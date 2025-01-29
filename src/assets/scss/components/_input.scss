@@ -1,0 +1,129 @@
+// Imports
+@use "../vars/colors" as colors;
+
+// ===============================================
+// Estilos para input
+// ===============================================
+.input {
+  height: 40px;
+  margin: 4px 0;
+  border: 1px solid transparent;
+  padding-left: 25px;
+  padding-right: 25px;
+  font-size: 13px;
+  letter-spacing: 0.15px;
+  outline: none;
+  background-color: colors.$bg_elements;
+  transition: 0.25s ease;
+  border-radius: 8px;
+
+  box-shadow:
+    inset 2px 2px 4px colors.$sha2,
+    inset -2px -2px 4px colors.$sha1;
+
+  &:focus {
+    box-shadow:
+      inset 4px 4px 4px colors.$sha2,
+      inset -4px -4px 4px colors.$sha1;
+  }
+}
+
+.input:focus,
+.input:active {
+  border: 1px solid colors.$primary;
+}
+
+.input:focus {
+  box-shadow:
+    0 0 0 1px colors.$primary,
+    0 0 0 4px colors.$focus-input;
+}
+
+// input inactivo
+.inactive {
+  background-color: darken(colors.$bg_elements, 5%) !important;
+  box-shadow:
+    inset 2px 2px 4px darken(colors.$sha2, 10%),
+    inset -2px -2px 4px darken(colors.$sha1, 10%);
+  cursor: default;
+}
+
+.inactive:focus,
+.inactive:active {
+  border: 1px solid lighten(colors.$primary, 50%);
+}
+
+// ===============================================
+// Estilos para redimencion de textarea
+// ===============================================
+.textarea {
+  resize: vertical;
+  min-height: 75px;
+  max-height: 300px;
+  padding-top: 10px;
+  padding-right: 20px;
+}
+
+// ===============================================
+// Estilos para input file
+// ===============================================
+.input_file {
+  position: relative;
+  display: inline-block;
+  height: auto;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  color: rgba(colors.$black, 0.6);
+  cursor: pointer;
+  z-index: 1;
+
+  span {
+    i {
+      font-size: 15px;
+    }
+  }
+
+  @media (max-width: 375px) {
+    padding-top: 6px;
+  }
+}
+
+.input_file input[type="file"] {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.remove-icon {
+  position: absolute;
+  display: none;
+  top: 50%;
+  right: 10px;
+  color: var(--red);
+  cursor: pointer;
+  z-index: 3 !important;
+  transform: translateY(-50%);
+
+  &.show {
+    display: inline;
+  }
+}
+
+// ===============================================
+// Estilos para selects
+// ===============================================
+
+.input_select {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+// ===============================================
+// Estilos para otros elementos
+// ===============================================
+.requerido {
+  color: var(--red);
+}

@@ -1,0 +1,70 @@
+// Imports
+@use "../vars/colors" as colors;
+
+/*  SEGMENTED-CONTROL */
+.segmented-control {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  padding: 5px;
+  margin-bottom: 15px;
+  align-items: center;
+  border-radius: 1rem;
+  background-color: rgba(colors.$primary, .8);
+  border: 1px solid darken(colors.$white, 15);
+
+  .segmented {
+    display: flex;
+    width: 100%;
+    cursor: pointer !important;
+    border: 1px solid transparent;
+
+    &_x {
+      display: flex;
+      cursor: pointer !important;
+      width: 100%;
+      text-align: center;
+      font-size: 0.9rem;
+      justify-content: center;
+      align-items: center;
+      color: colors.$white;
+      transition: all 0.5s ease;
+
+      &:hover {
+        color: colors.$white;
+      }
+
+      @media (max-width: 480px) {
+        font-size: 0.7rem;
+      }
+    }
+
+    &:hover {
+      border: 1px solid rgba(colors.$primary, 1);
+      border-radius: 0.8rem;
+    }
+
+    input {
+      display: none;
+    }
+
+    input:checked + label {
+      color: colors.$white;
+      font-weight: bold;
+      transition: all 0.5s ease;
+    }
+  }
+
+  .active {
+    justify-content: center;
+    align-items: center;
+    border-radius: 0.8rem;
+    justify-content: center;
+    border: 1px solid transparent;
+    box-shadow:
+    inset 2px 2px 5px rgba(darken(colors.$primary, 20%), 0.5),
+    inset -2px -2px 5px rgba(lighten(colors.$black, 20%), 0.5) !important;
+    transition: all 0.5s ease;
+  }
+}

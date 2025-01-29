@@ -1,0 +1,177 @@
+@use "../../../../../assets/scss/vars/colors" as colors;
+@use "../../../../../assets/scss/vars/fonts" as fonts;
+
+$background_content: rgba(lighten(colors.$white, 10), 1);
+
+.content_notifications {
+  position: fixed;
+  display: grid;
+  width: 350px;
+  top: 75px;
+  right: 10px;
+  border-radius: 10px;
+  box-shadow: 1px 1px 3px colors.$gray;
+  z-index: 10002 !important;
+
+  // Cabezera
+  .content_head {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 10px 20px;
+    border-radius: 10px 10px 0 0;
+    background-color: colors.$white;
+    border-bottom: 1px solid rgba(colors.$black, 0.1);
+    align-items: center;
+
+    .title {
+      font-size: 0.9em;
+      font-weight: bold;
+      color: rgba(colors.$black, 0.7);
+    }
+
+    .markAll {
+      font-size: 0.6em;
+      color: colors.$primary;
+      text-align: end;
+      cursor: pointer;
+      transition: all 0.3s;
+
+      &:hover {
+        color: darken(colors.$primary, 20);
+      }
+    }
+  }
+
+  // Cuerpo
+  .content_body {
+    display: grid;
+    height: 300px;
+    background-color: colors.$sha1;
+    // background-color: lighten(colors.$sha2, 10);   // Color para notificaciones sin leer
+    overflow-y: auto;
+    border-top: 1px solid rgba(colors.$black, 0.1);
+    border-bottom: 1px solid rgba(colors.$black, 0.1);
+
+    .notification {
+      display: grid;
+      grid-template-columns: 2fr 10fr 1fr;
+      gap: 10px;
+      padding: 10px;
+      border-bottom: 1px solid rgba(colors.$black, 0.1);
+
+      .icon {
+        display: grid;
+        justify-content: center;
+        align-items: center;
+        color: colors.$primary;
+        font-size: 25px;
+      }
+
+      .content {
+        display: grid;
+        gap: 3px;
+
+        .title {
+          display: grid;
+          font-size: 0.7em;
+          font-weight: bold;
+        }
+
+        .message {
+          display: grid;
+          font-size: 0.7em;
+        }
+
+        .time {
+          display: grid;
+          text-align: end;
+          font-size: 0.6em;
+          color: rgba(colors.$black, 0.7);
+        }
+      }
+
+      .options {
+        position: relative;
+        display: grid;
+        justify-content: center;
+        align-items: center;
+
+        button {
+          transform: scale(0.8);
+        }
+
+        .list {
+          position: absolute;
+          display: grid;
+          width: 125px;
+          top: 15px;
+          right: 35px;
+          background-color: colors.$white;
+          border-radius: 5px;
+          box-shadow: 1px 1px 3px colors.$gray;
+
+          div {
+            display: grid;
+            padding: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+
+            &:nth-child(1) {
+              border-radius: 5px 5px 0 0;
+            }
+
+            &:last-child {
+              border-radius: 0 0 5px 5px;
+            }
+
+            &:hover {
+              background-color: darken(colors.$sha1, 5);
+            }
+
+            span {
+              font-size: 0.7em;
+            }
+          }
+        }
+      }
+    }
+
+    .no_notification {
+      display: grid;
+      color: rgba(colors.$black, 0.8);
+      text-align: center;
+      align-items: center;
+    }
+  }
+
+  // Pie de notificacion
+  .content_footer {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-top: 1px solid rgba(colors.$black, 0.1);
+    background-color: colors.$white;
+    border-radius: 0 0 10px 10px;
+    padding: 5px 10px;
+
+    .deleteAll {
+      font-size: 0.6em;
+      color: colors.$primary;
+      text-align: center;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s;
+
+      &:hover {
+        color: darken(colors.$primary, 20);
+      }
+    }
+
+    .total {
+      font-size: 0.6em;
+      color: rgba(colors.$black, 0.8);
+      text-align: right;
+      font-weight: bold;
+    }
+  }
+}

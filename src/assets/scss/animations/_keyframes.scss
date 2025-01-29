@@ -1,0 +1,161 @@
+/*
+ * ----------------------------------------------------------------------------
+ * Propiedad de <Armando Josue Velasquez Delgado> <<https://armandovelasquez.com>>
+ * Todos los derechos reservados. Ninguna parte de este software puede ser
+ * reproducida, distribuida o transmitida de ninguna forma o por ningún medio,
+ * electrónico o mecánico, incluyendo fotocopias, grabaciones o cualquier otro
+ * sistema de almacenamiento y recuperación de información, sin el permiso
+ * previo por escrito del autor.
+ * ----------------------------------------------------------------------------
+ */
+
+@use '../vars/colors' as colors;
+
+// Transiciones
+$transition: 1.25s;
+
+// Animaciones
+// Animacion pop
+@keyframes popAnimation {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  12.5% {
+    transform: scale(1.1);
+  }
+
+  25% {
+    transform: scale(0.9);
+  }
+
+  37.5% {
+    transform: scale(1.07);
+  }
+
+  50% {
+    transform: scale(0.93);
+  }
+
+  62.5% {
+    transform: scale(1.04);
+  }
+
+  75% {
+    transform: scale(0.96);
+  }
+
+  87.5% {
+    transform: scale(1.01);
+  }
+}
+
+// Animacion para los elementos del nav
+@media (max-width: 580px) {
+  .nav {
+      overflow: auto;
+  }
+}
+
+// Animacion de entrada y salida de targetas
+@keyframes goLeft {
+  from {
+    transform: translateX(0%) scale(1);
+  }
+
+  to {
+    transform: translateX(-120%) scale(0.1);
+  }
+}
+
+@keyframes center {
+  from {
+    transform: translateX(0%) scale(0.1);
+  }
+
+  to {
+    transform: translateX(0%) scale(1);
+  }
+}
+
+@keyframes goRight {
+  from {
+    transform: translateX(0%) scale(1);
+  }
+
+  to {
+    transform: translateX(120%) scale(0.1);
+  }
+}
+
+// transicion de las targetas de organizaciones
+@keyframes shadow-transition-target {
+  0% {
+      box-shadow:
+          0.125rem 0.125rem 0.25rem darken(colors.$sha2, 10%),
+          -0.125rem -0.125rem 0.25rem darken(colors.$sha1, 10%);
+  }
+
+  100% {
+      box-shadow:
+          0.3rem 0.3rem 0.6rem darken(colors.$sha2, 10%),
+          -0.2rem -0.2rem 0.5rem darken(colors.$sha1, 10%);
+  }
+}
+
+// Botones
+@keyframes scaleUp {
+  0% {
+      transform: scale(0.5);
+  }
+
+  100% {
+      transform: scale(1);
+  }
+}
+
+@keyframes fade {
+  0% {
+      opacity: 0;
+  }
+
+  100% {
+      opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+      opacity: 0;
+      transform: translateY(10px);
+  }
+
+  100% {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
+
+@keyframes fadeInItem {
+100% {
+  transform: translatex(0px);
+  opacity: 1;
+}
+}
+
+@keyframes onePulse {
+0% {
+  box-shadow: 0px 0px 0px 0px rgba(92, 103, 255, 0.3);
+}
+
+50% {
+  box-shadow: 0px 0px 0px 12px rgba(92, 103, 255, 0.1);
+}
+
+100% {
+  box-shadow: 0px 0px 0px 4px rgba(92, 103, 255, 0.3);
+}
+}
+

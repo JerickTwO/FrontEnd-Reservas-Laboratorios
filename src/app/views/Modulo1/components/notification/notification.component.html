@@ -1,0 +1,74 @@
+<section class="content_notifications">
+
+  <div class="content_head">
+    <span class="title">Notificaciones</span>
+    <span class="markAll">Marcar todas como leido</span>
+  </div>
+
+  <div class="content_body scroll_element">
+
+    @for (item of notifications; track $index) {
+    <div class="notification">
+      <div class="icon">
+        <!-- type -->
+        <i class="fa-solid fa-envelope"></i>
+      </div>
+
+      <div class="content">
+        <div class="title">
+          <span>{{item.name}}</span>
+        </div>
+
+        <div class="message">
+          <span>{{item.description}}</span>
+        </div>
+
+        <div class="time">
+          <span>{{parseDate(item.created_at)
+            }}</span>
+        </div>
+      </div>
+
+      <div class="options">
+
+        <button class="button4 btn_2_2" pTooltip="Más opciones" tooltipPosition="left"
+          (click)="showMenuOptions($event, $index)">
+          <i class="fa-regular fa-ellipsis"></i>
+          <!-- acciones -->
+        </button>
+
+        @if (showOptions[$index]) {
+        <div class="list">
+          <div>
+            <span (click)="mark_read()">Marcar como leído</span>
+          </div>
+
+          <div>
+            <span>Marcar como no leído</span>
+          </div>
+
+          <div>
+            <span>Eliminar notificación</span>
+          </div>
+        </div>
+        }
+
+      </div>
+    </div>
+    }
+
+    <!-- Mensaje cuando no hay notificaciones -->
+    @if (notifications.length === 0) {
+    <div class="no_notification">
+      <span>No tiene notificaciones</span>
+    </div>
+    }
+
+  </div>
+
+  <div class="content_footer">
+    <span class=""></span>
+    <span class="deleteAll">Eliminar todo</span>
+    <span class="total">Total (9)</span>
+  </div>
+</section>

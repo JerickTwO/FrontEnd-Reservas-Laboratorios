@@ -1,0 +1,60 @@
+@use "../../../../../assets/scss/vars/colors" as colors;
+
+$background_content: rgba(lighten(colors.$white, 10), 1);
+
+.popup-menu-profile {
+  position: fixed;
+  top: 75px;
+  right: 10px;
+  width: 175px;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: $background_content;
+  box-shadow:
+    5px 5px 10px colors.$gray,
+    inset 8px 8px 12px darken(colors.$sha2, 15),
+    inset -8px -8px 12px colors.$sha1;
+  z-index: 100;
+
+  &::before {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 10px;
+    top: -9px;
+    right: 30px;
+    background-color: darken(colors.$sha2, 11);
+    clip-path: polygon(50% 0, 0% 100%, 100% 100%);
+  }
+
+  .container {
+    display: grid;
+    gap: 4px;
+
+    a {
+      display: flex;
+      gap: 10px;
+      padding: 7px 10px;
+      text-decoration: none;
+      color: colors.$black-sha;
+      border-radius: 10px;
+      border: 1px solid transparent;
+
+      i {
+        font-size: 20px;
+      }
+
+      &:hover {
+        border: 1px solid rgba(colors.$gray, 40%);
+      }
+    }
+
+    .active-section {
+      color: colors.$primary;
+      border: 1px solid rgba(colors.$primary, 40%);
+      box-shadow:
+        inset 2px 2px 10px darken(colors.$sha1, 20%),
+        inset -2px -2px 10px lighten(colors.$sha2, 20%);
+    }
+  }
+}

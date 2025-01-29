@@ -1,0 +1,67 @@
+// Imports
+@use "../../../../../../assets/scss/vars/colors" as colors;
+@import "../../../components/chat-structure/chat-structure.component.scss";
+
+.contenedor_charGlobal {
+  display: grid;
+  gap: 10px;
+  padding: 10px 0;
+
+  .contenedor_filtros {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 2fr;
+
+    .input {
+      width: 80%;
+    }
+  }
+
+  .contenedor_chat {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 20px;
+
+    .chats {
+      display: grid;
+      gap: 5px;
+
+      .content {
+        display: grid;
+        text-decoration: none;
+        color: colors.$black;
+        grid-template-columns: 5fr 1fr;
+        background-color: rgba(colors.$gray, 0.1);
+        padding: 5px;
+        border-radius: 5px;
+        transition: all 0.3s;
+
+        &:hover {
+          background-color: rgba(colors.$gray, 0.3);
+        }
+
+        .message {
+          display: grid;
+          gap: 3px;
+
+          .title {
+            font-weight: bold;
+          }
+
+          .text {
+            font-size: 12px;
+          }
+        }
+
+        .hour {
+          display: grid;
+          text-align: right;
+          align-items: center;
+
+          .time {
+            font-size: 10px;
+          }
+        }
+      }
+    }
+  }
+}

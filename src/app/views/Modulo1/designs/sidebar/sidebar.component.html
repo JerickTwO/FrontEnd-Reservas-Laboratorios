@@ -1,0 +1,255 @@
+<section
+  class="content-sidebar"
+  [ngClass]="{ 'content-sidebar-hidden': sidebarHidden }"
+>
+  <div class="content scroll-small">
+    <div class="sidebar">
+      <!-- Identidad del sitio -->
+      <a [routerLink]="routes[0]" class="logo_site">
+        <div class="img_logo">
+          <img src="assets/img/logos/Icon_profile.png" alt="logo" />
+        </div>
+
+        <div class="title-text">
+          <p>{{ title }}</p>
+        </div>
+      </a>
+      <!-- Items -->
+      <div class="links_site">
+        <nav class="nav">
+          <ul class="nav-list">
+            <!-- <div *ngIf="usuario.role !== 'Customer'"> -->
+              <a
+                [routerLink]="routes[0]"
+                routerLinkActive="active-section"
+                [pTooltip]="sidebarHidden ? 'Inicio' : undefined"
+                [class.active-section]="activeLink.includes(routes[0])"
+              >
+                <div class="icon-sidebar-item">
+                  <i class="bx bxs-home"></i>
+                </div>
+                <div class="name-sidebar-item">
+                  <li>Inicio</li>
+                </div>
+              </a>
+
+              <!-- Bandera -->
+              <li
+                class="divider"
+                [pTooltip]="sidebarHidden ? 'ADMINISTRADOR' : undefined"
+              >
+                ADMINISTRADOR
+              </li>
+
+              <a
+                [routerLink]="routes[routes.length - 1]"
+                routerLinkActive="active-section"
+                [pTooltip]="sidebarHidden ? 'Servicios' : undefined"
+                [class.active-section]="activeLink.includes('{{ routes[2] }}')"
+              >
+                <div class="icon-sidebar-item">
+                  <i class="bx bxs-dashboard"></i>
+                </div>
+                <div class="name-sidebar-item">
+                  <li>Servicios</li>
+                </div>
+              </a>
+              <a
+                [routerLink]="routes[3]"
+                routerLinkActive="active-section"
+                [pTooltip]="sidebarHidden ? 'Chat global' : undefined"
+                [class.active-section]="activeLink.includes('{{ routes[3] }}')"
+              >
+                <div class="icon-sidebar-item">
+                  <i class="bx bxs-chat"></i>
+                </div>
+                <div class="name-sidebar-item">
+                  <li>Chat global</li>
+                </div>
+              </a>
+
+              <a
+                [routerLink]="routes[4]"
+                routerLinkActive="active-section"
+                [pTooltip]="sidebarHidden ? 'Chat soporte' : undefined"
+                [class.active-section]="activeLink.includes('{{ routes[4] }}')"
+              >
+                <div class="icon-sidebar-item">
+                  <i class="bx bx-conversation"></i>
+                </div>
+                <div class="name-sidebar-item">
+                  <li>Chat soporte</li>
+                </div>
+              </a>
+
+              <a
+                [routerLink]="routes[5]"
+                routerLinkActive="active-section"
+                [pTooltip]="sidebarHidden ? 'Verificar tareas' : undefined"
+                [class.active-section]="activeLink.includes('{{ routes[5] }}')"
+              >
+                <div class="icon-sidebar-item">
+                  <i class="bx bx-check-shield"></i>
+                </div>
+                <div class="name-sidebar-item">
+                  <li>Verificar tareas</li>
+                </div>
+              </a>
+
+              <a
+                [routerLink]="routes[6]"
+                routerLinkActive="active-section"
+                [pTooltip]="sidebarHidden ? 'Empleados' : undefined"
+                [class.active-section]="activeLink.includes('{{ routes[6] }}')"
+              >
+                <div class="icon-sidebar-item">
+                  <i class="bx bxs-user-detail"></i>
+                </div>
+                <div class="name-sidebar-item">
+                  <li>Empleados</li>
+                </div>
+              </a>
+
+              <a
+                [routerLink]="routes[7]"
+                routerLinkActive="active-section"
+                [pTooltip]="sidebarHidden ? 'Solicitudes de empleo' : undefined"
+                [class.active-section]="activeLink.includes('{{ routes[7] }}')"
+              >
+                <div class="icon-sidebar-item">
+                  <i class="bx bx-user-plus"></i>
+                </div>
+                <div class="name-sidebar-item">
+                  <li>Solicitudes de empleo</li>
+                </div>
+              </a>
+
+              <!-- Bandera -->
+              <!-- <div *ngIf="usuario.role !== 'Colaborador'"> -->
+              <li
+                class="divider"
+                [pTooltip]="sidebarHidden ? 'EMPLEADO' : undefined"
+              >
+                EMPLEADO
+              </li>
+
+              <a
+                [routerLink]="routes[2]"
+                routerLinkActive="active-section"
+                [pTooltip]="sidebarHidden ? 'Servicios empleado' : undefined"
+                [class.active-section]="activeLink.includes('{{ routes[2] }}')"
+              >
+                <div class="icon-sidebar-item">
+                  <i class="bx bxs-dashboard"></i>
+                </div>
+                <div class="name-sidebar-item">
+                  <li>Servicios empleado</li>
+                </div>
+              </a>
+
+              <a
+                [routerLink]="routes[8]"
+                routerLinkActive="active-section"
+                [pTooltip]="sidebarHidden ? 'Chats' : undefined"
+                [class.active-section]="activeLink.includes('{{ routes[8] }}')"
+              >
+                <div class="icon-sidebar-item">
+                  <i class="bx bxs-conversation"></i>
+                </div>
+                <div class="name-sidebar-item">
+                  <li>Chats</li>
+                </div>
+              </a>
+
+              <a
+                [routerLink]="routes[9]"
+                routerLinkActive="active-section"
+                [pTooltip]="sidebarHidden ? 'Tareas completadas' : undefined"
+                [class.active-section]="activeLink.includes('{{ routes[9] }}')"
+              >
+                <div class="icon-sidebar-item">
+                  <i class="bx bx-task"></i>
+                </div>
+                <div class="name-sidebar-item">
+                  <li>Tareas completadas</li>
+                </div>
+              </a>
+
+              <a
+                [routerLink]="routes[10]"
+                routerLinkActive="active-section"
+                [pTooltip]="sidebarHidden ? 'Cartera' : undefined"
+                [class.active-section]="activeLink.includes('{{ routes[10] }}')"
+              >
+                <div class="icon-sidebar-item">
+                  <i class="bx bx-wallet"></i>
+                </div>
+                <div class="name-sidebar-item">
+                  <li>Cartera</li>
+                </div>
+              </a>
+
+              <a
+                [routerLink]="routes[11]"
+                routerLinkActive="active-section"
+                [pTooltip]="sidebarHidden ? 'Soporte' : undefined"
+                [class.active-section]="activeLink.includes('{{ routes[11] }}')"
+              >
+                <div class="icon-sidebar-item">
+                  <i class="bx bx-support"></i>
+                </div>
+                <div class="name-sidebar-item">
+                  <li>Soporte</li>
+                </div>
+              </a>
+
+            <!-- Bandera -->
+          <!-- </div> -->
+            <li
+              class="divider"
+              [pTooltip]="sidebarHidden ? 'CLIENTE' : undefined"
+            >
+              CLIENTE
+            </li>
+
+            <a
+              [routerLink]="routes[12]"
+              routerLinkActive="active-section"
+              [pTooltip]="sidebarHidden ? 'Chats' : undefined"
+              [class.active-section]="activeLink.includes('{{ routes[12] }}')"
+            >
+              <div class="icon-sidebar-item">
+                <i class="bx bxs-conversation"></i>
+              </div>
+              <div class="name-sidebar-item">
+                <li>Chats</li>
+              </div>
+            </a>
+
+            <a
+              [routerLink]="routes[13]"
+              routerLinkActive="active-section"
+              [pTooltip]="sidebarHidden ? 'Soporte' : undefined"
+              [class.active-section]="activeLink.includes('{{ routes[13] }}')"
+            >
+              <div class="icon-sidebar-item">
+                <i class="bx bx-support"></i>
+              </div>
+              <div class="name-sidebar-item">
+                <li>Soporte</li>
+              </div>
+            </a>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+
+  <!-- Autors -->
+  <div class="content-autors">
+    <span class="autors1">
+      <i>Designed by </i>
+      <b><a target="_blank">Antares Solutions S.A.S</a></b>
+    </span>
+  </div>
+</section>

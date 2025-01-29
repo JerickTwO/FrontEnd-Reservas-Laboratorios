@@ -1,0 +1,534 @@
+// Estilos generales
+@use "../vars/colors" as colors;
+
+// ===============================================
+// Boton general (semi circulo)
+// ===============================================
+.button {
+  width: 180px;
+  height: 50px;
+  border-radius: 25px;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 1.15px;
+  background-color: darken(colors.$primary, 10);
+  color: var(--white);
+  box-shadow: 2px 2px 5px var(--black-50);
+
+  border: none;
+  outline: none;
+
+  @media (max-width: 380px) {
+    height: 40px;
+  }
+
+  @media ((max-width: 335px) and (min-width: 0px)) {
+    width: 100%;
+    padding: 0 25px;
+  }
+
+  &:hover {
+    background-color: darken(colors.$primary, 20);
+  }
+}
+
+// ===============================================
+// Boton para cambiar entre las ventanas de login y registro
+// ===============================================
+.button_container_register,
+.button_container_login {
+  z-index: 100;
+  display: grid;
+
+  .button1 {
+    width: 180px;
+    height: 40px;
+    border-radius: 0px 5px 0px 0px;
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--white);
+    background-color: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+
+    &:hover {
+      &::after {
+        background-color: rgba(colors.$primary, 0.7);
+      }
+    }
+
+    @media ((max-width: 350px) and (min-width: 0px)) {
+      font-size: 10px;
+      height: 30px;
+      width: 150px;
+      transform: scale(0.9);
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      cursor: pointer;
+      backdrop-filter: blur(3px);
+      background-color: rgba(colors.$primary, 0.6);
+      border-radius: 0px 5px 0px 0px;
+      z-index: -1;
+    }
+  }
+}
+
+// ===============================================
+// Boton cuadrado (se debe asignar clase de color)
+// ===============================================
+.button2 {
+  width: 180px;
+  height: 40px;
+  border-radius: 5px;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--white);
+  box-shadow:
+    5px 5px 5px colors.$sha2,
+    -5px -5px 5px colors.$sha1;
+
+  border: none;
+  outline: none;
+
+  @media ((max-width: 350px) and (min-width: 0px)) {
+    font-size: 10px;
+    height: 30px;
+    width: 150px;
+    transform: scale(0.9);
+  }
+}
+
+// ===============================================
+// Boton cuadrado para palabras cortas (se debe asignar clase de color)
+// ===============================================
+.button3 {
+  width: 60px;
+  height: 40px;
+  border-radius: 5px;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--white);
+  box-shadow:
+    5px 5px 5px colors.$sha2,
+    -5px -5px 5px colors.$sha1;
+
+  border: none;
+  outline: none;
+}
+
+// ===============================================
+// Boton para icono sin borde (se debe asignar clase de color)
+// ===============================================
+.button4 {
+  display: grid;
+  width: 30px;
+  height: 30px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+  font-weight: 700;
+  font-size: 25px;
+  border: none;
+  outline: none;
+
+  @media (max-width: 768px) {
+  }
+
+  @media (max-width: 480px) {
+    transform: scale(0.9);
+  }
+
+  @media (max-width: 375px) {
+    transform: scale(0.8);
+  }
+
+  @media ((max-width: 350px) and (min-width: 0px)) {
+    height: 30px;
+  }
+}
+
+// ===============================================
+// Boton para icono (se debe asignar clase de color)
+// ===============================================
+.button5 {
+  width: 40px;
+  height: 40px;
+  border-radius: 5px;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--white);
+  box-shadow:
+    5px 5px 5px colors.$sha2,
+    -5px -5px 5px colors.$sha1;
+
+  border: none;
+  outline: none;
+
+  i {
+    font-size: 25px;
+  }
+
+  @media ((max-width: 350px) and (min-width: 0px)) {
+    font-size: 10px;
+    height: 30px;
+    width: 150px;
+    transform: scale(0.9);
+  }
+}
+
+// ===============================================
+// Boton para icono navegacion sin borde (se debe asignar clase de color)
+// ===============================================
+.button6 {
+  width: 40px;
+  height: 25px;
+  border-radius: 5px;
+  font-weight: 700;
+  font-size: 12px;
+  color: var(--white);
+  box-shadow:
+    5px 5px 5px colors.$sha2,
+    -5px -5px 5px colors.$sha1;
+
+  border: none;
+  outline: none;
+
+  i {
+    font-size: 17px;
+  }
+
+  @media ((max-width: 350px) and (min-width: 0px)) {
+    font-size: 10px;
+    height: 30px;
+    width: 150px;
+    transform: scale(0.9);
+  }
+}
+
+// ===============================================
+// Boton para icono sin borde (se debe asignar clase de color)
+// ===============================================
+.button7 {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 100px;
+  font-weight: 700;
+  font-size: 25px;
+  border: none;
+  outline: none;
+
+  @media (max-width: 768px) {
+  }
+
+  @media (max-width: 480px) {
+    transform: scale(0.9);
+  }
+
+  @media (max-width: 375px) {
+    transform: scale(0.8);
+  }
+
+  @media ((max-width: 350px) and (min-width: 0px)) {
+    height: 30px;
+  }
+}
+
+// ===============================================
+// Boton para asignar poligono clip-path (se debe asignar clase de color)
+// ===============================================
+.button_forma {
+  width: 180px;
+  height: 40px;
+  color: var(--white);
+  border-radius: 0px;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+
+  filter: drop-shadow(3px 3px 1.5px var(--black-10));
+
+  &:hover {
+    filter: drop-shadow(3px 3px 5px var(--black-10));
+  }
+
+  &:hover {
+    &::after {
+      background-color: rgba(colors.$primary, 0.9);
+    }
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    cursor: pointer;
+    border-radius: 0px;
+    backdrop-filter: blur(3px);
+    background-color: rgba(colors.$primary, 0.6);
+    z-index: -1;
+  }
+}
+
+// ===============================================
+// Efecto 1
+// ===============================================
+.efects_button {
+  cursor: pointer;
+
+  &:hover {
+    box-shadow:
+      6px 6px 10px colors.$sha2,
+      -6px -6px 10px colors.$sha1;
+    transform: scale(0.985);
+    transition: 0.25s;
+  }
+
+  &:active,
+  &:focus {
+    box-shadow:
+      2px 2px 6px colors.$sha2,
+      -2px -2px 6px colors.$sha1;
+    transform: scale(0.97);
+    transition: 0.25s;
+  }
+}
+
+// ===============================================
+// Ejecto 2 (simple)
+// ===============================================
+.efects2_button {
+  cursor: pointer;
+
+  &:hover,
+  &:active,
+  &:focus {
+    transition: 0.25s;
+  }
+}
+
+// ===============================================
+// Color de botones (relleno)
+// ===============================================
+.btn_actualizar {
+  background-color: colors.$btn-color-actualizar;
+}
+
+.btn_actualizar:hover {
+  background-color: darken(colors.$btn-color-actualizar, 10%);
+}
+
+.btn_buscar {
+  background-color: colors.$btn-color-buscar;
+}
+
+.btn_buscar:hover {
+  background-color: darken(colors.$btn-color-buscar, 10%);
+}
+
+.btn_cancelar {
+  background-color: colors.$btn-color-cancelar;
+}
+
+.btn_cancelar:hover {
+  background-color: darken(colors.$btn-color-cancelar, 10%);
+}
+
+.btn_editar {
+  background-color: colors.$btn-color-editar;
+}
+
+.btn_editar:hover {
+  background-color: darken(colors.$btn-color-editar, 10%);
+}
+
+.btn_eliminar {
+  background-color: colors.$btn-color-eliminar;
+}
+
+.btn_eliminar:hover {
+  background-color: darken(colors.$btn-color-eliminar, 10%);
+}
+
+.btn_enviar {
+  background-color: colors.$btn-color-enviar;
+}
+
+.btn_enviar:hover {
+  background-color: darken(colors.$btn-color-enviar, 10%);
+}
+
+.btn_ingresar {
+  background-color: colors.$btn-color-ingresar;
+}
+
+.btn_ingresar:hover {
+  background-color: darken(colors.$btn-color-ingresar, 10%);
+}
+
+.btn_nuevo {
+  background-color: colors.$btn-color-nuevo;
+}
+
+.btn_nuevo:hover {
+  background-color: darken(colors.$btn-color-nuevo, 10%);
+}
+
+.btn_copy {
+  background-color: colors.$btn-color-copy;
+}
+
+.btn_copy:hover {
+  background-color: darken(colors.$btn-color-copy, 10%);
+}
+
+.btn_excel {
+  background-color: colors.$btn-color-excel;
+}
+
+.btn_excel:hover {
+  background-color: darken(colors.$btn-color-excel, 10%);
+}
+
+.btn_csv {
+  background-color: colors.$btn-color-csv;
+}
+
+.btn_csv:hover {
+  background-color: darken(colors.$btn-color-csv, 10%);
+}
+
+// ===============================================
+// Color de botones (hueco - contorno)
+// ===============================================
+.btn_editar2 {
+  border: 1px solid colors.$btn-color-editar;
+  color: colors.$btn-color-editar;
+}
+
+.btn_editar2:hover {
+  background-color: darken(colors.$btn-color-editar, 0%);
+  color: colors.$white;
+}
+
+.btn_eliminar2 {
+  border: 1px solid colors.$btn-color-eliminar;
+  color: colors.$btn-color-eliminar;
+}
+
+.btn_eliminar2:hover {
+  background-color: darken(colors.$btn-color-eliminar, 0%);
+  color: colors.$white;
+}
+
+.btn_organizaciones2 {
+  border: 1px solid colors.$btn-color-navegacion;
+  color: colors.$btn-color-navegacion;
+}
+
+.btn_organizaciones2:hover {
+  background-color: darken(colors.$btn-color-navegacion, 0%);
+  color: colors.$white;
+}
+
+// ===============================================
+// Color de botones (solo texto)
+// ===============================================
+.btn_eliminar3 {
+  color: rgba(colors.$black, 0.5);
+  background-color: transparent;
+}
+
+.btn_eliminar3:hover {
+  color: colors.$btn-color-eliminar;
+}
+
+.btn_editar3 {
+  color: rgba(colors.$black, 0.5);
+  background-color: transparent;
+}
+
+.btn_editar3:hover {
+  color: colors.$btn-color-editar;
+}
+
+// ===============================================
+// Color de botones para paginacion
+// ===============================================
+.btn_navegacion {
+  background-color: colors.$btn-color-navegacion;
+  box-shadow:
+    inset 0.2rem 0.2rem 0.5rem darken(colors.$btn-color-navegacion, 10),
+    inset -0.2rem -0.2rem 0.5rem rgba(colors.$white, 0.5);
+}
+
+.btn_navegacion:hover {
+  background-color: darken(colors.$btn-color-navegacion, 5%);
+  box-shadow:
+    inset 0.2rem 0.2rem 0.5rem darken(colors.$btn-color-navegacion, 15),
+    inset -0.2rem -0.2rem 0.5rem rgba(colors.$white, 0.5);
+}
+
+.btn_navegacion:disabled {
+  cursor: default;
+  background-color: darken(colors.$btn-color-navegacion, 15%);
+  transform: none;
+  box-shadow: none;
+  opacity: 0.6;
+  box-shadow:
+    inset 0.2rem 0.2rem 0.5rem darken(colors.$btn-color-navegacion, 15),
+    inset -0.2rem -0.2rem 0.5rem rgba(colors.$white, 0.5);
+}
+
+/**
+* Boton para mover elemento
+*/
+.icon_move_element {
+  color: rgba(colors.$primary, 0.2);
+}
+
+// ===============================================
+// Boton top
+// ===============================================
+#btn_top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  z-index: 9999;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  border: none;
+  outline: none;
+  background-color: colors.$primary;
+  color: var(--white);
+  cursor: pointer;
+  border-radius: 10px;
+  font-size: 20px;
+  transition: opacity 0.5s ease;
+  opacity: 0;
+
+  &.visible {
+    opacity: 1;
+  }
+
+  &:hover {
+    background-color: darken(colors.$primary, 10%);
+  }
+
+  @media ((max-width: 335px) and (min-width: 0px)) {
+    bottom: 5px;
+    right: 5px;
+    width: 35px;
+    height: 35px;
+    font-size: 15px;
+  }
+}

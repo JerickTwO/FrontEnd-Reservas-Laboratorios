@@ -1,0 +1,91 @@
+@use "../../../assets/scss/vars/colors" as colors;
+
+// ==============================
+// Contenedor de vistas
+// ==============================
+
+::ng-deep *,
+::ng-deep *::after,
+::ng-deep *::before {
+  box-sizing: content-box;
+}
+
+::ng-deep html,
+::ng-deep body {
+  padding: 0;
+  user-select: none;
+}
+
+::ng-deep .views {
+  background-color: colors.$bg;
+  margin: 0;
+}
+
+.content-views {
+  display: block;
+  padding: 20px;
+
+  .title-component {
+    h1 {
+      font-size: 20px;
+      font-weight: bold;
+      margin-top: 15px;
+      margin-bottom: 3px;
+      color: rgba(colors.$black, 0.8);
+    }
+
+    // Divisor
+    .divisor-title {
+      height: 3px;
+      margin-bottom: 15px;
+      border-radius: 50px;
+      background-color: colors.$primary;
+      width: calc(5px * var(--title-length, 0));
+    }
+  }
+
+  .views {
+    position: relative;
+    padding: 10px 20px;
+    border-radius: 10px;
+    background-color: colors.$white;
+    border: 1px solid rgba(colors.$black, 0.05);
+
+    @media (max-width: 630px) {
+      position: absolute;
+    }
+  }
+
+  .views-active {
+    @media (max-width: 630px) {
+      position: relative !important;
+    }
+
+    @media (max-width: 470px) {
+      position: absolute !important;
+    }
+  }
+}
+
+// Especifica las dimenciones en las que se deben poner el nav y el contenedor
+// Sidebar Expandido
+.dimension-content {
+  position: relative;
+  margin-top: 50px;
+}
+
+.dimension-nav,
+.dimension-content {
+  width: calc(100% - 270px);
+  left: 230px;
+  gap: 10px;
+  transition: all 0.3s ease;
+}
+
+// Sidebar Retraido
+.dimension-nav-hidden,
+.dimension-content-hidden {
+  width: calc(100% - 105px);
+  left: 65px;
+  transition: all 0.3s ease;
+}

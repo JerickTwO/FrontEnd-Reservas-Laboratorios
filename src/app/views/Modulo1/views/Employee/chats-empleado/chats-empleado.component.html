@@ -1,0 +1,203 @@
+<section class="contenedor_charSupport">
+  <!-- Filtros -->
+  <div class="contenedor_filtros">
+    <div>
+      <!-- vacio -->
+    </div>
+
+    <div>
+      <!-- El boton debe cambiar de estado al inicial el chat -->
+      <!-- Botón para iniciar chat si currentOrder no es undefined y start_chat es 0 (falso) -->
+      <button *ngIf="currentOrder && currentOrder.start_chat === 0" class="button efects_button" [style]="{ width: '7vw' }" (click)="startChat()">
+        <i class="pi pi-caret-right"></i>
+      </button>
+
+      <!-- Botón para finalizar chat si currentOrder no es undefined y start_chat es 1 (verdadero) -->
+      <button *ngIf="currentOrder && currentOrder.start_chat === 1" class="button efects_button" [style]="{ width: '7vw' }" (click)="endChat()">
+        <i class="pi pi-times"></i>
+      </button>
+      <!-- <button class="button efects_button">Stop</button> -->
+      <!--<button class="button efects_button"  [style]="{width: '7vw'}"> <i class="pi pi-stop-circle
+        "></i></button> -->
+    </div>
+
+    <div>
+      <button
+        class="button efects_button btn_nuevo"
+        [style]="{ width: '10vw' }"
+        (click)="showDialog()"
+      >
+        Detalles
+      </button>
+      <p-dialog
+        header="Detalles de la órden"
+        [(visible)]="visible"
+        [style]="{ width: '50vw' }"
+      >
+        <p>
+          <label class="w-6rem">ID: </label>
+          <span class="w-6rem">#0000</span>
+        </p>
+        <p-divider></p-divider>
+        <p>
+          <label class="w-6rem">Precio: </label>
+          <span class="w-6rem">$100</span>
+        </p>
+        <p-divider></p-divider>
+        <p>
+          <label class="w-6rem">Ubicación del Cliente: </label>
+          <span class="w-6rem">New York</span>
+        </p>
+        <p-divider></p-divider>
+        <p>
+          <label class="w-6rem">Juego: </label>
+          <span class="w-6rem">Destiny 2</span>
+        </p>
+        <p-divider></p-divider>
+        <p>
+          <label class="w-6rem">Plataforma: </label>
+          <span class="w-6rem">PC</span>
+        </p>
+        <p-divider></p-divider>
+        <p>
+          <label class="w-6rem">VPN: </label>
+          <span class="w-6rem">Ubicación del empleado</span>
+        </p>
+        <p-divider></p-divider>
+        <p>
+          <label class="w-6rem">Personajes: </label>
+          <span class="w-6rem">Titan, Hunter</span>
+        </p>
+        <p-divider></p-divider>
+        <p>
+          <label class="w-6rem">Actividades: </label>
+          <span class="w-6rem">tareas extras de la orden</span>
+        </p>
+
+        <p-divider></p-divider>
+        <p>
+          <label class="w-6rem">Nota: </label>
+          <span class="w-6rem">Mensaje adicional del cliente</span>
+        </p>
+      </p-dialog>
+    </div>
+
+    <div>
+      <input class="input" type="text" placeholder="Buscar cliente..." />
+    </div>
+  </div>
+
+  <hr class="divisor" />
+
+  <!-- Chat -->
+  <div class="contenedor_chat">
+    <!-- contenedor de mensajes -->
+    <div>
+      <div class="card">
+        <p-tabView>
+          <p-tabPanel header="Progreso">
+            <div class="chats">
+              <div *ngFor="let client of clientsByEmployeStartTrue" class="content">
+                <div (click)="getMessagesByGroup(client)" class="content">
+                  <div class="message">
+                    <span class="title">Cliente#{{ client.customer_id }}</span>
+                    <span class="text">
+                      <b>Mensaje:</b> {{ client.order_item_name }}
+                    </span>
+                  </div>
+                  <div class="hour">
+                    <span><i class="bx bx-check-double"></i></span>
+                    <span class="time">{{ client.customer_name }}</span>
+                    <!-- Indicador de mensajes no leídos -->
+                    <span *ngIf="client.unread_messages > 0" class="unread-messages">
+                      {{ client.unread_messages }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </p-tabPanel>
+          <p-tabPanel header="Finalizado">
+            <div class="chats">
+              <div *ngFor="let client of clientsByEmployeStartFalse" class="content">
+                <div (click)="getMessagesByGroup(client)" class="content">
+                  <div class="message">
+                    <span class="title">Cliente#{{ client.customer_id }}</span>
+                    <span class="text">
+                      <b>Mensaje:</b> {{ client.order_item_name }}
+                    </span>
+                  </div>
+                  <div class="hour">
+                    <span><i class="bx bx-check-double"></i></span>
+                    <span class="time">{{ client.customer_name }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </p-tabPanel>
+        </p-tabView>
+      </div>
+    </div>
+
+    <!-- Contenedor de chats -->
+    <div>
+      <section class="content_chat_component">
+        <div class="chat">
+          <div class="contact bar">
+            <div class="name">
+              <span class="nameEmployee">{{ nameCliente }}</span>
+            </div>
+
+            <div class="title_orden">
+              <span>{{ nameOrder }}</span>
+            </div>
+          </div>
+
+          <div class="messages" id="chat">
+            <div
+              class="message"
+              [ngClass]="msg.sender"
+              *ngFor="let msg of messages"
+            >
+              <span class="user-name">{{ msg.name }} {{trandorDateCreated(msg.created_at)}}</span>
+              {{ msg.message_text }}
+            </div>
+
+            <!-- <div class="message stark">
+              <div class="typing typing-1"></div>
+              <div class="typing typing-2"></div>
+              <div class="typing typing-3"></div>
+            </div> -->
+          </div>
+
+
+          <!-- Después del cambio -->
+          <div *ngIf="currentOrder">
+            <div *ngIf="currentOrder.start_chat === 0; else chatStarted">
+              <div class="content_text" style="text-align: center; padding: 20px;">
+                <div style="font-size: 1em; color: rgb(91, 89, 183); margin-top: 5px;">
+                  Debes iniciar el chat.
+                </div>
+              </div>
+            </div>
+            <ng-template #chatStarted>
+              <div *ngIf="currentOrder.finish_chat !== 1; else chatFinished" class="content_text">
+                <input [(ngModel)]="newMessage" placeholder="Escribe un mensaje" type="text" />
+                <button class="button2 efects_button btn_nuevo" [style.width]="'5vw'" (click)="sendMessage()">
+                  <span class="pi pi-send"></span> Enviar
+                </button>
+              </div>
+              <ng-template #chatFinished>
+                <div class="content_text" style="text-align: center; padding: 20px;">
+                  <div style="font-size: 1em; color: rgb(91, 89, 183); margin-top: 5px;">
+                    Chat finalizado, gracias por tu atención.
+                  </div>
+                </div>
+              </ng-template>
+            </ng-template>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</section>

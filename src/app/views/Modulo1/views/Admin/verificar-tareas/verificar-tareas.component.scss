@@ -1,0 +1,85 @@
+// Imports
+@use "../../../../../../assets/scss/vars/colors" as colors;
+
+.contenedor_verificarTareas {
+  display: grid;
+  gap: 10px;
+  padding: 10px 0;
+
+  .contenedor_filtros {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 2fr;
+
+    .input {
+      width: 80%;
+    }
+  }
+
+  .contenedor_list {
+    display: grid;
+    gap: 10px;
+
+    .player-card {
+      display: grid;
+      grid-template-columns: 1fr .5fr;
+      border: 1px solid colors.$sha2;
+      border-radius: 8px;
+      padding: 20px;
+      background-color: colors.$sha1;
+      .div {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+
+
+
+        .info_general {
+          display: grid;
+          gap: 5px;
+
+          .name {
+            font-weight: bold;
+            font-size: 18px;
+          }
+
+          .info_order {
+            display: grid;
+
+            .title {
+              font-size: 15px;
+              font-weight: bold;
+            }
+
+            .description {
+              font-size: 12px;
+            }
+
+
+          }
+        }
+      }
+
+      .div{
+        .info {
+          display: grid;
+          gap: 5px;
+          .valoration{
+            color: colors.$yellow;
+          }
+        }
+      }
+
+    }
+
+  }
+
+  .contenedor_botones {
+    display: grid;
+    gap: 10px;
+
+    .contenedor_inputs_otrovalor {
+      display: grid;
+      gap: 10px;
+    }
+  }
+
+}

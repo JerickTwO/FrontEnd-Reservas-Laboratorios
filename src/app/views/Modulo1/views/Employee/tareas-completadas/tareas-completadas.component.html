@@ -1,0 +1,43 @@
+<section class="contenedor_verificarTareas">
+
+    <!-- Filtros -->
+    <div class="contenedor_filtros">
+      <div>
+        <!-- vacio -->
+      </div>
+
+      <div>
+        <!-- vacio -->
+      </div>
+
+      <div>
+        <select class="input input_select" name="" id="">
+          <option value="">Game</option>
+          <option value="">Destiny2</option>
+        </select>
+      </div>
+
+      <div>
+        <input class="input" type="text" placeholder="Buscar orden...">
+      </div>
+    </div>
+
+    <!-- list -->
+    <div class="contenedor_list">
+      <div *ngFor="let tarea of listCompletedOrders" class="player-card">
+        <div class="info_general">
+          <div class="info_order">
+            <span class="title">{{ tarea.name }}</span>
+            <span class="description">{{ tarea.order_item_name}} (Al presionar en la card se debe redirigir al chat del cliente con el empleado para verificar la conversación)</span>
+          </div>
+        </div>
+
+        <div class="info">
+          <span>Tiempo de finalización: {{ tarea.duration }}</span>
+          <span>Valoración del cliente: <span class="valoration">{{ tarea.rating }}</span></span>
+          <span>Valor de la tarea: {{ tarea.total_amount }}</span>
+        </div>
+
+      </div>
+    </div>
+  </section>

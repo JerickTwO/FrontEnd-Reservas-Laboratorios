@@ -1,0 +1,146 @@
+<section class="contenedor_charSupport">
+  <!-- Filtros -->
+  <div class="contenedor_filtros">
+    <div>
+      <!-- vacio -->
+    </div>
+
+    <div>
+      <!-- vacio -->
+    </div>
+
+    <div>
+      <!-- <button class="button2 efects_button btn_nuevo" (click)="showDialog()">Control</button>
+      <p-dialog header="Aqui va algunas funcionalidades para despues" [(visible)]="visible" [style]="{width: '50vw'}">
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+          magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+          consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+          pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id
+          est laborum.
+        </p>
+      </p-dialog> -->
+    </div>
+
+    <div>
+      <input class="input" type="text" placeholder="Buscar usuario..." />
+    </div>
+  </div>
+
+  <hr class="divisor" />
+
+  <!-- Chat -->
+  <div class="contenedor_chat">
+    <!-- contenedor de mensajes -->
+    <div>
+      <div class="card">
+        <p-tabView>
+          <p-tabPanel header="Clientes">
+            <div class="chats">
+              <a
+                class="content"
+                *ngFor="let group of listGroupCustomer"
+                (click)="getMessagesByGroup(group)"
+              >
+                <div class="message">
+                  <span class="title">{{ group.name }}</span>
+                  <span
+                    [ngClass]="{
+                      'new-tag': !group.start_chat,
+                      'taken-tag': group.start_chat
+                    }"
+                  >
+                    {{ group.start_chat ? "Tomado" : "Nuevo" }}
+                    {{ group.unread_messages > 0 ? " - " + group.unread_messages + " Nuevos" : "" }}
+
+                  </span>
+                </div>
+              </a>
+            </div>
+
+          </p-tabPanel>
+          <p-tabPanel header="Empleados">
+            <div class="chats">
+              <a
+                class="content"
+                *ngFor="let group of listGroupEmp"
+                (click)="getMessagesByGroup(group)"
+              >
+                <div class="message">
+                  <span class="title">{{ group.name }}</span>
+                  <span
+                    [ngClass]="{
+                      'new-tag': !group.start_chat,
+                      'taken-tag': group.start_chat
+                    }"
+                  >
+                    {{ group.start_chat ? "Tomado" : "Nuevo" }}
+                  </span>
+                </div>
+              </a>
+            </div>
+          </p-tabPanel>
+        </p-tabView>
+      </div>
+    </div>
+
+    <!-- Contenedor de chats -->
+    <div>
+      <section class="content_chat_component">
+        <div class="chat">
+          <div class="contact bar">
+            <div class="name">
+              <span class="nameEmployee">{{ nameCliente }}</span>
+            </div>
+
+            <div class="title_orden">
+              <span>{{ nameOrder }}</span>
+            </div>
+          </div>
+
+          <div class="messages" id="chat">
+            <div
+              class="message"
+              [ngClass]="msg.sender"
+              *ngFor="let msg of messages"
+            >
+              <span class="user-name">{{ msg.name }}</span>
+              {{ msg.message_text }}
+            </div>
+
+            <!-- <div class="message stark">
+              <div class="typing typing-1"></div>
+              <div class="typing typing-2"></div>
+              <div class="typing typing-3"></div>
+            </div> -->
+          </div>
+
+          <!-- Después del cambio -->
+          <div class="content_text">
+            <input
+              [(ngModel)]="newMessage"
+              placeholder="Escribe un mensaje"
+              type="text"
+            />
+            <button
+              class="button2 efects_button btn_nuevo"
+              [style.width]="'5vw'"
+              (click)="sendMessage()"
+            >
+              <span class="pi pi-send"></span> Enviar
+            </button>
+          </div>
+          <ng-template #chatFinished>
+            <div class="content_text" style="text-align: center; padding: 20px">
+              <div
+                style="font-size: 1em; color: rgb(91, 89, 183); margin-top: 5px"
+              >
+                Chat finalizado, gracias por tu atención.
+              </div>
+            </div>
+          </ng-template>
+        </div>
+      </section>
+    </div>
+  </div>
+</section>

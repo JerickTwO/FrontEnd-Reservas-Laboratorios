@@ -1,0 +1,48 @@
+<section class="contenedor_service">
+  <div class="contenedor_filtros">
+    <div></div>
+
+    <div>
+      <select class="input input_select" name="" id="">
+        <option value="">Estado</option>
+        <option value="1">En progreso</option>
+        <option value="2">En espera</option>
+        <option value="3">Completado</option>
+      </select>
+    </div>
+
+    <div>
+      <select class="input input_select" name="" id="">
+        <option value="">Game</option>
+        <option value="">Destiny2</option>
+      </select>
+    </div>
+
+    <div>
+      <input class="input" type="text" placeholder="Buscar orden..." />
+    </div>
+  </div>
+
+  <hr class="divisor" />
+
+  <!-- [routerLink]="['/jugador/chat', orden.order_item_id]" -->
+  <div class="contenedor_cards" >
+    <a
+      *ngFor="let orden of ordenes"
+    >
+      <p-card
+        [header]="orden.order_item_name"
+        [subheader]="orden.order_item_name"
+        [style]="{ width: '360px' }"
+        (click)="acceptOrder(orden); $event.stopPropagation()"
+      >
+        <div class="informacion_cards">
+          <span>Tipo de tarea: {{ orden.type }}</span>
+          <span>Ganancia: $ {{ orden.total_amount }}</span>
+          <span>Estado: {{ orden.status }}</span>
+          <!-- <span>Aceptado: {{ orden. ? "Sí" : "No" }}</span> -->
+        </div>
+      </p-card>
+    </a>
+  </div>
+</section>

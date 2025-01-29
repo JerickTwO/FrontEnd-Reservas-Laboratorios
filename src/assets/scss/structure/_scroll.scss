@@ -1,0 +1,65 @@
+@use "../vars/colors" as colors;
+
+/*-----------------------------------*\
+  # Scroll PAGE
+\*-----------------------------------*/
+
+body {
+  &::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: rgba(colors.$primary, 0.2);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border: 1px solid darken(colors.$primary, 20);
+    background: rgba(colors.$primary, 0.1);
+    border-radius: 20px;
+    box-shadow:
+      inset 1px 1px 0 rgba(colors.$primary, 0.9),
+      inset -1px -1px 0 rgba(colors.$primary, 0.9);
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: rgba(colors.$primary, 0.9);
+  }
+
+  &::-webkit-scrollbar-button {
+    height: 0px;
+  }
+}
+
+/*-----------------------------------*\
+  # Scroll Table
+\*-----------------------------------*/
+
+.contenedor_tabla {
+  .table-container {
+    &::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: rgba(colors.$gray, 0.2);
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: rgba(colors.$gray, 0.8);
+      transition: 0.5s;
+
+      &:hover {
+        transition: 0.5s;
+        background: rgba(colors.$primary, 0.8);
+      }
+    }
+
+    &::-webkit-scrollbar-button {
+      width: 0px;
+      height: 0px;
+    }
+  }
+}

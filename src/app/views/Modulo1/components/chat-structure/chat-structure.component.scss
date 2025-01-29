@@ -1,0 +1,145 @@
+// Imports
+@use "../../../../../assets/scss/vars/colors" as colors;
+@import "primeicons/primeicons.css";
+
+.content_chat_component {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  z-index: 2;
+  box-sizing: border-box;
+  border-radius: 1rem;
+  background: colors.$white;
+  box-shadow: 0 0 8rem 0 rgba(colors.$black, 0.1), 0 2rem 4rem -3rem rgba(colors.$black, 0.5);
+  overflow-y: auto;
+
+  .contact {
+    position: relative;
+    display: grid;
+    width: 100%;
+    align-items: center;
+    gap: 5px;
+    padding-top: 10px;
+    background: darken(colors.$primary, 5%);
+    color: colors.$white;
+
+    .name {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      font-weight: bold;
+
+      .nameEmployee {
+        padding-left: 30px;
+        text-align: left;
+      }
+
+      .nameClient {
+        padding-right: 30px;
+        text-align: right;
+      }
+    }
+
+    .title_orden {
+      display: grid;
+      justify-content: center;
+      padding: 5px;
+      background-color: rgba(colors.$primary, 0.8);
+    }
+  }
+
+  .messages {
+    padding: 1rem;
+    background: colors.$sha1;
+    flex-grow: 1;
+    min-height: 300px;
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-shadow: inset 0 2rem 2rem -2rem rgba(colors.$black, 0.05), inset 0 -2rem 2rem -2rem rgba(colors.$black, 0.05);
+  }
+
+  .message {
+    position: relative;
+    padding: 0.5rem 1rem;
+    margin: 0.5rem 1rem;
+    background: colors.$white;
+    border-radius: 1.125rem;
+    width: fit-content;
+    max-width: 66%;
+    box-shadow: 0 0 2rem rgba(colors.$black, 0.075), 0 1rem 1rem -1rem rgba(colors.$white, 0.1);
+
+    &.me {
+      margin-left: auto;
+      background: lighten(colors.$primary, 15%);
+      color: colors.$white;
+      border-radius: 1.125rem 1.125rem 0 1.125rem;
+    }
+
+    span.user-name {
+      position: absolute;
+      color: colors.$gray;
+      bottom: -17px;
+      left: 0;
+      padding-bottom: 5px;
+      font-size: 12px;
+    }
+  }
+
+  .content_text {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    padding: 0 1.5rem;
+    flex-shrink: 0;
+    height: 4rem;
+
+    input {
+      flex-grow: 1;
+      padding: 0.5rem 1rem;
+      margin-right: 1rem;
+      border-radius: 1.125rem;
+      border: none;
+      background-color: colors.$white;
+      box-shadow: 0 0 1rem rgba(colors.$black, 0.1), 0 1rem 1rem -1rem rgba(colors.$black, 0.2);
+      font-family: 'Red Hat Display', sans-serif;
+      font-weight: 400;
+      letter-spacing: 0.025em;
+      &::placeholder {
+        color: colors.$gray;
+      }
+    }
+
+    button {
+      width: 5vw;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      background: darken(colors.$primary, 10%);
+      border: none;
+      border-radius: 1.125rem;
+      padding: 0.5rem 1rem;
+      color: colors.$white;
+      &:hover {
+        background: darken(colors.$primary, 15%);
+      }
+    }
+
+    .pi {
+      margin-right: 0.5rem;
+    }
+  }
+
+  @keyframes typing {
+    0%, 75%, 100% {
+      transform: translate(0, 0.25rem) scale(0.9);
+      opacity: 0.5;
+    }
+    25% {
+      transform: translate(0, -0.25rem) scale(1);
+      opacity: 1;
+    }
+  }
+}

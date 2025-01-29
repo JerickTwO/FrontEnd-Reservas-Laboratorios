@@ -1,0 +1,23 @@
+<!-- NAVBAR -->
+<app-navbar [routes]="routesArray" [sidebarHidden]="sidebarHidden" (toggleSidebar)="toggleSidebar()"></app-navbar>
+
+<!-- SIDEBAR -->
+<app-sidebar [title]="title" [routes]="routesArray" [sidebarHidden]="sidebarHidden"></app-sidebar>
+
+<!-- CONTENEDOR -->
+<section class="content-views dimension-content" [ngClass]="{'dimension-content-hidden': sidebarHidden}">
+  <!-- Title component -->
+  <div class="title-component">
+    <h1>{{ title_component }}</h1>
+    <div class="divisor-title"></div>
+  </div>
+  <!-- Componentes -->
+  <div class="views" [ngClass]="{'views-active': sidebarHidden}">
+    <router-outlet></router-outlet>
+  </div>
+</section>
+
+
+<!-- ALERTS -->
+<p-toast [life]="10000" [showTransformOptions]="'translateY(100%)'" [showTransitionOptions]="'500ms'"
+  [hideTransitionOptions]="'500ms'" [showTransformOptions]="'translateX(100%)'"></p-toast>

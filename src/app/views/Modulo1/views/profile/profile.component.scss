@@ -1,0 +1,240 @@
+// Imports
+@use "../../../../../assets/scss/vars/colors" as colors;
+
+.contenedor_profile {
+  display: grid;
+  height: 75vh;
+  min-height: 550px;
+  grid-template-columns: 0.5fr 2fr;
+
+  @media (min-height: 775px) {
+    height: 100%;
+  }
+
+  @media (max-width: 1100px) {
+    height: 100%;
+  }
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
+
+  .content_calendar {
+    display: grid;
+
+    @media (max-width: 900px) {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    @media (max-width: 845px) {
+      grid-template-columns: 1fr;
+    }
+
+    .calendar_eventos {
+      position: relative;
+      z-index: 1;
+
+      .calendar_container {
+        position: absolute;
+        transform: scale(0.5) translate(-35%, -35%);
+
+        @media (max-width: 845px) {
+          position: relative;
+          transform: scale(0.8) translate(5%, 0%);
+        }
+
+        @media (max-width: 768px) {
+          transform: scale(0.8) translate(13%, 0%);
+        }
+
+        @media (max-width: 700px) {
+          transform: scale(0.8) translate(7%, 0%);
+        }
+
+        @media (max-width: 650px) {
+          transform: scale(0.8) translate(0%, 0%);
+        }
+      }
+    }
+
+    .calendar_trabajo {
+      position: relative;
+
+      @media (max-width: 845px) {
+        display: none;
+      }
+
+      .structure {
+        $tamañoCalengarTrabajo: 310px;
+        display: grid;
+        grid-template-rows: 1fr 3fr;
+        width: $tamañoCalengarTrabajo;
+        height: $tamañoCalengarTrabajo;
+        border-radius: 5px;
+        border: 1px solid rgba(colors.$black, 0.2);
+        transform: scale(0.7) translate(-7%, 65%);
+
+        @media (max-width: 900px) {
+          transform: scale(0.7) translate(10%, -5%);
+        }
+
+        .head {
+          display: grid;
+          justify-content: center;
+          text-align: center;
+          align-items: center;
+          font-weight: bold;
+          color: colors.$white;
+          border-radius: 5px 5px 0 0;
+          background-color: rgba(darken(colors.$primary, 5), 0.8);
+
+          .title {
+            font-size: 30px;
+            padding: 0;
+            margin: 0;
+          }
+
+          .valor {
+            margin: 0;
+            font-size: 20px;
+          }
+        }
+
+        .body {
+          display: grid;
+          justify-content: center;
+          align-items: center;
+          text-align: center;
+          font-weight: bold;
+          color: colors.$white;
+          border-radius: 0 0 5px 5px;
+          background-color: rgba(lighten(colors.$primary, 20), 0.8);
+
+          .number {
+            font-size: 120px;
+          }
+
+          .text {
+            font-size: 30px;
+          }
+        }
+      }
+    }
+  }
+
+  // Estilos cuando el sidebar esta activo
+  .sidebar_active_content_calendar {
+    .calendar_eventos {
+      .calendar_container {
+        @media (max-width: 900px) {
+          transform: scale(0.5) translate(0%, -35%) !important;
+        }
+
+        @media (max-width: 845px) {
+          transform: scale(0.8) translate(15%, 0%) !important;
+        }
+
+        @media (max-width: 768px) {
+          transform: scale(0.8) translate(23%, 0%) !important;
+        }
+
+        @media (max-width: 700px) {
+          transform: scale(0.8) translate(17%, 0%) !important;
+        }
+
+        @media (max-width: 550px) {
+          transform: scale(0.8) translate(10%, 0%) !important;
+        }
+
+        @media (max-width: 500px) {
+          transform: scale(0.8) translate(5%, 0%) !important;
+        }
+
+        @media (max-width: 470px) {
+          transform: scale(0.8) translate(-3%, 0%) !important;
+        }
+      }
+    }
+
+    .calendar_trabajo {
+      .structure {
+        @media (max-width: 900px) {
+          transform: scale(0.7) translate(-10%, -5%) !important;
+        }
+      }
+    }
+  }
+
+  .content_inputs {
+    display: grid;
+
+    // .contenedor_formulario_perfil {
+
+    form {
+      display: inherit;
+      padding: 10px 20px;
+      border-radius: 10px;
+      border: 1px solid rgba(colors.$black, 0.1);
+    }
+    // }
+
+    .formulario_perfil {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+
+      @media (max-width: 1100px) {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      @media (max-width: 900px) {
+        padding-top: 0px;
+      }
+
+      @media (max-width: 845px) {
+        padding-top: 0px;
+      }
+
+      div {
+        display: grid;
+      }
+    }
+
+    .botones_form {
+      display: grid;
+      justify-content: center;
+      padding: 20px 0 0 0;
+      justify-items: center;
+    }
+
+    .password_change {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      justify-content: center;
+      margin-top: 20px;
+      gap: 10px;
+
+      @media (max-width: 1100px) {
+        grid-template-columns: 1fr;
+        justify-content: none;
+      }
+
+      .form_passw_change {
+        position: relative;
+        display: grid;
+        gap: 10px;
+
+        div {
+          display: grid;
+        }
+      }
+
+      .botones_form {
+        display: grid;
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  }
+}

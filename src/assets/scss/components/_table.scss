@@ -1,0 +1,75 @@
+// Imports
+@use "../vars/colors" as colors;
+
+// Estilos para el contenedor de la tabla
+.contenedor_tabla {
+  display: grid;
+  border-radius: 5px;
+  border: 1px solid rgba(colors.$gray, 0.3);
+  overflow-x: auto;
+
+  .table-container {
+    overflow-x: auto;
+    box-shadow: none !important;
+
+    table {
+      width: 100%;
+      box-shadow: none !important;
+
+      .mat-mdc-header-row {
+        font-weight: bold;
+        background: rgba(colors.$primary, 0.1);
+      }
+      
+      td,
+      th {
+        width: 200px;
+        min-width: 150px;
+      }
+    }
+  }
+
+  .paginator-container {
+    display: grid;
+    align-items: end;
+    height: 56px;
+
+    ::ng-deep .mat-mdc-paginator-container {
+      @media (max-width: 620px) {
+        align-items: center;
+        justify-content: center;
+        justify-items: center;
+      }
+
+      @media (max-width: 455px) {
+        margin-top: -25px;
+      }
+
+      .mat-mdc-paginator-range-actions {
+        @media (max-width: 620px) {
+          display: grid;
+          grid-template-columns: repeat(4, 1fr);
+          justify-items: center;
+
+          div {
+            grid-column: 1 / -1;
+          }
+        }
+      }
+    }
+
+    // Eliminar texto de numero de filtro en tabla
+    ::ng-deep .mat-mdc-paginator-page-size-label {
+      display: none;
+    }
+  }
+}
+
+::ng-deep .noExisteRegistro {
+  display: grid;
+  height: 40%;
+  font-size: 20px;
+  text-align: center;
+  align-content: end;
+  color: colors.$gray;
+}

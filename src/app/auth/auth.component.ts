@@ -27,9 +27,10 @@ import { UsuarioService } from '../core/services/usuario.service';
   imports: [FormsModule, ReactiveFormsModule],
 })
 export class AuthComponent implements OnInit {
-  title: string = 'Administración';
+  title: string = 'Iniciar Sesión';
   loading: boolean = false; // Para deshabilitar el botón de "Ingresar" durante la solicitud HTTP
   errorMenssage: string = ''; // Para mostrar mensajes de error
+  showPassword: boolean = false;
 
   // Formulario
   loginForm: FormGroup;

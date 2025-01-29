@@ -1,61 +1,56 @@
-<div
-	class="bg-purple-900 absolute top-0 left-0 bg-gradient-to-b from-gray-900 via-gray-900 to-purple-800 bottom-0 leading-5 h-full w-full overflow-hidden">
+@if (loginForm) {
 
-</div>
-<section class="global_contenedor">
-  <div class="main1" id="main1">
-    @if (loginForm) {
-      
-      <div class="switch">
-        <div class="switch_circle"></div>
-        <div class="switch_circle switch_circle_t"></div>
-        <div class="switch_circle switch_circle_t2"></div>
-        <div class="switch_circle switch_circle_t3"></div>
-        <!-- Utiliza el FormGroup para encapsular los controles del formulario -->
-        <form class="switch_container" [formGroup]="loginForm" id="login_form">
-          <img class="logo_login" src="assets/img/logos/Logo_vertical_color.png" alt="Logo">
-          <h3 class="title">{{title}}</h3>
-          <!-- Campo de correo electrónico -->
-          <p class="description">Nombre de Usuario</p>
-          <input class="input form_input" type="text" id="username" formControlName="username"
-            placeholder="Ingrese su nombre de usuario">
-          <!-- Mostrar mensaje de error si el campo de correo electrónico es inválido -->
-          @if (usernameControl && usernameControl.errors && usernameControl.touched) {
-            <div class="contenedor_campo_requerido"
-              >
-              @if (usernameControl.errors['required']) {
-                <div>
-                  Ingrese el correo electrónico.
-                </div>
-              }
-            </div>
-          }
-          <!-- Campo de contraseña -->
-          <p class="description">Contraseña</p>
-          <input class="input form_input" type="password" id="password_user" formControlName="password_user"
-            placeholder="Ingrese su contraseña">
-          <!-- Mostrar mensaje de error si el campo de contraseña es inválido -->
-          @if (password_userControl && password_userControl.errors && password_userControl.touched) {
-            <div class="contenedor_campo_requerido"
-              >
-              @if (password_userControl.errors['required']) {
-                <div>
-                  Ingrese su contraseña.
-                </div>
-              }
-            </div>
-          }
-          <!-- Mostrar mensaje de error -->
-          @if (errorMenssage) {
-            <div class="error-message">{{ errorMenssage }}</div>
-          }
-          <!-- Botón de enviar -->
-          <div class="btn_contenedor_login">
-            <button class="button efects_button" (click)="login()">INGRESAR</button>
+<section class="section">
+
+  <div class="left">
+
+  </div>
+
+  <div class="right">
+
+    <div class="login-container">
+      <!-- Utiliza el FormGroup para encapsular los controles del formulario -->
+      <form class="" [formGroup]="loginForm" id="login_form">
+        <h1>JEFATURA DE LABORATORIOS <span>DEPARTAMENTO DE CIENCIAS DE LA COMPUTACIÓN</span></h1>
+
+        <h3 class=" text-center">{{title}}</h3>
+        <!-- Campo de correo electrónico -->
+        <p class="">Nombre de Usuario</p>
+        <input class="" type="text" id="username" formControlName="username" placeholder="Ingrese su nombre de usuario">
+        <!-- Mostrar mensaje de error si el campo de correo electrónico es inválido -->
+        @if (usernameControl && usernameControl.errors && usernameControl.touched) {
+        <div class="">
+          @if (usernameControl.errors['required']) {
+          <div>
+            Ingrese el correo electrónico.
           </div>
-        </form>
-      </div>
-    }
+          }
+        </div>
+        }
+        <!-- Campo de Contraseña -->
+        <p>Contraseña</p>
+        <div class="password-container">
+          <input [type]="showPassword ? 'text' : 'password'" id="password_user" formControlName="password_user" placeholder="Ingrese su contraseña ">
+          <span class="password-icon" (click)="showPassword = !showPassword">👁</span>
+          
+        </div>
+        <div class="error-container">
+          <div class="error-message" [hidden]="!loginForm.get('password_user')?.touched || !loginForm.get('password_user')?.errors">
+            <div [hidden]="!loginForm.get('password_user')?.errors?.['required']">
+              Ingrese su contraseña.
+            </div>
+          </div>
+        </div>
+        <!-- Mostrar mensaje de error -->
+        @if (errorMenssage) {
+        <div class="error-message">{{ errorMenssage }}</div>
+        }
+        <!-- Botón de enviar -->
+        <div class="btn_contenedor_login">
+          <button class="button efects_button" (click)="login()">INGRESAR</button>
+        </div>
+      </form>
+    </div>
   </div>
 </section>
-
+}

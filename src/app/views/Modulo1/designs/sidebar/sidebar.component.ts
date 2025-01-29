@@ -25,7 +25,11 @@ export class SidebarComponent implements OnInit {
   @Input() routes!: string[];
   activeLink: string = '';
   usuario: Usuario = this.usuarioService.usuario;
+  submenuOpen = false;
 
+  toggleSubmenu() {
+    this.submenuOpen = !this.submenuOpen;
+  }
   constructor(private usuarioService: UsuarioService) {}
 
   ngOnInit(): void {}

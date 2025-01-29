@@ -3,6 +3,7 @@ import { Modulo1Component } from './modulo1.component';
 
 import { HomeComponent } from './views/home/home.component';
 import { LabsComponent } from './views/labs/labs.component';
+import { ReservasComponent } from './views/reservas/reservas.component';
 import { ProfileComponent } from './views/profile/profile.component';
 import { ServiciosComponent } from './views/servicios/servicios.component';
 import { ChatSoporteComponent } from './views/Admin/chat-soporte/chat-soporte.component';
@@ -21,6 +22,7 @@ import { ServiciosAdminComponent } from './views/servicios-admin/servicios-admin
 
 const home: string = 'dashboard';
 const labs: string = 'laboratorios';
+const reservas: string = 'reservas';
 const profile: string = 'perfil';
 const servicios: string = 'servicios';
 const serviciosAdmin: string = 'servicios-admin';
@@ -45,6 +47,7 @@ const soporteCliente: string = client + 'soporte';
 export const routesArrayModulo1: string[] = [
   '/' + home,
   '/' + labs,
+  '/' + reservas,
   '/' + profile,
   '/' + servicios,
   '/' + chatGlobal,
@@ -93,6 +96,14 @@ export const routesModulo1: Routes = [
         component: LabsComponent,
         data: {
           title: capitalizeFirstLetter(labs),
+        },
+      },
+      {
+        path: reservas,
+        canActivate: [isAuthenticatedGuard],
+        component: ReservasComponent,
+        data: {
+          title: capitalizeFirstLetter(reservas),
         },
       },
       {

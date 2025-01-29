@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { Modulo1Component } from './modulo1.component';
 
 import { HomeComponent } from './views/home/home.component';
+import { LabsComponent } from './views/labs/labs.component';
 import { ProfileComponent } from './views/profile/profile.component';
 import { ServiciosComponent } from './views/servicios/servicios.component';
 import { ChatSoporteComponent } from './views/Admin/chat-soporte/chat-soporte.component';
@@ -18,7 +19,8 @@ import { SoporteClienteComponent } from './views/Client/soporte-cliente/soporte.
 import { isAuthenticatedGuard } from 'src/app/guards/is-authenticated.guard';
 import { ServiciosAdminComponent } from './views/servicios-admin/servicios-admin.component';
 
-const home: string = 'inicio';
+const home: string = 'dashboard';
+const labs: string = 'laboratorios';
 const profile: string = 'perfil';
 const servicios: string = 'servicios';
 const serviciosAdmin: string = 'servicios-admin';
@@ -42,6 +44,7 @@ const soporteCliente: string = client + 'soporte';
 
 export const routesArrayModulo1: string[] = [
   '/' + home,
+  '/' + labs,
   '/' + profile,
   '/' + servicios,
   '/' + chatGlobal,
@@ -82,6 +85,14 @@ export const routesModulo1: Routes = [
         canActivate: [isAuthenticatedGuard],
         data: {
           title: capitalizeFirstLetter(home),
+        },
+      },
+      {
+        path: labs,
+        canActivate: [isAuthenticatedGuard],
+        component: LabsComponent,
+        data: {
+          title: capitalizeFirstLetter(labs),
         },
       },
       {

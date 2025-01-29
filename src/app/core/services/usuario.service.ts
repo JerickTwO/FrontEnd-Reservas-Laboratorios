@@ -22,7 +22,7 @@ export class UsuarioService {
     private http: HttpClient,
     private router: Router,
     private ngZone: NgZone
-  ) {}
+  ) { }
 
   get token(): string {
     return localStorage.getItem('token') || '';
@@ -65,75 +65,63 @@ export class UsuarioService {
   }
 
   validarToken(): Observable<boolean> {
+    return of(false);
 
-    return this.http
-      .get<UserReponse>(`${environment.urlBase}/auth/renew`, {
-        headers: {
-          'x-token': this.token,
-        },
-      })
-      .pipe(
-        map((resp: UserReponse) => {
-          const {
-            id,
-            user_login,
-            user_nicename,
-            user_email,
-            user_url,
-            display_name,
-            role,
-          } = resp.data;
-          this.setUsuario(
-            new Usuario(
-              id,
-              user_login,
-              user_nicename,
-              user_email,
-              user_url,
-              display_name,
-              role
-            )
-          );
-          this.guardarLocalStorage(resp.token);
-          console.log("Token renovado");
-          return true;
-        }),
-        catchError((error) => {
-          console.log("Error en el token: ", error);
+    // return this.http
+    //   .get<UserReponse>(`${environment.urlBase}/auth/renew`, {
+    //     headers: {
+    //       'x-token': this.token,
+    //     },
+    //   })
+    //   .pipe(
+    //     map((resp: UserReponse) => {
+    //       const {
+    //         id,
+    //         user_login,
+    //         user_nicename,
+    //         username,
+    //         user_url,
+    //         display_name,
+    //         role,
+    //       } = resp.data;
+    //       this.setUsuario(
+    //         new Usuario(
+    //           id,
+    //           user_login,
+    //           user_nicename,
+    //           username,
+    //           user_url,
+    //           display_name,
+    //           role
+    //         )
+    //       );
+    //       this.guardarLocalStorage(resp.token);
+    //       console.log("Token renovado");
+    //       return true;
+    //     }),
+    //     catchError((error) => {
+    //       console.log("Error en el token: ", error);
 
-          return of(false);
-        }
-        )
-      );
+    //       return of(false);
+    //     }
+    //     )
+    //   );
   }
 
   login(formData: LoginForm) {
     return this.http
-      .post<UserReponse>(`${environment.urlBase}/auth/login`, formData)
+      .post<any>(`${environment.urlBase}/auth/login`, formData)
       .pipe(
-        tap((resp: UserReponse) => {
-          const {
-            id,
-            user_login,
-            user_nicename,
-            user_email,
-            user_url,
-            display_name,
-            role,
-          } = resp.data;
-          this.setUsuario(
-            new Usuario(
-              id,
-              user_login,
-              user_nicename,
-              user_email,
-              user_url,
-              display_name,
-              role
-            )
-          );
-          this.guardarLocalStorage(resp.token);
+        tap((resp) => {
+          if (resp && resp.resultado) {
+            const token = resp.resultado; // Obtener el token correctamente
+            this.guardarLocalStorage(token);
+            console.log("Login exitoso, token guardado:", token);
+          } else {
+            console.error("Error: La respuesta del backend no tiene el formato esperado.");
+          }
         })
       );
   }
+
 }

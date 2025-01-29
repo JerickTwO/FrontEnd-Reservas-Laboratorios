@@ -12,12 +12,9 @@
     width: 100%;
     height: 100%;
     max-width: 220px;
-    background: colors.$white;
-    border-radius: 0px 0px 20px 0px;
-    box-shadow:
-      10px 10px 10px colors.$sha2,
-      -10px -10px 10px colors.$sha1;
-    z-index: 98;
+    background: #111929;
+    color: colors.$white;
+    z-index: 1000;
     overflow-x: hidden;
     overflow-y: auto;
     scrollbar-width: none;
@@ -34,12 +31,9 @@
         font-weight: bold;
         align-items: center;
         text-decoration: none;
-        padding: 5px 0px;
-        color: rgba(colors.$black, 0.7);
-        background: colors.$bg;
-        box-shadow:
-          0px 8px 5px colors.$sha2,
-          -10px -10px 10px colors.$sha1;
+        padding: 8px 0px;
+        background: colors.$primary;
+
         transition: all 0.3s ease;
 
         .img_logo {
@@ -61,7 +55,7 @@
         justify-items: center;
         align-content: center;
         align-items: center;
-        color: colors.$black-sha;
+        color: colors.$white;
       }
 
       p {
@@ -80,23 +74,13 @@
           display: grid;
           position: relative;
           width: 206px;
-          margin-top: 10px;
-          gap: 10px;
-          padding-left: 6px;
           list-style: none;
 
           a {
             display: flex;
             gap: 0px;
-            padding-right: 20px;
             align-items: center;
-            justify-content: left;
             text-decoration: none;
-            border-radius: 10px;
-            border: 1px solid rgba(colors.$black, 10%);
-            box-shadow:
-              inset 5px 5px 15px darken(colors.$sha2, 20%),
-              inset -5px 10px 10px lighten(colors.$sha1, 20%);
             transition: all 0.3s ease;
 
             .icon-sidebar-item {
@@ -109,20 +93,18 @@
 
               i {
                 font-size: 18px;
-                color: darken(colors.$primary, 10%);
+                color: darken(colors.$white, 10%);
               }
             }
 
             .name-sidebar-item {
               font-size: 12px;
-              color: darken(colors.$primary, 10%);
+              color: darken(colors.$white, 10%);
             }
 
             &:hover {
               transition: all 0.3s ease;
-              box-shadow:
-                inset 5px 5px 15px rgba(darken(colors.$sha2, 20%), 0.5),
-                inset -5px 10px 10px rgba(lighten(colors.$sha1, 20%), 0.5);
+              background-color: #1E2936;
             }
           }
 
@@ -142,86 +124,14 @@
   }
 }
 
-// AUTHORS
-.content-autors {
-  display: grid;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 200px;
-  padding: 10px;
-  border-radius: 0px 0px 20px 0px;
-  background: colors.$bg;
-  text-align: center;
-  opacity: 0;
-  z-index: 1000;
-  transition: all 5s ease;
 
 
-  .autors1 {
-    display: block;
-    color: colors.$black-sha;
-    font-size: 9px;
 
-    a {
-      color: colors.$primary;
-      text-decoration: none;
-
-      &:hover {
-        color: darken(colors.$primary, 10);
-      }
-    }
-  }
-}
-
-
-// RETRAIDO
-.content-sidebar-hidden {
-  .content {
-    max-width: 55px;
-
-    .sidebar {
-      .logo_site {
-        .title-text {
-          display: none;
-        }
-      }
-    }
-
-    .links_site {
-      .nav {
-        .nav-list {
-          width: 0px;
-
-          a {
-            padding-right: 0px;
-
-            .name-sidebar-item {
-              display: none;
-            }
-          }
-
-          .divider {
-            text-align: center;
-            padding-left: 0px;
-            transition: all 0.3s ease;
-          }
-        }
-      }
-    }
-  }
-
-  .content-autors {
-    display: none;
-  }
-}
 
 // Iluminaror de los items del sidebar
 .active-section {
   background-color: colors.$primary;
-  box-shadow:
-    inset 5px 5px 15px rgba(darken(colors.$primary, 20%), 0.5),
-    inset -5px 10px 10px rgba(lighten(colors.$black, 20%), 0.5) !important;
+
   transition: all 0s ease;
 
   .icon-sidebar-item {
@@ -236,9 +146,5 @@
     }
   }
 
-  &:hover {
-    box-shadow:
-      inset 5px 5px 15px rgba(darken(colors.$primary, 20%), 0.5),
-      inset -5px 10px 10px rgba(lighten(colors.$black, 20%), 0.5) !important;
-  }
+
 }

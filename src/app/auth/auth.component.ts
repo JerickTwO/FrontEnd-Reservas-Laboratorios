@@ -33,7 +33,7 @@ export class AuthComponent implements OnInit {
 
   // Formulario
   loginForm: FormGroup;
-  email_userControl: AbstractControl | null = null;
+  usernameControl: AbstractControl | null = null;
   password_userControl: AbstractControl | null = null;
 
   constructor(
@@ -43,7 +43,7 @@ export class AuthComponent implements OnInit {
     private router: Router
   ) {
     this.loginForm = this.formBuilder.group({
-      email_user: ['', [Validators.required]],
+      username: ['', [Validators.required]],
       password_user: ['', [Validators.required]],
     });
   }
@@ -54,7 +54,7 @@ export class AuthComponent implements OnInit {
     });
 
     // Control de formulario
-    this.email_userControl = this.loginForm.get('email_user');
+    this.usernameControl = this.loginForm.get('username');
     this.password_userControl = this.loginForm.get('password_user');
   }
 
@@ -64,17 +64,24 @@ export class AuthComponent implements OnInit {
       return;
     }
     this.loading = true;
-    const { email_user, password_user } = this.loginForm.value;
-    console.log(email_user, password_user);
+    const { username, password_user } = this.loginForm.value;
+    console.log(username, password_user);
 
-    this.usuarioService.login({ correo: email_user, password: password_user }).subscribe(
+    this.usuarioService.login({ username, password: password_user }).subscribe(
       (resp) => {
         this.loading = false;
-        this.router.navigateByUrl('/inicio');
+        this.router.navigateByUrl('/dashboard');
       },
       (err) => {
         this.loading = false;
-        this.errorMenssage = err.error.message;
+
+        if (err.error && err.error.message) {
+          this.errorMenssage = err.error.message;
+        } else {
+          this.errorMenssage = "Error desconocido. Inténtalo nuevamente.";
+        }
+
+        console.error("Error en login:", err);
       }
     );
 

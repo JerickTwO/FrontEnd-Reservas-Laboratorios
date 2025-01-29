@@ -5,7 +5,7 @@ export class Usuario {
     public id: number,
     public user_login: string,
     public user_nicename: string,
-    public user_email: string,
+    public username: string,
     public user_url: string,
     public display_name: string,
     public role?: 'Administrador' | 'Colaborador' | 'Customer'

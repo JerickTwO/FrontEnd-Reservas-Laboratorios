@@ -6,15 +6,14 @@ import { map, tap } from 'rxjs/operators';
 export const isNotAuthenticatedGuard: CanActivateFn = (route, state) => {
   console.log('isNotAuthenticatedGuard');
 
-  const authService = inject(UsuarioService);
   const router = inject(Router);
+  const token = localStorage.getItem('token');
 
-  return authService.validarToken().pipe(
-    map((isAuthenticated) => !isAuthenticated),
-    tap((isNotAuthenticated) => {
-      if (!isNotAuthenticated) {
-        router.navigate(['/jugador/chat/1']);
-      }
-    })
-  );
+  if (!token) {
+    return true; // Permite el acceso si no hay un token
+  } else {
+    router.navigate(['/jugador/chat/1']);
+    return false; // Redirige si el usuario ya está autenticado
+  }
 };
+

@@ -19,7 +19,7 @@ import { NgClass } from '@angular/common';
 export class Modulo1Component implements OnInit {
 
   // Titulos
-  title = 'Sistema BoostAntares';
+  title = 'Agenda Citas';
   title_component = '';
 
   // Timer
@@ -55,10 +55,6 @@ export class Modulo1Component implements OnInit {
     this.sidebarService.changeNameDividers(this.sidebarHidden);
   }
 
-  // Cambiar estado del sidebar
-  toggleSidebar() {
-    this.sidebarHidden = this.sidebarService.toggleSidebar();
-  }
 
   // Función para actualizar el título de la página
   updateTitle() {

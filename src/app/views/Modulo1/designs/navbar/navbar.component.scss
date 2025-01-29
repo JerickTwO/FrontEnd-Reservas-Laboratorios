@@ -17,166 +17,43 @@ $fondo-active-hover: darken(colors.$primary, 5);
 // ==============================
 .content-navbar {
   display: flex;
-  position: fixed;
+  position: sticky;
   top: 0;
   right: 0;
-  padding: 8px 20px;
+  width: 100%;
+  padding: 8px 0px;
   align-items: center;
   color: colors.$white;
-  background-color: colors.$primary;
-  border-radius: 0px 0px 0px 20px;
-  box-shadow: 0px 8px 10px colors.$sha2, -10px -10px 10px colors.$sha1;
-  z-index: 100;
+  background-color: #202938;
   overflow-x: hidden;
   transition: all 0.3s ease;
+}
 
-  .icon-menu-sidebar {
-    display: grid;
-    width: 20px;
-    height: 20px;
-    padding: 5px;
+.content_balance {
+  display: grid;
+  padding-left: 10px;
+  gap: 5px;
+
+  .title {
+    font-size: 12px;
+    font-weight: bold;
+  }
+
+  .number {
     font-size: 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    align-items: center;
-    justify-content: center;
-    box-shadow: inset 2px 2px 4px rgba(colors.$black, 0.5),
-      inset -2px -2px 3px rgba(darken(colors.$sha1, 35%), 0.3);
-    transition: 0.3s;
-
-    &:hover {
-      background-color: $fondo-active-hover;
-    }
   }
+}
 
-  .content_balance {
-    display: grid;
-    padding-left: 10px;
-    gap: 5px;
+.navbar {
+  display: flex;
+  width: 100%;
+  min-height: 50px;
+  align-items: center;
+  justify-content: right;
+  gap: 10px;
 
-    .title {
-      font-size: 12px;
-      font-weight: bold;
-    }
-
-    .number {
-      font-size: 20px;
-    }
-  }
-
-  .navbar {
-    display: flex;
-    width: 100%;
-    min-height: 50px;
-    align-items: center;
-    justify-content: right;
-    gap: 10px;
-
-    // TODO: responsive 300px
-    @media screen and (max-width: 300px) {
-      width: auto;
-    }
-
-    // Boton de notificaciones
-    .notification_button {
-      position: relative;
-      display: grid;
-      width: 30px;
-      height: 30px;
-      justify-content: center;
-      align-items: center;
-      font-size: 23px;
-      padding: 5px;
-      border-radius: 10px;
-      box-shadow: inset 5px 5px 15px darken(colors.$primary, 20%),
-        inset -5px 10px 10px lighten(colors.$primary, 20%);
-      cursor: pointer;
-      transition: all 0.3s;
-
-      &:hover {
-        box-shadow: inset 5px 5px 15px darken(colors.$primary, 30px),
-          inset -5px 10px 10px lighten(colors.$primary, 10%);
-      }
-
-      .number {
-        position: absolute;
-        display: grid;
-        min-width: 10px;
-        min-height: 10px;
-        top: -5px;
-        right: -5px;
-        justify-content: center;
-        align-items: center;
-        padding: 3px;
-        border-radius: 50%;
-        background-color: colors.$badge_color;
-        box-shadow: 1px 1px 5px rgba(colors.$black, 0.3);
-
-        span {
-          font-size: 9px;
-          text-shadow: 1px 1px 2px rgba(colors.$black, 0.5);
-        }
-      }
-
-      i {
-        text-shadow: 1px 1px 2px rgba(colors.$black, 0.5);
-      }
-    }
-
-    .notification_button_active {
-      box-shadow: inset 5px 5px 15px darken(colors.$primary, 30px),
-        inset -5px 10px 10px lighten(colors.$primary, 10%);
-    }
-
-    .profile-icon {
-      display: flex;
-      gap: 10px;
-      color: colors.$white;
-      text-align: end;
-      padding: 5px 10px;
-      padding-left: 20px;
-      border: none;
-      border-radius: 10px;
-      align-items: center;
-      justify-content: end;
-      background-color: transparent;
-      cursor: pointer;
-      box-shadow: inset 5px 5px 15px darken(colors.$primary, 20%),
-        inset -5px 10px 10px lighten(colors.$primary, 20%);
-
-      .name-profile {
-        display: grid;
-        gap: 1px;
-
-        span {
-          font-size: 15px;
-          letter-spacing: 1.7px;
-          text-align: left;
-          text-transform: capitalize;
-          text-shadow: 2px 2px 5px darken(colors.$primary, 20%);
-        }
-      }
-
-      .icon-profile {
-        display: grid;
-        width: 40px;
-        height: 40px;
-        border-radius: 50px;
-        align-items: center;
-        justify-content: center;
-        border: 1px solid darken(colors.$primary, 20);
-        transition: 0.3s;
-
-        img {
-          width: 35px;
-        }
-      }
-
-      &:hover {
-        .icon-profile {
-          background-color: $fondo-active-hover;
-        }
-      }
-    }
+  // TODO: responsive 300px
+  @media screen and (max-width: 300px) {
+    width: auto;
   }
 }

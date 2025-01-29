@@ -1,50 +1,21 @@
-<section class="content-navbar dimension-nav" [ngClass]="{'dimension-nav-hidden': sidebarHidden}">
-  <!-- Toggle sidebar -->
-  <div class="icon-menu-sidebar" (click)="triggerToggleSidebar()">
-    <i class='bx bx-menu-alt-left' [ngClass]="{'bx-menu': sidebarHidden,'bx-menu-alt-left': !sidebarHidden}"></i>
-  </div>
-
-  <!-- Balance -->
-  <div class="content_balance">
-    <span class="title">Balance:</span>
-    <span class="number">$ {{ balance }}</span>
-  </div>
-
-  <!-- contenido -->
+<section class="content-navbar dimension-nav z-10">
   <main class="navbar">
-    
-    <!-- Notificaciones -->
-    <div class="notification_button" (click)="toggleNotifications()"
-      [ngClass]="{notification_button_active: notificationService.showNotification$ | async}">
-      @if (countNotifications !== 0) {
-      <div class="number">
-        <span>{{countNotifications}}</span>
-      </div>
-      }
-      @if (notificationService.showNotification$ | async) {
-      <i class="fa-solid fa-bell"></i>
-      } @else {
-      <i class="fa-sharp fa-regular fa-bell"></i>
-      }
-    </div>
-
-    <button class="profile-icon" [ngClass]="{'active-menu-profile': menuService.showMenuProfile$ | async}"
-      (click)="toggleMenuProfile()">
-      <div class="name-profile">
-        <span>{{ firstname_user }}</span>
-        <span>{{ lastname_user }}</span>
-      </div>
-      <div class="icon-profile">
-        <img src="assets/img/default/user.svg">
-      </div>
-    </button>
+    <ul class="flex items-center">
+      <li>
+        <a href="#" (click)="logout()" class="flex items-center mr-4 hover:text-blue-100">
+          <span class="inline-flex mr-1">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+            </svg>
+          </span>
+          Cerrar Sesión
+        </a>
+      </li>
+    </ul>
   </main>
 </section>
-
-<!-- Panel de notificaciones -->
-@if ((notificationService.showNotification$ | async)) {
-<app-notification [routes]="routes"></app-notification>
-}
 
 <!-- Boton para volver hacia arriba -->
 @if (showScrollButton) {

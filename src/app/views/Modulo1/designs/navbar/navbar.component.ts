@@ -1,9 +1,10 @@
-import { Component, EventEmitter, HostListener, Input, OnInit, Output, output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnInit, Output } from '@angular/core';
 import { MenuService } from 'src/app/views/Modulo1/services/menu-profile.service';
 import { MenuProfileComponent } from '../../components/menu-profile/menu-profile.component';
 import { NgClass, AsyncPipe } from '@angular/common';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { NotificationComponent } from '../../components/notification/notification.component';
+import { UsuarioService } from 'src/app/core/services/usuario.service';
 
 @Component({
   selector: 'app-navbar',
@@ -19,8 +20,6 @@ export class NavbarComponent implements OnInit {
   lastname_user: string | null = 'Sistema';
 
   // Sidebar y rutas
-  @Input() sidebarHidden!: boolean;
-  @Output() toggleSidebar = new EventEmitter<void>();
   @Input() routes!: string[];
 
   // Button top
@@ -32,13 +31,10 @@ export class NavbarComponent implements OnInit {
   // Notificaciones
   countNotifications: number = 9;
 
-  triggerToggleSidebar() {
-    this.toggleSidebar.emit();
-  }
-
   constructor(
     public menuService: MenuService,
     public notificationService: NotificationService,
+    private usuarioService: UsuarioService
   ) {
   }
 
@@ -72,21 +68,11 @@ export class NavbarComponent implements OnInit {
     }
   }
 
-
   //===================================================================
-  // Notificaciones
+  // Logout
   //===================================================================
 
-  toggleNotifications() {
-    this.notificationService.toggleNotification();
-  }
-
-  // Evento para mostrar el menu de perfil
-  @HostListener('document:click', ['$event'])
-  handleClickOutside(event: Event) {
-    const target = event.target as HTMLElement;
-    if (!target.closest('.profile-icon')) {
-      this.menuService.closeMenuProfile();
-    }
+  logout() {
+    this.usuarioService.logout();
   }
 }

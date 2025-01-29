@@ -60,7 +60,7 @@ export class AlertService {
         timerProgressBar: true,
         allowOutsideClick: false, // Evita que la alerta se cierre al hacer clic fuera de ella
         didOpen: () => {
-          Swal.showLoading(); // Muestra la animación de carga circular
+          Swal.showLoading(null); // Muestra la animación de carga circular
           const timer = Swal.getPopup()?.querySelector('b');
           if (timer) {
             this.timerInterval = setInterval(() => {

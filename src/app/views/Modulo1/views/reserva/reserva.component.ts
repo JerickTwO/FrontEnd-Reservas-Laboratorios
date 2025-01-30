@@ -8,7 +8,7 @@ import { Reserva } from 'src/app/models/reserva.model';
   imports: [],
   templateUrl: './reserva.component.html',
 })
-export class ReservasComponent implements OnInit {
+export class ReservaComponent implements OnInit {
   reservas: Reserva[] = [];
   reservasPaginadas: Reserva[] = [];
   currentPage = 1;

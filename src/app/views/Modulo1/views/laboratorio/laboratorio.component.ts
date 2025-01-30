@@ -9,7 +9,7 @@ import { Laboratorio } from 'src/app/models/laboratorio.model';
   imports: [], // Importar NgFor y NgIf
   templateUrl: './laboratorio.component.html',
 })
-export class LabsComponent implements OnInit {
+export class LaboratorioComponent implements OnInit {
   laboratorios: Laboratorio[] = [];
   laboratoriosPaginados: Laboratorio[] = [];
   error: string | null = null;

@@ -4,10 +4,10 @@ import { LaboratorioService } from 'src/app/core/services/laboratorio.service';
 import { Laboratorio } from 'src/app/models/laboratorio.model';
 
 @Component({
-  selector: 'app-labs',
+  selector: 'app-laboratorio',
   standalone: true,
   imports: [], // Importar NgFor y NgIf
-  templateUrl: './labs.component.html',
+  templateUrl: './laboratorio.component.html',
 })
 export class LabsComponent implements OnInit {
   laboratorios: Laboratorio[] = [];

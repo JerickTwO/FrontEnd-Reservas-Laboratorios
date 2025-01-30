@@ -1,13 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { NgFor, NgIf } from '@angular/common';
 import { ReservaService } from 'src/app/core/services/reserva.service';
 import { Reserva } from 'src/app/models/reserva.model';
 
 @Component({
-  selector: 'app-reservas',
+  selector: 'app-reserva',
   standalone: true,
-  imports: [NgFor, NgIf],
-  templateUrl: './reservas.component.html',
+  imports: [],
+  templateUrl: './reserva.component.html',
 })
 export class ReservasComponent implements OnInit {
   reservas: Reserva[] = [];

@@ -2,8 +2,8 @@ import { Routes } from '@angular/router';
 import { Modulo1Component } from './modulo1.component';
 
 import { HomeComponent } from './views/home/home.component';
-import { LabsComponent } from './views/labs/labs.component';
-import { ReservasComponent } from './views/reservas/reservas.component';
+import { LabsComponent } from './views/lab/labs.component';
+import { ReservasComponent } from './views/reserva/reservas.component';
 import { ProfileComponent } from './views/profile/profile.component';
 import { ServiciosComponent } from './views/servicios/servicios.component';
 import { ChatSoporteComponent } from './views/Admin/chat-soporte/chat-soporte.component';

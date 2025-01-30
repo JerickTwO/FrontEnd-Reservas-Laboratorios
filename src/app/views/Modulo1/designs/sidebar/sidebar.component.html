@@ -20,13 +20,12 @@
               [pTooltip]="sidebarHidden ? 'dashboard' : undefined"
               [class.active-section]="activeLink.includes(routes[0])">
               <div class="icon-sidebar-item">
-                <i class="bx bxs-pie-chart-alt-2"></i>
+                <i class="bx bxs-dashboard"></i>
               </div>
               <div class="name-sidebar-item">
                 <li>Dashboard</li>
               </div>
             </a>
-
 
             <a [routerLink]="routes[1]" routerLinkActive="active-section"
               [pTooltip]="sidebarHidden ? 'Laboratorios' : undefined"
@@ -42,7 +41,7 @@
               [pTooltip]="sidebarHidden ? 'Reservas' : undefined"
               [class.active-section]="activeLink.includes(routes[2])">
               <div class="icon-sidebar-item">
-                <i class="bx bxs-calendar"></i>
+                <i class="bx bxs-calendar-check"></i>
               </div>
               <div class="name-sidebar-item">
                 <li>Reservas</li>
@@ -50,9 +49,9 @@
             </a>
             <a [routerLink]="routes[3]" routerLinkActive="active-section"
               [pTooltip]="sidebarHidden ? 'Materias' : undefined"
-              [class.active-section]="activeLink.includes('{{ routes[3] }}')">
+              [class.active-section]="activeLink.includes(routes[3])">
               <div class="icon-sidebar-item">
-                <i class="bx bxs-calendar"></i>
+                <i class="bx bxs-book"></i>
               </div>
               <div class="name-sidebar-item">
                 <li>Materias</li>
@@ -65,9 +64,9 @@
 
             <a [routerLink]="routes[4]" routerLinkActive="active-section"
               [pTooltip]="sidebarHidden ? 'Roles' : undefined"
-              [class.active-section]="activeLink.includes('{{ routes[4] }}')">
+              [class.active-section]="activeLink.includes(routes[4])">
               <div class="icon-sidebar-item">
-                <i class="bx bxs-user"></i>
+                <i class="bx bxs-user-badge"></i>
               </div>
               <div class="name-sidebar-item">
                 <li>Roles</li>
@@ -75,9 +74,9 @@
             </a>
             <a [routerLink]="routes[4]" routerLinkActive="active-section"
               [pTooltip]="sidebarHidden ? 'Docentes' : undefined"
-              [class.active-section]="activeLink.includes('{{ routes[4] }}')">
+              [class.active-section]="activeLink.includes(routes[4])">
               <div class="icon-sidebar-item">
-                <i class="bx bxs-user"></i>
+                <i class="bx bxs-chalkboard"></i>
               </div>
               <div class="name-sidebar-item">
                 <li>Docentes</li>
@@ -88,9 +87,9 @@
             </li>
             <a [routerLink]="routes[5]" routerLinkActive="active-section"
               [pTooltip]="sidebarHidden ? 'Carreras' : undefined"
-              [class.active-section]="activeLink.includes('{{ routes[5] }}')">
+              [class.active-section]="activeLink.includes(routes[5])">
               <div class="icon-sidebar-item">
-                <i class="bx bx-check-shield"></i>
+                <i class="bx bxs-graduation"></i>
               </div>
               <div class="name-sidebar-item">
                 <li>Carreras</li>
@@ -98,9 +97,9 @@
             </a>
             <a [routerLink]="routes[5]" routerLinkActive="active-section"
               [pTooltip]="sidebarHidden ? 'Departamentos' : undefined"
-              [class.active-section]="activeLink.includes('{{ routes[5] }}')">
+              [class.active-section]="activeLink.includes(routes[5])">
               <div class="icon-sidebar-item">
-                <i class="bx bx-check-shield"></i>
+                <i class="bx bxs-building"></i>
               </div>
               <div class="name-sidebar-item">
                 <li>Departamentos</li>
@@ -112,9 +111,9 @@
             </li>
             <a [routerLink]="routes[6]" routerLinkActive="active-section"
               [pTooltip]="sidebarHidden ? 'Horario 1' : undefined"
-              [class.active-section]="activeLink.includes('{{ routes[6] }}')">
+              [class.active-section]="activeLink.includes(routes[6])">
               <div class="icon-sidebar-item">
-                <i class="bx bxs-user-detail"></i>
+                <i class="bx bxs-time"></i>
               </div>
               <div class="name-sidebar-item">
                 <li>Horario 1</li>
@@ -123,9 +122,9 @@
 
             <a [routerLink]="routes[7]" routerLinkActive="active-section"
               [pTooltip]="sidebarHidden ? 'Horario 2' : undefined"
-              [class.active-section]="activeLink.includes('{{ routes[7] }}')">
+              [class.active-section]="activeLink.includes(routes[7])">
               <div class="icon-sidebar-item">
-                <i class="bx bx-user-plus"></i>
+                <i class="bx bxs-time-five"></i>
               </div>
               <div class="name-sidebar-item">
                 <li>Horario 2</li>
@@ -136,6 +135,4 @@
       </div>
     </div>
   </div>
-
-
 </section>

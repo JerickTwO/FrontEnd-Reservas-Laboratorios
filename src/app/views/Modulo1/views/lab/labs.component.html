@@ -1,0 +1,51 @@
+<div class="container mx-auto p-6">
+
+    <div class="w-full overflow-hidden rounded-lg shadow-lg bg-white">
+        <div class="w-full overflow-x-auto">
+            <table class="w-full text-sm text-gray-700">
+                <thead class="bg-gray-800 text-white uppercase text-xs font-semibold">
+                    <tr>
+                        <th class="px-6 py-3 text-left">Nombre Laboratorio</th>
+                        <th class="px-6 py-3 text-left">Ubicación</th>
+                        <th class="px-6 py-3 text-left">Estado</th>
+                        <th class="px-6 py-3 text-left">Capacidad</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    @for (lab of laboratorios; track lab.idLaboratorio) {
+                    <tr class="hover:bg-gray-100 transition">
+                        <td class="px-6 py-4 font-medium">{{ lab.nombreLaboratorio }}</td>
+                        <td class="px-6 py-4">{{ lab.ubicacion }}</td>
+                        <td class="px-6 py-4">
+                            <span class="px-3 py-1 text-xs font-semibold rounded-full"
+                                [class.bg-green-100]="lab.capacidad > 10"
+                                [class.bg-yellow-100]="lab.capacidad <= 10 && lab.capacidad > 5"
+                                [class.bg-red-100]="lab.capacidad <= 5">
+                                {{ lab.capacidad > 10 ? 'Disponible' : lab.capacidad > 5 ? 'Ocupado' : 'Lleno' }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4">{{ lab.capacidad }}</td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Paginación -->
+        <div class="flex items-center justify-between px-6 py-4 bg-gray-100 border-t">
+            <button class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border rounded-md hover:bg-gray-200"
+                (click)="prevPage()" [disabled]="currentPage === 1">
+                Anterior
+            </button>
+
+            <span class="text-sm text-gray-700">
+                Página {{ currentPage }} de {{ totalPages }}
+            </span>
+
+            <button class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border rounded-md hover:bg-gray-200"
+                (click)="nextPage()" [disabled]="currentPage === totalPages">
+                Siguiente
+            </button>
+        </div>
+    </div>
+</div>

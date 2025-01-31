@@ -14,7 +14,6 @@ $background_content: rgba(lighten(colors.$white, 10), 1);
     5px 5px 10px colors.$gray,
     inset 8px 8px 12px darken(colors.$sha2, 15),
     inset -8px -8px 12px colors.$sha1;
-  z-index: 100;
 
   &::before {
     content: "";

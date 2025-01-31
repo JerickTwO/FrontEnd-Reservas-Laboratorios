@@ -9,7 +9,6 @@ import {
 import { Observable } from 'rxjs';
 import { Modulo1Component } from './views/Modulo1/modulo1.component';
 import { Injector } from '@angular/core';
-import { SocketService } from './core/services/socket.service';
 import { UsuarioService } from './core/services/usuario.service';
 
 export let AppInjector: Injector;

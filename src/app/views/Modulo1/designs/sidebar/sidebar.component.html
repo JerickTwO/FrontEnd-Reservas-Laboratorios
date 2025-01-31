@@ -17,7 +17,6 @@
           <ul class="nav-list">
             <!-- <div *ngIf="usuario.role !== 'Customer'"> -->
             <a [routerLink]="routes[0]" routerLinkActive="active-section"
-              [pTooltip]="sidebarHidden ? 'dashboard' : undefined"
               [class.active-section]="activeLink.includes(routes[0])">
               <div class="icon-sidebar-item">
                 <i class="bx bxs-dashboard"></i>
@@ -28,7 +27,6 @@
             </a>
 
             <a [routerLink]="routes[1]" routerLinkActive="active-section"
-              [pTooltip]="sidebarHidden ? 'Laboratorios' : undefined"
               [class.active-section]="activeLink.includes(routes[1])">
               <div class="icon-sidebar-item">
                 <i class="bx bxs-flask"></i>
@@ -38,7 +36,6 @@
               </div>
             </a>
             <a [routerLink]="routes[2]" routerLinkActive="active-section"
-              [pTooltip]="sidebarHidden ? 'Reservas' : undefined"
               [class.active-section]="activeLink.includes(routes[2])">
               <div class="icon-sidebar-item">
                 <i class="bx bxs-calendar-check"></i>
@@ -48,7 +45,6 @@
               </div>
             </a>
             <a [routerLink]="routes[3]" routerLinkActive="active-section"
-              [pTooltip]="sidebarHidden ? 'Materias' : undefined"
               [class.active-section]="activeLink.includes(routes[3])">
               <div class="icon-sidebar-item">
                 <i class="bx bxs-book"></i>
@@ -57,13 +53,13 @@
                 <li>Materias</li>
               </div>
             </a>
-            
-            <!-- <li class="divider" [pTooltip]="sidebarHidden ? 'ADMINISTRADOR' : undefined">
+
+            <li class="dividers">
               Usuarios
             </li>
 
             <a [routerLink]="routes[4]" routerLinkActive="active-section"
-              [pTooltip]="sidebarHidden ? 'Roles' : undefined" [class.active-section]="activeLink.includes(routes[4])">
+              [class.active-section]="activeLink.includes(routes[4])">
               <div class="icon-sidebar-item">
                 <i class="bx bxs-user-badge"></i>
               </div>
@@ -72,7 +68,6 @@
               </div>
             </a>
             <a [routerLink]="routes[4]" routerLinkActive="active-section"
-              [pTooltip]="sidebarHidden ? 'Docentes' : undefined"
               [class.active-section]="activeLink.includes(routes[4])">
               <div class="icon-sidebar-item">
                 <i class="bx bxs-chalkboard"></i>
@@ -81,11 +76,10 @@
                 <li>Docentes</li>
               </div>
             </a>
-            <li class="divider" [pTooltip]="sidebarHidden ? 'ADMINISTRADOR' : undefined">
+            <li class="dividers">
               Áreas
             </li>
             <a [routerLink]="routes[5]" routerLinkActive="active-section"
-              [pTooltip]="sidebarHidden ? 'Carreras' : undefined"
               [class.active-section]="activeLink.includes(routes[5])">
               <div class="icon-sidebar-item">
                 <i class="bx bxs-graduation"></i>
@@ -95,7 +89,6 @@
               </div>
             </a>
             <a [routerLink]="routes[5]" routerLinkActive="active-section"
-              [pTooltip]="sidebarHidden ? 'Departamentos' : undefined"
               [class.active-section]="activeLink.includes(routes[5])">
               <div class="icon-sidebar-item">
                 <i class="bx bxs-building"></i>
@@ -104,12 +97,11 @@
                 <li>Departamentos</li>
               </div>
             </a>
-          
-            <li class="divider" [pTooltip]="sidebarHidden ? 'ADMINISTRADOR' : undefined">
+
+            <li class="dividers">
               Horarios
             </li>
             <a [routerLink]="routes[6]" routerLinkActive="active-section"
-              [pTooltip]="sidebarHidden ? 'Horario 1' : undefined"
               [class.active-section]="activeLink.includes(routes[6])">
               <div class="icon-sidebar-item">
                 <i class="bx bxs-time"></i>
@@ -120,7 +112,6 @@
             </a>
 
             <a [routerLink]="routes[7]" routerLinkActive="active-section"
-              [pTooltip]="sidebarHidden ? 'Horario 2' : undefined"
               [class.active-section]="activeLink.includes(routes[7])">
               <div class="icon-sidebar-item">
                 <i class="bx bxs-time-five"></i>
@@ -128,7 +119,7 @@
               <div class="name-sidebar-item">
                 <li>Horario 2</li>
               </div>
-            </a> -->
+            </a>
           </ul>
         </nav>
       </div>

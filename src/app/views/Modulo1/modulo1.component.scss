@@ -48,6 +48,8 @@
     position: relative;
     padding: 10px 20px;
     border-radius: 10px;
+    margin-left: 180px;
+
     background-color: colors.$white;
     border: 1px solid rgba(colors.$black, 0.05);
 
@@ -75,7 +77,7 @@
 
 .dimension-nav,
 .dimension-content {
-  width: calc(100% - 270px);
+  width: calc(100% - 290px);
   left: 230px;
   gap: 10px;
   transition: all 0.3s ease;
@@ -84,7 +86,7 @@
 // Sidebar Retraido
 .dimension-nav-hidden,
 .dimension-content-hidden {
-  width: calc(100% - 105px);
+  width: calc(100% - 125px);
   left: 65px;
   transition: all 0.3s ease;
 }

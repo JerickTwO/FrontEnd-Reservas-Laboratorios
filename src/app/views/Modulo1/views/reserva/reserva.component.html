@@ -16,48 +16,36 @@
                 </thead>
                 <tbody class="divide-y divide-gray-200">
                     @if (reservas.length === 0) {
-                        <tr>
-                            <td colspan="7" class="text-center py-4 text-gray-500">
-                                No hay reservas disponibles.
-                            </td>
-                        </tr>
+                    <tr>
+                        <td colspan="7" class="text-center py-4 text-gray-500">
+                            No hay reservas disponibles.
+                        </td>
+                    </tr>
                     } @for (reserva of reservasPaginadas; track reserva.idReserva) {
-                        <tr class="hover:bg-gray-100 transition">
-                            <td class="px-6 py-4 font-medium">{{ reserva.nombreCompleto }}</td>
-                            <td class="px-6 py-4">{{ reserva.correo }}</td>
-                            <td class="px-6 py-4">{{ reserva.telefono }}</td>
-                            <td class="px-6 py-4">{{ reserva.laboratorio.nombreLaboratorio }}</td>
-                            <td class="px-6 py-4">{{ reserva.horaInicio }}</td>
-                            <td class="px-6 py-4">{{ reserva.horaFin }}</td>
-                            <td class="px-6 py-4">
-                                <span class="px-3 py-1 text-xs font-semibold rounded-full"
-                                    [class.bg-green-100]="reserva.estado === 'Aprobada'"
-                                    [class.bg-yellow-100]="reserva.estado === 'Pendiente'"
-                                    [class.bg-red-100]="reserva.estado === 'Rechazada'">
-                                    {{ reserva.estado }}
-                                </span>
-                            </td>
-                        </tr>
+                    <tr class="hover:bg-gray-100 transition">
+                        <td class="px-6 py-4 font-medium">{{ reserva.nombreCompleto }}</td>
+                        <td class="px-6 py-4">{{ reserva.correo }}</td>
+                        <td class="px-6 py-4">{{ reserva.telefono }}</td>
+                        <td class="px-6 py-4">{{ reserva.laboratorio.nombreLaboratorio }}</td>
+                        <td class="px-6 py-4">{{ reserva.horaInicio }}</td>
+                        <td class="px-6 py-4">{{ reserva.horaFin }}</td>
+                        <td class="px-6 py-4">
+                            <span class="px-3 py-1 text-xs font-semibold rounded-full"
+                                [class.bg-green-100]="reserva.estado === 'Aprobada'"
+                                [class.bg-yellow-100]="reserva.estado === 'Pendiente'"
+                                [class.bg-red-100]="reserva.estado === 'Rechazada'">
+                                {{ reserva.estado }}
+                            </span>
+                        </td>
+                    </tr>
                     }
                 </tbody>
             </table>
         </div>
 
         <!-- Paginación -->
-        <div class="flex items-center justify-between px-6 py-4 bg-gray-100 border-t">
-            <button class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border rounded-md hover:bg-gray-200"
-                (click)="prevPage()" [disabled]="currentPage === 1">
-                Anterior
-            </button>
+        <app-pagination [currentPage]="currentPage" [totalPages]="totalPages" (pageChange)="onPageChange($event)">
+        </app-pagination>
 
-            <span class="text-sm text-gray-700">
-                Página {{ currentPage }} de {{ totalPages }}
-            </span>
-
-            <button class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border rounded-md hover:bg-gray-200"
-                (click)="nextPage()" [disabled]="currentPage === totalPages">
-                Siguiente
-            </button>
-        </div>
     </div>
 </div>

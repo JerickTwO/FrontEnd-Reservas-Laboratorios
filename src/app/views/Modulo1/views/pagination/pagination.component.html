@@ -1,0 +1,15 @@
+<div class="flex items-center justify-between px-6 py-4 bg-gray-100 border-t">
+  <button class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border rounded-md hover:bg-gray-200"
+      (click)="prevPage()" [disabled]="currentPage === 1">
+      Anterior
+  </button>
+
+  <span class="text-sm text-gray-700">
+      Página {{ currentPage }} de {{ totalPages }}
+  </span>
+
+  <button class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border rounded-md hover:bg-gray-200"
+      (click)="nextPage()" [disabled]="currentPage === totalPages">
+      Siguiente
+  </button>
+</div>

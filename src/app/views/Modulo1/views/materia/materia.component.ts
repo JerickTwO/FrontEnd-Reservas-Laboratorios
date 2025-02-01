@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { NgFor, NgIf } from '@angular/common';
 import { MateriaService } from 'src/app/core/services/materia.service';
 import { Materia } from 'src/app/models/materia.model';
 
 @Component({
   selector: 'app-materia',
   standalone: true,
-  imports: [NgFor, NgIf],
   templateUrl: './materia.component.html',
 })
 export class MateriaComponent implements OnInit {

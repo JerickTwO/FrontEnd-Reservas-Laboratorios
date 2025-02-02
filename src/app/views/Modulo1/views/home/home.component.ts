@@ -4,6 +4,8 @@ import { LaboratorioService } from 'src/app/core/services/laboratorio.service';
 import { CarreraService } from 'src/app/core/services/carrera.service';
 import { DepartamentoService } from 'src/app/core/services/departamento.service';
 import { DocenteService } from 'src/app/core/services/docente.service';
+import 'boxicons';
+
 
 @Component({
   selector: 'app-home',
@@ -20,13 +22,13 @@ export class HomeComponent implements OnInit {
   totalDocentes: number = 0;
   totalDepartamentos: number = 0;
   totalCarreras: number = 0;
-
+  
   cards = [
-    { icon: 'bx-calendar', color: 'blue', title: 'Reservas Pendientes', count: () => this.totalReservasPendientes },
-    { icon: 'bx-chalkboard', color: 'red', title: 'Docentes', count: () => this.totalDocentes },
-    { icon: 'bx-book', color: 'purple', title: 'Carreras', count: () => this.totalCarreras },
-    { icon: 'bx-building', color: 'yellow', title: 'Departamentos', count: () => this.totalDepartamentos },
-    { icon: 'bxs-flask', color: 'green', title: 'Laboratorios', count: () => this.totalLaboratorios }
+    { icon: 'bx-calendar', color:'text-blue-600', gradient: 'from-blue-500 to-blue-700  shadow-blue-800/40', title: 'Reservas Pendientes', count: () => this.totalReservasPendientes },
+    { icon: 'bx-chalkboard', color:'text-red-600', gradient: 'from-red-500 to-red-700  shadow-red-800/40', title: 'Docentes', count: () => this.totalDocentes },
+    { icon: 'bx-book', color:'text-purple-600', gradient: 'from-purple-500 to-purple-700  shadow-purple-800/40', title: 'Carreras', count: () => this.totalCarreras },
+    { icon: 'bx-building', color:'text-yellow-600', gradient: 'from-yellow-500 to-yellow-700  shadow-yellow-800/40', title: 'Departamentos', count: () => this.totalDepartamentos },
+    { icon: 'bxs-flask', color:'text-green-600', gradient: 'from-green-500 to-green-700  shadow-green-800/40', title: 'Laboratorios', count: () => this.totalLaboratorios }
   ];
 
   constructor(
@@ -35,14 +37,14 @@ export class HomeComponent implements OnInit {
     private docenteService: DocenteService,
     private departamentoService: DepartamentoService,
     private carreraService: CarreraService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.cargarDatos();
   }
 
   cargarDatos(): void {
-    this.reservaService.getReservas().subscribe((data) => {
+    this.reservaService.listarReservas().subscribe((data) => {
       this.totalReservasPendientes = data.filter((reserva) => reserva.estado === 'PENDIENTE').length;
     });
 

@@ -1,5 +1,9 @@
-<div class="container mx-auto m-6">
-
+<div>
+    <div class="text-end  mb-2 ">
+        <button class="rounded-lg text-white text-sm py-2 px-3 bg-gray-800 hover:bg-gray-900" (click)="abrirModal()">
+            <i class="bi bi-plus-circle"></i> Nueva Reserva
+        </button>
+    </div>
     <div class="w-full overflow-hidden rounded-lg shadow-lg bg-white">
         <div class="w-full overflow-x-auto">
             <table class="w-full text-sm text-gray-700">
@@ -21,7 +25,7 @@
                             No hay reservas disponibles.
                         </td>
                     </tr>
-                    } @for (reserva of reservasPaginadas; track reserva.idReserva) {
+                    } @for (reserva of reservasPaginadas; track reserva.id) {
                     <tr class="hover:bg-gray-100 transition">
                         <td class="px-6 py-4 font-medium">{{ reserva.nombreCompleto }}</td>
                         <td class="px-6 py-4">{{ reserva.correo }}</td>
@@ -42,7 +46,71 @@
                 </tbody>
             </table>
         </div>
-
+        <!-- Modal para crear o editar reserva -->
+        <div class="modal fade" id="modalReserva" tabindex="-1" aria-labelledby="modalReservaLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header bg-gray-800 text-white">
+                        <h5 class="modal-title" id="modalReservaLabel">
+                            {{ isEditing ? 'Editar Reserva' : 'Nueva Reserva' }}
+                        </h5>
+                        <button type="button" class="btn-close" aria-label="Close" (click)="cerrarModal()"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form (ngSubmit)="guardarReserva()">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="mb-1">
+                                    <label for="nombreCompleto" class="form-label">Nombre Completo</label>
+                                    <input type="text" id="nombreCompleto" [(ngModel)]="nuevaReserva.nombreCompleto"
+                                        name="nombreCompleto" class="form-control" required />
+                                </div>
+                                <div class="mb-1">
+                                    <label for="correo" class="form-label">Correo</label>
+                                    <input type="email" id="correo" [(ngModel)]="nuevaReserva.correo" name="correo"
+                                        class="form-control" required />
+                                </div>
+                                <div class="mb-1">
+                                    <label for="telefono" class="form-label">Teléfono</label>
+                                    <input type="text" id="telefono" [(ngModel)]="nuevaReserva.telefono" name="telefono"
+                                        class="form-control" required />
+                                </div>
+                                <div class="mb-1">
+                                    <label for="laboratorio" class="form-label">Laboratorio</label>
+                                    <select id="laboratorio" [(ngModel)]="nuevaReserva.laboratorio" name="laboratorio"
+                                        class="form-select" required>
+                                        <option [ngValue]="null" disabled selected>Seleccione un laboratorio</option>
+                                        <option *ngFor="let lab of laboratorios" [ngValue]="lab">
+                                            {{ lab.nombreLaboratorio }}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="mb-1">
+                                    <label for="horaInicio" class="form-label">Hora Inicio</label>
+                                    <input type="datetime-local" id="horaInicio" [(ngModel)]="nuevaReserva.horaInicio"
+                                        name="horaInicio" class="form-control" required />
+                                </div>
+                                <div class="mb-1">
+                                    <label for="horaFin" class="form-label">Hora Fin</label>
+                                    <input type="datetime-local" id="horaFin" [(ngModel)]="nuevaReserva.horaFin"
+                                        name="horaFin" class="form-control" required />
+                                </div>
+                                <div class="col-span-2 mb-1">
+                                    <label for="motivoReserva" class="form-label">Motivo</label>
+                                    <textarea id="motivoReserva" [(ngModel)]="nuevaReserva.motivoReserva"
+                                        name="motivoReserva" class="form-control" rows="3" required></textarea>
+                                </div>
+                            </div>
+                            <div class="text-end">
+                                <button type="submit" class="btn btn-dark mr-2">{{ isEditing ? 'Guardar Cambios' :
+                                    'Crear Reserva' }}</button>
+                                <button type="button" class="btn btn-warning"
+                                    (click)="cerrarModal()">Cancelar</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- Paginación -->
         <app-pagination [currentPage]="currentPage" [totalPages]="totalPages" (pageChange)="onPageChange($event)">
         </app-pagination>

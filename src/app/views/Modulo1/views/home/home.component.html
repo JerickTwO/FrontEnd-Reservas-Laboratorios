@@ -3,11 +3,11 @@
         @for ( card of cards;track card.title) {
         <div class="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md">
             <div
-                class="bg-clip-border mx-4 rounded-xl overflow-hidden cursor-pointer bg-gradient-to-tr from-{{card.color}}-500 to-{{card.color}}-700 text-white shadow-{{card.color}}-800/40 shadow-lg absolute -mt-4 grid h-12 w-12 place-items-center">
-                <i class='bx {{card.icon}}' style='color:white; font-size: 34px;'></i>
+                class="bg-clip-border mx-4 rounded-xl overflow-hidden cursor-pointer bg-gradient-to-tr text-white {{card.gradient}} shadow-lg absolute -mt-4 grid h-12 w-12 place-items-center">
+                <i class='bx {{card.icon}}' style='color:black; font-size: 34px;'></i>
             </div>
             <div class="p-4 text-right">
-                <p class="block antialiased font-sans text-sm leading-normal font-normal text-{{card.color}}-600">
+                <p class="block antialiased font-sans text-sm leading-normal font-normal {{card.color}}">
                     {{ card.title }}
                 </p>
                 <h4

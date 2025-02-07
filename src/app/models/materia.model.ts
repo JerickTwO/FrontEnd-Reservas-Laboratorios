@@ -1,22 +1,15 @@
-export interface Materia {
-    idMateria: number;
-    nombreMateria: string;
-    nrc: string;
-    docente: Docente;
+import { Docente } from './docente.model';
+
+export class Materia {
+  idMateria: number;
+  nombreMateria: string;
+  nrc: string;
+  docente: Docente; // Relación con el modelo Docente
+
+  constructor() {
+    this.idMateria = 0;
+    this.nombreMateria = '';
+    this.nrc = '';
+    this.docente = new Docente();
   }
-  
-  export interface Docente {
-    idDocente: number;
-    nombreDocente: string;
-    apellidoDocente: string;
-    correoDocente: string;
-    idInstitucional: string;
-    departamento: Departamento;
-  }
-  
-  export interface Departamento {
-    idDepartamento: number;
-    nombreDepartamento: string;
-    descripcion: string;
-  }
-  
+}

@@ -1,8 +1,9 @@
 <div>
-    <div class="text-end mb-2">
+    <div class="d-flex justify-content-between align-items-center mb-3">
         <button class="rounded-lg text-white text-sm py-2 px-3 bg-gray-800 hover:bg-gray-900" (click)="abrirModal()">
             <i class="bi bi-plus-circle"></i> Nueva Reserva
         </button>
+        <p class="text-muted mb-0">Total: {{ reservas.length }} reservas registrados.</p>
     </div>
     <div class="w-full overflow-hidden rounded-lg shadow-lg bg-white">
         <div class="w-full overflow-x-auto">
@@ -16,6 +17,7 @@
                         <th class="px-6 py-3 text-left">Hora Inicio</th>
                         <th class="px-6 py-3 text-left">Hora Fin</th>
                         <th class="px-6 py-3 text-left">Estado</th>
+                        <th class="px-6 py-3 text-left">Acciones</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
@@ -25,7 +27,7 @@
                             No hay reservas disponibles.
                         </td>
                     </tr>
-                    } @for (reserva of reservasPaginadas; track reserva.id) {
+                    } @for (reserva of reservasPaginadas; track reserva.idReserva) {
                     <tr class="hover:bg-gray-100 transition">
                         <td class="px-6 py-4 font-medium">{{ reserva.nombreCompleto }}</td>
                         <td class="px-6 py-4">{{ reserva.correo }}</td>
@@ -41,6 +43,14 @@
                                 {{ reserva.estado }}
                             </span>
                         </td>
+                        <td>
+                            <button class="btn btn-warning btn-sm me-1"
+                                (click)="abrirModalEditar(reserva)">Editar</button>
+                            <button class="btn btn-danger btn-sm"
+                                (click)="eliminarReserva(reserva.idReserva)">Eliminar</button>
+
+                        </td>
+
                     </tr>
                     }
                 </tbody>
@@ -76,10 +86,10 @@
                                 </div>
                                 <div class="mb-1">
                                     <label for="laboratorio" class="form-label">Laboratorio</label>
-                                    <select id="laboratorio" [(ngModel)]="nuevaReserva.laboratorio" name="laboratorio"
-                                        class="form-select" required>
-                                        <option [ngValue]="null" disabled selected>Seleccione un laboratorio</option>
-                                        <option *ngFor="let lab of laboratorios" [ngValue]="lab">
+                                    <select id="laboratorio" [(ngModel)]="nuevaReserva.laboratorio.idLaboratorio"
+                                        name="laboratorio" class="form-select" required>
+                                        <option [value]="null" disabled selected>Seleccione un laboratorio</option>
+                                        <option *ngFor="let lab of laboratorios" [value]="lab.idLaboratorio">
                                             {{ lab.nombreLaboratorio }}
                                         </option>
                                     </select>
@@ -103,8 +113,7 @@
                             <div class="text-end">
                                 <button type="submit" class="btn btn-dark mr-2">{{ isEditing ? 'Guardar Cambios' :
                                     'Crear Reserva' }}</button>
-                                <button type="button" class="btn btn-warning"
-                                    (click)="cerrarModal()">Cancelar</button>
+                                <button type="button" class="btn btn-warning" (click)="cerrarModal()">Cancelar</button>
                             </div>
                         </form>
                     </div>

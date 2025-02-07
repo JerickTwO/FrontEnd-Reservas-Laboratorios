@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Estudiante } from 'src/app/models/estudiante.model';
 import { Carrera } from 'src/app/models/carrera.model';
 import { EstudianteService } from 'src/app/core/services/estudiante.service';
@@ -22,7 +22,7 @@ export class EstudianteComponent {
   carreras: Carrera[] = [];
   newEstudiante: Estudiante = new Estudiante();
   selectedEstudiante: Estudiante | null = null;
-  isEditing: boolean = false; // Modo edición o creación
+  isEditing: boolean = false;
   estudiantesPaginados: Estudiante[] = [];
   currentPage = 1;
   itemsPerPage = 5;

@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { Modal } from 'bootstrap';
+
 @Component({
   selector: 'app-reserva',
   standalone: true,
@@ -38,6 +39,9 @@ export class ReservaComponent implements OnInit {
     this.getReservas();
     this.modalReserva = new Modal(document.getElementById('modalReserva')!, { backdrop: 'static' });
     this.getLaboratorios();
+    document.getElementById('modalReserva')?.addEventListener('hidden.bs.modal', () => {
+      this.cerrarModal();
+    });
   }
 
   getReservas(): void {
@@ -59,13 +63,17 @@ export class ReservaComponent implements OnInit {
   }
 
   guardarReserva(): void {
+
     if (this.isEditing) {
-      if (!this.nuevaReserva.id) {
+
+      console.log(this.nuevaReserva)
+      console.log(this.nuevaReserva.idReserva)
+      if (!this.nuevaReserva.idReserva) {
         console.error('ID inválido para actualizar la reserva.');
         return;
       }
 
-      this.reservaService.actualizarReserva(this.nuevaReserva.id, this.nuevaReserva).subscribe({
+      this.reservaService.actualizarReserva(this.nuevaReserva.idReserva, this.nuevaReserva).subscribe({
         next: () => {
           console.log('Reserva actualizada con éxito');
           this.getReservas();
@@ -86,19 +94,21 @@ export class ReservaComponent implements OnInit {
   }
 
   cambiarEstado(reserva: Reserva, nuevoEstado: string): void {
-    if (!reserva.id) {
+    if (!reserva.idReserva) {
       console.error('ID de reserva inválido para cambiar estado.');
       return;
     }
 
     reserva.estado = nuevoEstado; // Actualiza localmente
-    this.reservaService.actualizarReserva(reserva.id, { estado: nuevoEstado }).subscribe({
-      next: () => console.log(`Estado de la reserva con ID ${reserva.id} actualizado a ${nuevoEstado}`),
+    this.reservaService.actualizarReserva(reserva.idReserva, { estado: nuevoEstado }).subscribe({
+      next: () => console.log(`Estado de la reserva con ID ${reserva.idReserva} actualizado a ${nuevoEstado}`),
       error: (err) => console.error('Error al actualizar el estado de la reserva:', err),
     });
   }
 
   abrirModal(): void {
+    this.isEditing = false;
+
     if (this.modalReserva) {
       this.modalReserva.hide(); // Cierra cualquier modal abierto
       setTimeout(() => this.modalReserva.show(), 300); // Abre el nuevo modal después de un corto retraso
@@ -108,6 +118,10 @@ export class ReservaComponent implements OnInit {
   abrirModalEditar(reserva: Reserva): void {
     this.isEditing = true;
     this.nuevaReserva = { ...reserva };
+
+    const laboratorioEncontrado = this.laboratorios.find(lab => lab.idLaboratorio === reserva.laboratorio.idLaboratorio);
+    this.nuevaReserva.laboratorio = laboratorioEncontrado || { idLaboratorio: 0, nombreLaboratorio: '' };
+
     this.abrirModal();
   }
 
@@ -115,9 +129,14 @@ export class ReservaComponent implements OnInit {
     if (this.modalReserva) {
       this.modalReserva.hide();
     }
-    document.querySelectorAll('.modal-backdrop').forEach(el => el.remove()); this.isEditing = false;
+    document.querySelectorAll('.modal-backdrop').forEach(el => el.remove());
+    document.body.classList.remove('modal-open');
+
+    this.isEditing = false;
     this.nuevaReserva = this.resetNuevaReservaData();
   }
+
+
 
   eliminarReserva(id: number | undefined): void {
     if (!id) {
@@ -136,7 +155,7 @@ export class ReservaComponent implements OnInit {
 
   private resetNuevaReservaData(): Reserva {
     return {
-      id: undefined,
+      idReserva: 0,
       nombreCompleto: '',
       correo: '',
       telefono: '',
@@ -157,7 +176,7 @@ export class ReservaComponent implements OnInit {
     if (action === 'edit') {
       this.abrirModalEditar(reserva);
     } else if (action === 'delete') {
-      this.eliminarReserva(reserva.id);
+      this.eliminarReserva(reserva.idReserva);
     } else if (event.event.target.tagName === 'SELECT') {
       const estado = (event.event.target as HTMLSelectElement).value;
       this.cambiarEstado(reserva, estado);

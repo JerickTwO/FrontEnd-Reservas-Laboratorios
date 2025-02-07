@@ -31,7 +31,7 @@ export class ReservaService {
   }
 
   actualizarReserva(idReserva: number, data: Partial<Reserva>): Observable<Reserva> {
-    return this.http.patch<Reserva>(`${this.baseUrl}/${idReserva}`, data).pipe(
+    return this.http.put<Reserva>(`${this.baseUrl}/${idReserva}`, data).pipe(
       catchError(this.handleError)
     );
   }

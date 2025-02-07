@@ -1,5 +1,11 @@
 <div>
-
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <button class="rounded-lg text-white text-sm py-2 px-3 bg-gray-800 hover:bg-gray-900"
+            (click)="openAddLaboratorioModal()">
+            <i class="bi bi-plus-circle"></i> Agregar Laboratorio
+        </button>
+        <p class="text-muted mb-0">Total: {{ laboratorios.length }} laboratorios registrados.</p>
+    </div>
     <div class="w-full overflow-hidden rounded-lg shadow-lg bg-white">
         <div class="w-full overflow-x-auto">
             <table class="w-full text-sm text-gray-700">
@@ -9,6 +15,7 @@
                         <th class="px-6 py-3 text-left">Ubicación</th>
                         <th class="px-6 py-3 text-left">Estado</th>
                         <th class="px-6 py-3 text-left">Capacidad</th>
+                        <th class="px-6 py-3 text-left">Acciones</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
@@ -24,28 +31,110 @@
                                 {{ lab.capacidad > 10 ? 'Disponible' : lab.capacidad > 5 ? 'Ocupado' : 'Lleno' }}
                             </span>
                         </td>
+
                         <td class="px-6 py-4">{{ lab.capacidad }}</td>
+                        <td class="text-center">
+                            <button class="btn btn-warning btn-sm me-1" (click)="openEditLaboratorioModal(lab)">
+                                <i class="bi bi-pencil-square"></i> Editar
+                            </button>
+                            <button class="btn btn-danger btn-sm me-1" (click)="eliminarLaboratorio(lab.idLaboratorio)">
+                                <i class="bi bi-trash"></i> Eliminar
+                            </button>
+                            <button class="btn btn-info btn-sm" (click)="openPreviewLaboratorioModal(lab)">
+                                <i class="bi bi-eye"></i> Ver
+                            </button>
+                        </td>
                     </tr>
                     }
                 </tbody>
             </table>
         </div>
+        <div class="modal fade" id="addLaboratorioModal" tabindex="-1" aria-labelledby="addLaboratorioLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addLaboratorioLabel">Agregar Laboratorio</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form (ngSubmit)="agregarLaboratorio()">
+                            <div class="mb-3">
+                                <label for="nombreLaboratorio" class="form-label">Nombre del Laboratorio</label>
+                                <input type="text" id="nombreLaboratorio" [(ngModel)]="newLaboratorio.nombreLaboratorio"
+                                    name="nombreLaboratorio" class="form-control" required />
+                            </div>
+                            <div class="mb-3">
+                                <label for="capacidad" class="form-label">Capacidad</label>
+                                <input type="number" id="capacidad" [(ngModel)]="newLaboratorio.capacidad"
+                                    name="capacidad" class="form-control" required />
+                            </div>
+                            <div class="mb-3">
+                                <label for="ubicacion" class="form-label">Ubicación</label>
+                                <input type="text" id="ubicacion" [(ngModel)]="newLaboratorio.ubicacion"
+                                    name="ubicacion" class="form-control" required />
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Guardar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        <!-- Paginación -->
-        <div class="flex items-center justify-between px-6 py-4 bg-gray-100 border-t">
-            <button class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border rounded-md hover:bg-gray-200"
-                (click)="prevPage()" [disabled]="currentPage === 1">
-                Anterior
-            </button>
+        <!-- Modal de editar laboratorio -->
+        <div class="modal fade" id="editLaboratorioModal" tabindex="-1" aria-labelledby="editLaboratorioLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editLaboratorioLabel">Editar Laboratorio</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form (ngSubmit)="editarLaboratorio()">
+                            <!-- Reutilización del mismo diseño del formulario anterior -->
+                            <div class="mb-3">
+                                <label for="nombreLaboratorio" class="form-label">Nombre del Laboratorio</label>
+                                <input type="text" id="nombreLaboratorio" [(ngModel)]="newLaboratorio.nombreLaboratorio"
+                                    name="nombreLaboratorio" class="form-control" required />
+                            </div>
+                            <div class="mb-3">
+                                <label for="capacidad" class="form-label">Capacidad</label>
+                                <input type="number" id="capacidad" [(ngModel)]="newLaboratorio.capacidad"
+                                    name="capacidad" class="form-control" required />
+                            </div>
+                            <div class="mb-3">
+                                <label for="ubicacion" class="form-label">Ubicación</label>
+                                <input type="text" id="ubicacion" [(ngModel)]="newLaboratorio.ubicacion"
+                                    name="ubicacion" class="form-control" required />
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Guardar Cambios</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            <span class="text-sm text-gray-700">
-                Página {{ currentPage }} de {{ totalPages }}
-            </span>
-
-            <button class="px-4 py-2 text-sm font-medium text-gray-600 bg-white border rounded-md hover:bg-gray-200"
-                (click)="nextPage()" [disabled]="currentPage === totalPages">
-                Siguiente
-            </button>
+        <!-- Modal de vista previa -->
+        <div class="modal fade" id="previewLaboratorioModal" tabindex="-1" aria-labelledby="previewLaboratorioLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="previewLaboratorioLabel">Detalles del Laboratorio</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p><strong>Nombre:</strong> {{ selectedLaboratorio?.nombreLaboratorio }}</p>
+                        <p><strong>Capacidad:</strong> {{ selectedLaboratorio?.capacidad }}</p>
+                        <p><strong>Ubicación:</strong> {{ selectedLaboratorio?.ubicacion }}</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+    <!-- Paginación -->
+    <app-pagination [currentPage]="currentPage" [totalPages]="totalPages" (pageChange)="onPageChange($event)">
+    </app-pagination>
+
 </div>

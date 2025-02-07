@@ -1,5 +1,5 @@
 export class Reserva {
-    id?: number; // La propiedad ID debe existir, y el '?' indica que es opcional
+    idReserva: number; // La propiedad ID debe existir, y el '?' indica que es opcional
     nombreCompleto: string;
     correo: string;
     telefono: string;

@@ -1,0 +1,188 @@
+<div class="container py-4">
+    <!-- Encabezado -->
+    <h1 class="text-center text-primary fw-bold mb-4">Gestión de Departamentos</h1>
+  
+    <!-- Botón para agregar departamento -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <button class="btn btn-primary" (click)="openAddDepartamentoModal()">
+        <i class="bi bi-plus-circle"></i> Agregar Departamento
+      </button>
+      <p class="text-muted mb-0">Total: {{ departamentos.length }} departamentos registrados.</p>
+    </div>
+  
+    <!-- Tabla de departamentos -->
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th class="text-center">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="departamentos.length === 0">
+            <td colspan="3" class="text-center">No hay departamentos disponibles.</td>
+          </tr>
+          <tr *ngFor="let departamento of departamentos">
+            <td>{{ departamento.nombreDepartamento }}</td>
+            <td>{{ departamento.descripcion }}</td>
+            <td class="text-center">
+              <button
+                class="btn btn-warning btn-sm me-1"
+                (click)="openEditDepartamentoModal(departamento)"
+              >
+                <i class="bi bi-pencil-square"></i> Editar
+              </button>
+              <button
+                class="btn btn-info btn-sm me-1"
+                (click)="openPreviewDepartamentoModal(departamento)"
+              >
+                <i class="bi bi-eye"></i> Vista Previa
+              </button>
+              <button
+                class="btn btn-danger btn-sm"
+                (click)="eliminarDepartamento(departamento.idDepartamento!)"
+              >
+                <i class="bi bi-trash"></i> Eliminar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+    <!-- Modal para agregar departamento -->
+    <div
+      class="modal fade"
+      id="addDepartamentoModal"
+      tabindex="-1"
+      aria-labelledby="addDepartamentoModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header bg-primary text-white">
+            <h5 class="modal-title" id="addDepartamentoModalLabel">Agregar Departamento</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form (ngSubmit)="agregarDepartamento()">
+              <div class="mb-3">
+                <label for="nombreDepartamento" class="form-label">Nombre</label>
+                <input
+                  type="text"
+                  id="nombreDepartamento"
+                  [(ngModel)]="newDepartamento.nombreDepartamento"
+                  name="nombreDepartamento"
+                  class="form-control"
+                  placeholder="Ingrese el nombre del departamento"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="descripcion" class="form-label">Descripción</label>
+                <textarea
+                  id="descripcion"
+                  [(ngModel)]="newDepartamento.descripcion"
+                  name="descripcion"
+                  class="form-control"
+                  placeholder="Ingrese una descripción"
+                  rows="3"
+                  required
+                ></textarea>
+              </div>
+              <div class="text-end">
+                <button type="submit" class="btn btn-primary">
+                  <i class="bi bi-save"></i> Guardar
+                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                  <i class="bi bi-x-circle"></i> Cancelar
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Modal para editar departamento -->
+    <div
+      class="modal fade"
+      id="editDepartamentoModal"
+      tabindex="-1"
+      aria-labelledby="editDepartamentoModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header bg-warning text-white">
+            <h5 class="modal-title" id="editDepartamentoModalLabel">Editar Departamento</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form (ngSubmit)="editarDepartamento()">
+              <div class="mb-3">
+                <label for="editNombreDepartamento" class="form-label">Nombre</label>
+                <input
+                  type="text"
+                  id="editNombreDepartamento"
+                  [(ngModel)]="newDepartamento.nombreDepartamento"
+                  name="editNombreDepartamento"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="editDescripcion" class="form-label">Descripción</label>
+                <textarea
+                  id="editDescripcion"
+                  [(ngModel)]="newDepartamento.descripcion"
+                  name="editDescripcion"
+                  class="form-control"
+                  rows="3"
+                  required
+                ></textarea>
+              </div>
+              <div class="text-end">
+                <button type="submit" class="btn btn-primary">
+                  <i class="bi bi-check-circle"></i> Actualizar
+                </button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                  <i class="bi bi-x-circle"></i> Cancelar
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Modal para vista previa -->
+    <div
+      class="modal fade"
+      id="previewDepartamentoModal"
+      tabindex="-1"
+      aria-labelledby="previewDepartamentoModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header bg-info text-white">
+            <h5 class="modal-title" id="previewDepartamentoModalLabel">Vista Previa</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p><strong>Nombre:</strong> {{ selectedDepartamento?.nombreDepartamento }}</p>
+            <p><strong>Descripción:</strong> {{ selectedDepartamento?.descripcion }}</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+              <i class="bi bi-x-circle"></i> Cerrar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

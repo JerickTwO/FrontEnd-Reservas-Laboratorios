@@ -1,1 +1,107 @@
-<p>admin works!</p>
+<div class="container mt-4">  
+    <button class="btn btn-primary mb-3" (click)="openAddAdministradorModal()">Agregar Administrador</button>
+  
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Nombre Completo</th>
+          <th>Correo</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="administradores.length === 0">
+          <td colspan="4" class="text-center">No hay administradors dissponibles.</td>
+        </tr>
+        <tr *ngFor="let administrador of administradores">
+          <td>{{ administrador.nombreAdministrador }} {{ administrador.apellidoAdministrador }}</td>
+          <td>{{ administrador.correoAdministrador }}</td>
+          <td>
+            <button class="btn btn-info btn-sm" (click)="openPreviewAdministradorModal(administrador)">Vista Previa</button>
+            <button class="btn btn-warning btn-sm" (click)="openEditAdministradorModal(administrador)">Editar</button>
+            <button class="btn btn-danger btn-sm" (click)="eliminarAdministrador(administrador.idAdministrador)">Eliminar</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <!-- Modal para agregar/editar administrador -->
+    <div id="addAdministradorModal" class="modal fade" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Agregar/Editar Administrador</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="mb-3">
+                <label for="nombreAdministrador" class="form-label">Nombre</label>
+                <input
+                  type="text"
+                  id="nombreAdministrador"
+                  [(ngModel)]="newAdministrador.nombreAdministrador"
+                  name="nombreAdministrador"
+                  class="form-control"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="apellidoAdministrador" class="form-label">Apellido</label>
+                <input
+                  type="text"
+                  id="apellidoAdministrador"
+                  [(ngModel)]="newAdministrador.apellidoAdministrador"
+                  name="apellidoAdministrador"
+                  class="form-control"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="correoAdministrador" class="form-label">Correo</label>
+                <input
+                  type="email"
+                  id="correoAdministrador"
+                  [(ngModel)]="newAdministrador.correoAdministrador"
+                  name="correoAdministrador"
+                  class="form-control"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="idInstitucional" class="form-label">ID Institucional</label>
+                <input
+                  type="text"
+                  id="idInstitucional"
+                  [(ngModel)]="newAdministrador.idInstitucional"
+                  name="idInstitucional"
+                  class="form-control"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="carreraId" class="form-label">Carrera</label>
+                
+              </div>
+              <button type="button" class="btn btn-primary" (click)="guardarAdministrador()">Guardar</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Modal para vista previa del administrador -->
+    <div id="previewAdministradorModal" class="modal fade" tabindex="-1">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Vista Previa del Administrador</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <p><strong>Nombre Completo:</strong> {{ selectedAdminstrador?.nombreAdministrador }} {{ selectedAdminstrador?.apellidoAdministrador }}</p>
+            <p><strong>Correo:</strong> {{ selectedAdminstrador?.correoAdministrador }}</p>
+            <p><strong>ID Institucional:</strong> {{ selectedAdminstrador?.idInstitucional }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+   

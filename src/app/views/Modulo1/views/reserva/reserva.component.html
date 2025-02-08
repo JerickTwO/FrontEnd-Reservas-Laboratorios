@@ -29,13 +29,13 @@
                     </tr>
                     } @for (reserva of reservasPaginadas; track reserva.idReserva) {
                     <tr class="hover:bg-gray-100 transition">
-                        <td class="px-6 py-4 font-medium">{{ reserva.nombreCompleto }}</td>
-                        <td class="px-6 py-4">{{ reserva.correo }}</td>
-                        <td class="px-6 py-4">{{ reserva.telefono }}</td>
-                        <td class="px-6 py-4">{{ reserva.laboratorio.nombreLaboratorio }}</td>
-                        <td class="px-6 py-4">{{ reserva.horaInicio }}</td>
-                        <td class="px-6 py-4">{{ reserva.horaFin }}</td>
-                        <td class="px-6 py-4">
+                        <td class="px-2 py-4 font-medium">{{ reserva.nombreCompleto }}</td>
+                        <td class="px-2 py-4">{{ reserva.correo }}</td>
+                        <td class="px-2 py-4">{{ reserva.telefono }}</td>
+                        <td class="px-2 py-4">{{ reserva.laboratorio.nombreLaboratorio }}</td>
+                        <td class="px-2 py-4">{{ reserva.horaInicio }}</td>
+                        <td class="px-2 py-4">{{ reserva.horaFin }}</td>
+                        <td class="px-2 py-4">
                             <span class="px-3 py-1 text-xs font-semibold rounded-full"
                                 [class.bg-green-100]="reserva.estado === 'Aprobada'"
                                 [class.bg-yellow-100]="reserva.estado === 'Pendiente'"
@@ -44,10 +44,11 @@
                             </span>
                         </td>
                         <td>
-                            <button class="btn btn-warning btn-sm me-1"
-                                (click)="abrirModalEditar(reserva)">Editar</button>
-                            <button class="btn btn-danger btn-sm"
-                                (click)="eliminarReserva(reserva.idReserva)">Eliminar</button>
+                            <button class="btn btn-outline-dark btn-sm me-1" (click)="abrirModalEditar(reserva)"><i
+                                    class='bx bxs-edit-alt'></i> Editar</button>
+                            <button class="btn btn-outline-danger btn-sm"
+                                (click)="eliminarReserva(reserva.idReserva)"><i class="bx bxs-trash-alt"></i>
+                                Eliminar</button>
 
                         </td>
 

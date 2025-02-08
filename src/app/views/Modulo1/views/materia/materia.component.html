@@ -33,11 +33,11 @@
                         </td>
                         <td class="px-6 py-4">{{ materia.docente.departamento.nombreDepartamento }}</td>
                         <td class="text-center">
-                            <button class="btn btn-sm btn-warning me-1" (click)="openEditMateriaModal(materia)">
-                                <i class="bi bi-pencil-square"></i> Editar
+                            <button class="btn btn-sm btn-outline-dark mr-2" (click)="openEditMateriaModal(materia)">
+                                <i class='bx bxs-edit-alt' ></i> Editar
                             </button>
-                            <button class="btn btn-sm btn-danger" (click)="eliminarMateria(materia.idMateria)">
-                                <i class="bi bi-trash"></i> Eliminar
+                            <button class="btn btn-sm btn-outline-danger" (click)="eliminarMateria(materia.idMateria)">
+                                <i class="bx bxs-trash-alt"></i> Eliminar
                             </button>
                         </td>
                     </tr>

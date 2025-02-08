@@ -34,13 +34,13 @@
 
                         <td class="px-6 py-4">{{ lab.capacidad }}</td>
                         <td class="text-center">
-                            <button class="btn btn-warning btn-sm me-1" (click)="openEditLaboratorioModal(lab)">
-                                <i class="bi bi-pencil-square"></i> Editar
+                            <button class="btn btn-outline-dark btn-sm me-1" (click)="openEditLaboratorioModal(lab)">
+                                <i class='bx bxs-edit-alt' ></i> Editar
                             </button>
-                            <button class="btn btn-danger btn-sm me-1" (click)="eliminarLaboratorio(lab.idLaboratorio)">
-                                <i class="bi bi-trash"></i> Eliminar
+                            <button class="btn btn-outline-danger btn-sm me-1" (click)="eliminarLaboratorio(lab.idLaboratorio)">
+                                <i class="bx bxs-trash-alt"></i> Eliminar
                             </button>
-                            <button class="btn btn-info btn-sm" (click)="openPreviewLaboratorioModal(lab)">
+                            <button class="btn btn-outline-success btn-sm" (click)="openPreviewLaboratorioModal(lab)">
                                 <i class="bi bi-eye"></i> Ver
                             </button>
                         </td>

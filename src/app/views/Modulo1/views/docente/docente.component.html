@@ -1,11 +1,8 @@
-<div class="container py-4">
+<div class="">
     <!-- Encabezado -->
-    <h1 class="text-center text-primary fw-bold mb-4">Gestión de Docentes</h1>
-
-    <!-- Botón para agregar un nuevo docente -->
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <button class="btn btn-primary" (click)="openAddDocenteModal()">
-            <i class="bi bi-plus-circle"></i> Agregar Docente
+    <div class="d-flex justify-content-between align-items-center">
+        <button class="rounded-lg text-white text-sm py-2 px-3 bg-gray-800 hover:bg-gray-900 mb-3" (click)="openAddDocenteModal()">
+            Agregar Docente
         </button>
         <p class="text-muted mb-0">Total: {{ docentes.length }} docentes registrados.</p>
     </div>
@@ -31,13 +28,13 @@
                     <td>{{ docente.departamento.nombreDepartamento || 'Sin departamento' }}</td>
                     <td class="text-center">
                         <button class="btn btn-warning btn-sm me-1" (click)="openEditDocenteModal(docente)">
-                            <i class="bi bi-pencil-square"></i> Editar
+                            <i class='bx bxs-edit-alt' ></i> Editar
                         </button>
                         <button class="btn btn-info btn-sm me-1" (click)="openPreviewDocenteModal(docente)">
                             <i class="bi bi-eye"></i> Vista Previa
                         </button>
                         <button class="btn btn-danger btn-sm" (click)="eliminarDocente(docente.idDocente!)">
-                            <i class="bi bi-trash"></i> Eliminar
+                            <i class="bx bxs-trash-alt"></i> Eliminar
                         </button>
                     </td>
                 </tr>

@@ -1,7 +1,4 @@
-<div class="container py-4">
-    <!-- Encabezado -->
-    <h1 class="text-center text-primary fw-bold mb-4">Gestión de Departamentos</h1>
-  
+<div >  
     <!-- Botón para agregar departamento -->
     <div class="d-flex justify-content-between align-items-center mb-3">
       <button class="btn btn-primary" (click)="openAddDepartamentoModal()">
@@ -32,7 +29,7 @@
                 class="btn btn-warning btn-sm me-1"
                 (click)="openEditDepartamentoModal(departamento)"
               >
-                <i class="bi bi-pencil-square"></i> Editar
+                <i class='bx bxs-edit-alt' ></i> Editar
               </button>
               <button
                 class="btn btn-info btn-sm me-1"
@@ -44,7 +41,7 @@
                 class="btn btn-danger btn-sm"
                 (click)="eliminarDepartamento(departamento.idDepartamento!)"
               >
-                <i class="bi bi-trash"></i> Eliminar
+                <i class="bx bxs-trash-alt"></i> Eliminar
               </button>
             </td>
           </tr>

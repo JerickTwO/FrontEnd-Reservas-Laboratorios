@@ -1,6 +1,4 @@
 <div class="carreras-container">
-    <h1 class="text-center my-4">Gestión de Carreras</h1>
-
     <!-- Botón para mostrar el modal de agregar carrera -->
     <div class="text-end mb-3">
         <button class="btn btn-primary" (click)="openAddCarreraModal()">
@@ -31,7 +29,7 @@
                         </button>
                         <button class="btn btn-danger btn-sm" *ngIf="carrera.idCarrera !== null"
                             (click)="eliminarCarrera(carrera.idCarrera!)">
-                            <i class="bi bi-trash"></i> Eliminar
+                            <i class="bx bxs-trash-alt"></i> Eliminar
                         </button>
                     </td>
                 </tr>

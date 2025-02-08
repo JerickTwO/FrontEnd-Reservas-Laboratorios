@@ -3,13 +3,15 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Horario } from 'src/app/models/horario.model';
 import { Laboratorio } from 'src/app/models/laboratorio.model'; // Importar el modelo de laboratorio
+import { environment } from 'src/environments/environment.development';
 
 @Injectable({
   providedIn: 'root',
 })
 export class HorarioService {
-  private apiUrl = 'http://localhost:8080/api/v1/horarios'; // URL de la API para horarios
-  private laboratorioApiUrl = 'http://localhost:8080/api/v1/laboratorios'; // URL de la API para laboratorios
+  private apiUrl = `${environment.urlBase}/horarios`;
+  private laboratorioApiUrl = `${environment.urlBase}/laboratorios`;
+
 
   constructor(private http: HttpClient) {}
 

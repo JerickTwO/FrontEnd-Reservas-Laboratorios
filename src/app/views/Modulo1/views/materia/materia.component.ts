@@ -1,9 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { DocenteService } from 'src/app/core/services/docente.service';
 import { MateriaService } from 'src/app/core/services/materia.service';
-import { Docente } from 'src/app/models/docente.model';
 import { Materia } from 'src/app/models/materia.model';
 import { Modal } from 'bootstrap';
 import { PaginationComponent } from '../pagination/pagination.component';
@@ -17,7 +15,6 @@ import { PaginationService } from 'src/app/core/services/pagination.service';
 })
 export class MateriaComponent implements OnInit {
   materias: Materia[] = [];
-  docentes: Docente[] = []; // Lista de docentes
   newMateria: Materia = new Materia(); // Materia para agregar o editar
   isEditing: boolean = false;
   materiasPaginadas: Materia[] = [];
@@ -28,13 +25,11 @@ export class MateriaComponent implements OnInit {
 
   constructor(
     private materiaService: MateriaService,
-    private docenteService: DocenteService,
     private paginationService: PaginationService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.cargarMaterias();
-    this.cargarDocentes();
     const modalElement = document.getElementById('materiaModal');
     if (modalElement) {
       this.modalMateria = new Modal(modalElement, { backdrop: 'static' });
@@ -47,41 +42,32 @@ export class MateriaComponent implements OnInit {
     this.materiaService.getMaterias().subscribe({
       next: (data: Materia[]) => {
         this.materias = data;
+        this.actualizarPaginacion();
       },
       error: (err) => {
         console.error('Error al cargar materias:', err);
       },
     });
   }
-  private resetNuevaMateriaData(): Materia {
-    return {
-      idMateria: 0,
-      nombreMateria: '',
-      nrc: '',
-      docente: new Docente() // Assuming Docente is the correct type
-    };
-  }
+
   cerrarModal(): void {
     if (this.modalMateria) {
       this.modalMateria.hide();
     }
-    document.querySelectorAll('.modal-backdrop').forEach(el => el.remove()); this.isEditing = false;
+    document.querySelectorAll('.modal-backdrop').forEach((el) => el.remove());
+    this.isEditing = false;
     this.newMateria = this.resetNuevaMateriaData();
-  }
-  cargarDocentes(): void {
-    this.docenteService.getDocentes().subscribe({
-      next: (data: Docente[]) => {
-        this.docentes = data;
-      },
-      error: (err) => {
-        console.error('Error al cargar docentes:', err);
-      },
-    });
   }
 
   openAddMateriaModal(): void {
     this.newMateria = new Materia(); // Resetea la materia
     this.isEditing = false; // Modo agregar
+    if (this.modalMateria) {
+      this.modalMateria.show();
+    }
+  }
+  trackById(index: number, item: Materia): number {
+    return item.idMateria; // Devuelve el ID único de la materia para rastreo
   }
 
 
@@ -111,13 +97,14 @@ export class MateriaComponent implements OnInit {
       next: (response: Materia) => {
         console.log('Materia editada:', response);
         this.cargarMaterias(); // Recarga la lista de materias
-        this.modalMateria.hide()
+        this.cerrarModal();
       },
       error: (err) => {
         console.error('Error al editar materia:', err);
       },
     });
   }
+
   openEditMateriaModal(materia: Materia): void {
     this.newMateria = { ...materia }; // Copia los datos de la materia para editar
     this.isEditing = true; // Modo edición
@@ -141,16 +128,6 @@ export class MateriaComponent implements OnInit {
     }
   }
 
-  onCellClicked(event: any): void {
-    const action = event.event.target.getAttribute('data-action');
-    const materia = event.data;
-
-    if (action === 'edit') {
-      this.openEditMateriaModal(materia);
-    } else if (action === 'delete') {
-      this.eliminarMateria(materia.idMateria);
-    }
-  }
   actualizarPaginacion(): void {
     this.materiasPaginadas = this.paginationService.paginate(this.materias, this.currentPage, this.itemsPerPage);
   }
@@ -158,5 +135,14 @@ export class MateriaComponent implements OnInit {
   onPageChange(page: number): void {
     this.currentPage = page;
     this.actualizarPaginacion();
+  }
+
+  private resetNuevaMateriaData(): Materia {
+    return {
+      idMateria: 0,
+      nombreMateria: '',
+      nrc: '',
+      creditos: 0,
+    };
   }
 }

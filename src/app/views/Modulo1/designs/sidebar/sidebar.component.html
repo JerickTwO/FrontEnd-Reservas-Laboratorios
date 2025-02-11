@@ -54,6 +54,7 @@
               </div>
             </a>
 
+
             <li class="dividers">
               Usuarios
             </li>
@@ -119,6 +120,17 @@
                 <li>Horario 1</li>
               </div>
             </a>
+
+            <a [routerLink]="routes[11]" routerLinkActive="active-section"
+              [class.active-section]="activeLink.includes(routes[11])">
+              <div class="icon-sidebar-item">
+                <i class="bx bxs-book"></i>
+              </div>
+              <div class="name-sidebar-item">
+                <li>Clases</li>
+              </div>
+            </a>
+
           </ul>
         </nav>
       </div>

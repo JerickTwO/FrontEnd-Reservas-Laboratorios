@@ -1,4 +1,3 @@
-
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
@@ -7,7 +6,7 @@ import { Laboratorio } from 'src/app/models/laboratorio.model';
 import { environment } from 'src/environments/environment.development';
 
 @Injectable({
-  providedIn: 'root', // Esto hace que el servicio sea accesible sin `app.module.ts`
+  providedIn: 'root',
 })
 export class LaboratorioService {
   private apiUrl = `${environment.urlBase}/laboratorios`;
@@ -20,7 +19,6 @@ export class LaboratorioService {
 
   constructor(private http: HttpClient) {}
 
-  // Manejo de errores genérico
   private handleError(error: HttpErrorResponse): Observable<never> {
     if (error.error instanceof ErrorEvent) {
       console.error('Error del cliente:', error.error.message);
@@ -33,35 +31,53 @@ export class LaboratorioService {
     return throwError(() => new Error('Error en la solicitud al servidor.'));
   }
 
-  // Obtener todos los laboratorios
   getLaboratorios(): Observable<Laboratorio[]> {
-    return this.http.get<Laboratorio[]>(this.apiUrl).pipe(
-      catchError(this.handleError)
-    );
+    try {
+      return this.http.get<Laboratorio[]>(this.apiUrl).pipe(
+        catchError(this.handleError)
+      );
+    } catch (error) {
+      return throwError(() => new Error('Error inesperado al obtener laboratorios.'));
+    }
   }
 
-  // Crear un laboratorio
   crearLaboratorio(laboratorio: Laboratorio): Observable<Laboratorio> {
-    return this.http.post<Laboratorio>(this.apiUrl, laboratorio, this.httpOptions).pipe(
-      catchError(this.handleError)
-    );
+    try {
+      return this.http.post<Laboratorio>(this.apiUrl, laboratorio, this.httpOptions).pipe(
+        catchError(this.handleError)
+      );
+    } catch (error) {
+      return throwError(() => new Error('Error inesperado al crear laboratorio.'));
+    }
   }
 
-  // Actualizar un laboratorio
   actualizarLaboratorio(id: number, laboratorio: Laboratorio): Observable<Laboratorio> {
-    return this.http.put<Laboratorio>(`${this.apiUrl}/${id}`, laboratorio, this.httpOptions).pipe(
-      catchError(this.handleError)
-    );
+    try {
+      return this.http.put<Laboratorio>(`${this.apiUrl}/${id}`, laboratorio, this.httpOptions).pipe(
+        catchError(this.handleError)
+      );
+    } catch (error) {
+      return throwError(() => new Error('Error inesperado al actualizar laboratorio.'));
+    }
   }
 
-  // Eliminar un laboratorio
   eliminarLaboratorio(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(
-      catchError(this.handleError)
-    );
+    try {
+      return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(
+        catchError(this.handleError)
+      );
+    } catch (error) {
+      return throwError(() => new Error('Error inesperado al eliminar laboratorio.'));
+    }
   }
-  // Buscar laboratorios
+
   buscarLaboratorios(query: string): Observable<Laboratorio[]> {
-    return this.http.get<Laboratorio[]>(`${this.apiUrl}/buscar?query=${query}`);
+    try {
+      return this.http.get<Laboratorio[]>(`${this.apiUrl}/buscar?query=${query}`).pipe(
+        catchError(this.handleError)
+      );
+    } catch (error) {
+      return throwError(() => new Error('Error inesperado al buscar laboratorios.'));
+    }
   }
 }

@@ -7,6 +7,7 @@ import { NavbarComponent } from './designs/navbar/navbar.component';
 import { ToastModule } from 'primeng/toast';
 import { SidebarComponent } from './designs/sidebar/sidebar.component';
 import { NgClass } from '@angular/common';
+import { FullCalendarModule } from '@fullcalendar/angular';
 
 
 @Component({
@@ -14,7 +15,7 @@ import { NgClass } from '@angular/common';
   templateUrl: './modulo1.component.html',
   styleUrls: ['./modulo1.component.scss'],
   standalone: true,
-  imports: [RouterOutlet, NavbarComponent, SidebarComponent, NgClass, ToastModule]
+  imports: [RouterOutlet, NavbarComponent, SidebarComponent, NgClass, ToastModule, FullCalendarModule]
 })
 export class Modulo1Component implements OnInit {
 

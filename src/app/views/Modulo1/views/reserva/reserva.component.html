@@ -71,16 +71,6 @@
                         <form (ngSubmit)="guardarReserva()">
                             <div class="grid grid-cols-2 gap-4">
                                 <div class="mb-1">
-                                    <label for="nombreCompleto" class="form-label">Nombre Completo</label>
-                                    <input type="text" id="nombreCompleto" [(ngModel)]="nuevaReserva.nombreCompleto"
-                                        name="nombreCompleto" class="form-control" required />
-                                </div>
-                                <div class="mb-1">
-                                    <label for="correo" class="form-label">Correo</label>
-                                    <input type="email" id="correo" [(ngModel)]="nuevaReserva.correo" name="correo"
-                                        class="form-control" required />
-                                </div>
-                                <div class="mb-1">
                                     <label for="telefono" class="form-label">Teléfono</label>
                                     <input type="text" id="telefono" [(ngModel)]="nuevaReserva.telefono" name="telefono"
                                         class="form-control" required />

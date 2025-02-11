@@ -1,15 +1,13 @@
-import { Docente } from './docente.model';
-
 export class Materia {
   idMateria: number;
   nombreMateria: string;
   nrc: string;
-  docente: Docente; // Relación con el modelo Docente
+  creditos: number; // Nuevo atributo para almacenar los créditos de la materia
 
   constructor() {
     this.idMateria = 0;
     this.nombreMateria = '';
     this.nrc = '';
-    this.docente = new Docente();
+    this.creditos = 0; // Inicializa los créditos con 0
   }
 }

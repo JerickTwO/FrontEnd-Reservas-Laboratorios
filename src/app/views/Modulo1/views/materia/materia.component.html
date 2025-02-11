@@ -1,102 +1,92 @@
 <div class="">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <button class="rounded-lg text-white text-sm py-2 px-3 bg-gray-800 hover:bg-gray-900"
-            (click)="openAddMateriaModal()" data-bs-toggle="modal" data-bs-target="#materiaModal">
-            <i class="bi bi-plus-circle"></i> Nueva Materia
-        </button>
-        <p class="text-muted mb-0">Total: {{ materias.length }} materias registrados.</p>
-    </div>
-    <div class="w-full overflow-hidden rounded-lg shadow-lg bg-white ">
-        <div class="w-full overflow-x-auto">
-            <table class="w-full text-sm text-gray-700">
-                <thead class="bg-gray-800 text-white uppercase text-xs font-semibold">
-                    <tr>
-                        <th class="px-6 py-3 text-left">Nombre Materia</th>
-                        <th class="px-6 py-3 text-left">NRC</th>
-                        <th class="px-6 py-3 text-left">Docente</th>
-                        <th class="px-6 py-3 text-left">Departamento</th>
-                        <th class="px-6 py-3 text-left">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-200">
-                    @if (materias.length === 0) {
-                    <tr>
-                        <td colspan="4" class="text-center py-4 text-gray-500">
-                            No hay materias disponibles.
-                        </td>
-                    </tr>
-                    } @for (materia of materias; track materia.idMateria) {
-                    <tr class="hover:bg-gray-100 transition">
-                        <td class="px-6 py-4 font-medium">{{ materia.nombreMateria }}</td>
-                        <td class="px-6 py-4">{{ materia.nrc }}</td>
-                        <td class="px-6 py-4">{{ materia.docente.nombreDocente }} {{ materia.docente.apellidoDocente }}
-                        </td>
-                        <td class="px-6 py-4">{{ materia.docente.departamento.nombreDepartamento }}</td>
-                        <td class="text-center">
-                            <button class="btn btn-sm btn-outline-dark mr-2" (click)="openEditMateriaModal(materia)">
-                                <i class='bx bxs-edit-alt' ></i> Editar
-                            </button>
-                            <button class="btn btn-sm btn-outline-danger" (click)="eliminarMateria(materia.idMateria)">
-                                <i class="bx bxs-trash-alt"></i> Eliminar
-                            </button>
-                        </td>
-                    </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    </div>
-    <!-- Modal de agregar/editar materia -->
-    <div class="modal fade" id="materiaModal" tabindex="-1" aria-labelledby="materiaModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="materiaModalLabel">
-                        {{ isEditing ? 'Editar Materia' : 'Agregar Materia' }}
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form (ngSubmit)="guardarMateria()">
-                        <!-- Campo para Nombre de la Materia -->
-                        <div class="mb-3">
-                            <label for="nombreMateria" class="form-label">Nombre Materia:</label>
-                            <input type="text" id="nombreMateria" [(ngModel)]="newMateria.nombreMateria"
-                                name="nombreMateria" class="form-control" placeholder="Ingrese el nombre de la materia"
-                                required />
-                        </div>
+  <div class="d-flex justify-content-between align-items-center mb-3">
+      <button class="rounded-lg text-white text-sm py-2 px-3 bg-gray-800 hover:bg-gray-900"
+          (click)="openAddMateriaModal()" data-bs-toggle="modal" data-bs-target="#materiaModal">
+          <i class="bi bi-plus-circle"></i> Nueva Materia
+      </button>
+      <p class="text-muted mb-0">Total: {{ materias.length }} materias registradas.</p>
+  </div>
+  <div class="w-full overflow-hidden rounded-lg shadow-lg bg-white ">
+      <div class="w-full overflow-x-auto">
+          <table class="w-full text-sm text-gray-700">
+              <thead class="bg-gray-800 text-white uppercase text-xs font-semibold">
+                  <tr>
+                      <th class="px-6 py-3 text-left">Nombre Materia</th>
+                      <th class="px-6 py-3 text-left">NRC</th>
+                      <th class="px-6 py-3 text-left">Créditos</th>
+                      <th class="px-6 py-3 text-left">Acciones</th>
+                  </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-200">
+                  <tr *ngIf="materias.length === 0">
+                      <td colspan="4" class="text-center py-4 text-gray-500">
+                          No hay materias disponibles.
+                      </td>
+                  </tr>
+                  <tr *ngFor="let materia of materias; trackBy: trackById" class="hover:bg-gray-100 transition">
+                      <td class="px-6 py-4 font-medium">{{ materia.nombreMateria }}</td>
+                      <td class="px-6 py-4">{{ materia.nrc }}</td>
+                      <td class="px-6 py-4">{{ materia.creditos }}</td>
+                      <td class="text-center">
+                          <button class="btn btn-sm btn-outline-dark mr-2" (click)="openEditMateriaModal(materia)">
+                              <i class='bx bxs-edit-alt'></i> Editar
+                          </button>
+                          <button class="btn btn-sm btn-outline-danger" (click)="eliminarMateria(materia.idMateria)">
+                              <i class="bx bxs-trash-alt"></i> Eliminar
+                          </button>
+                      </td>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+  </div>
+  <!-- Modal de agregar/editar materia -->
+  <div class="modal fade" id="materiaModal" tabindex="-1" aria-labelledby="materiaModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header bg-primary text-white">
+                  <h5 class="modal-title" id="materiaModalLabel">
+                      {{ isEditing ? 'Editar Materia' : 'Agregar Materia' }}
+                  </h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                  <form (ngSubmit)="guardarMateria()">
+                      <!-- Campo para Nombre de la Materia -->
+                      <div class="mb-3">
+                          <label for="nombreMateria" class="form-label">Nombre Materia:</label>
+                          <input type="text" id="nombreMateria" [(ngModel)]="newMateria.nombreMateria"
+                              name="nombreMateria" class="form-control" placeholder="Ingrese el nombre de la materia"
+                              required />
+                      </div>
 
-                        <!-- Campo para NRC -->
-                        <div class="mb-3">
-                            <label for="nrc" class="form-label">NRC:</label>
-                            <input type="text" id="nrc" [(ngModel)]="newMateria.nrc" name="nrc" class="form-control"
-                                placeholder="Ingrese el NRC de la materia" required />
-                        </div>
+                      <!-- Campo para NRC -->
+                      <div class="mb-3">
+                          <label for="nrc" class="form-label">NRC:</label>
+                          <input type="text" id="nrc" [(ngModel)]="newMateria.nrc" name="nrc" class="form-control"
+                              placeholder="Ingrese el NRC de la materia" required />
+                      </div>
 
-                        <!-- Selector de Docente -->
-                        <div class="mb-3">
-                            <label for="docente" class="form-label">Docente:</label>
-                            <select id="docente" [(ngModel)]="newMateria.docente.idDocente" name="docente"
-                                class="form-select" required>
-                                <option [value]="null" disabled>Selecciona un docente</option>
-                                <option *ngFor="let docente of docentes" [value]="docente.idDocente">
-                                    {{ docente.nombreDocente }}
-                                </option>
-                            </select>
-                        </div>
+                      <!-- Campo para Créditos -->
+                      <div class="mb-3">
+                          <label for="creditos" class="form-label">Créditos:</label>
+                          <input type="number" id="creditos" [(ngModel)]="newMateria.creditos" name="creditos"
+                              class="form-control" placeholder="Ingrese los créditos de la materia" required />
+                      </div>
 
-                        <!-- Botón de guardar -->
-                        <button type="submit" class="btn btn-primary w-100">
-                            <i class="bi bi-save"></i> {{ isEditing ? 'Guardar Cambios' : 'Agregar Materia' }}
-                        </button>
-                        <button type="button" class="btn btn-warning" (click)="cerrarModal()">Cancelar</button>
-
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Paginación -->
-    <app-pagination [currentPage]="currentPage" [totalPages]="totalPages" (pageChange)="onPageChange($event)">
-    </app-pagination>
+                      <!-- Botón de guardar -->
+                      <button type="submit" class="btn btn-primary w-100">
+                          <i class="bi bi-save"></i> {{ isEditing ? 'Guardar Cambios' : 'Agregar Materia' }}
+                      </button>
+                      <button type="button" class="btn btn-warning w-100 mt-2" data-bs-dismiss="modal">
+                          Cancelar
+                      </button>
+                  </form>
+              </div>
+          </div>
+      </div>
+  </div>
+  <!-- Paginación -->
+  <app-pagination [currentPage]="currentPage" [totalPages]="totalPages" (pageChange)="onPageChange($event)">
+  </app-pagination>
 </div>

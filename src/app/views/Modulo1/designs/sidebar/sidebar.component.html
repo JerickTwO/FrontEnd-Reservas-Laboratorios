@@ -14,6 +14,7 @@
       <!-- Items -->
       <div class="links_site">
         <nav class="nav">
+          @if (userRole === "admin") {
           <ul class="nav-list">
             <!-- <div *ngIf="usuario.role !== 'Customer'"> -->
             <a [routerLink]="routes[0]" routerLinkActive="active-section"
@@ -25,6 +26,7 @@
                 <li>Dashboard</li>
               </div>
             </a>
+
 
             <a [routerLink]="routes[1]" routerLinkActive="active-section"
               [class.active-section]="activeLink.includes(routes[1])">
@@ -132,6 +134,40 @@
             </a>
 
           </ul>
+          }
+          @if (userRole === "docente") {
+          <ul class="nav-list">
+            <!-- <div *ngIf="usuario.role !== 'Customer'"> -->
+
+
+
+            <a [routerLink]="routes[2]" routerLinkActive="active-section"
+              [class.active-section]="activeLink.includes(routes[2])">
+              <div class="icon-sidebar-item">
+                <i class="bx bxs-calendar-check"></i>
+              </div>
+              <div class="name-sidebar-item">
+                <li>Reservas</li>
+              </div>
+            </a>
+
+
+            <li class="dividers">
+              Horarios
+            </li>
+            <a [routerLink]="routes[10]" routerLinkActive="active-section"
+              [class.active-section]="activeLink.includes(routes[10])">
+              <div class="icon-sidebar-item">
+                <i class="bx bxs-time"></i>
+              </div>
+              <div class="name-sidebar-item">
+                <li>Horario 1</li>
+              </div>
+            </a>
+
+          </ul>
+          }
+
         </nav>
       </div>
     </div>

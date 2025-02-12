@@ -19,7 +19,13 @@ import { Clase } from 'src/app/models/clase.model';
   styleUrls: ['./horarios.component.scss'],
 })
 export class HorariosComponent implements OnInit {
-  dias: string[] = ['LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES'];
+  franjasPermitidas: { horaInicio: string, horaFin: string }[] = [
+    { horaInicio: "07:00", horaFin: "09:00" },
+    { horaInicio: "09:00", horaFin: "11:00" },
+    { horaInicio: "11:00", horaFin: "13:00" },
+    { horaInicio: "13:30", horaFin: "15:30" },
+  ];
+  dias: string[] = ['LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES'];
 
   eventos: any[] = [];
   clases: any[] = [];
@@ -34,7 +40,7 @@ export class HorariosComponent implements OnInit {
     horaFin: '',
     clase: {
       idClase: 0,
-      materia: { idMateria: 0, nombre: '' } // Se cambia `nombreMateria` por `nombre`
+      materia: { idMateria: 0, nombre: '' }
     },
     laboratorio: { idLaboratorio: 0, nombreLaboratorio: '' },
   };
@@ -126,6 +132,8 @@ export class HorariosComponent implements OnInit {
 
 
   guardarHorario(): void {
+    this.nuevoHorario.dia = this.quitarTildes(this.nuevoHorario.dia);
+
     this.horarioService.crearHorario(this.nuevoHorario).subscribe(
       () => {
         this.cerrarModal();
@@ -138,7 +146,9 @@ export class HorariosComponent implements OnInit {
     );
   }
 
-
+  quitarTildes(texto: string): string {
+    return texto.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
+  }
 
   editarHorario(eventClick: EventClickArg): void {
     const props = eventClick.event.extendedProps; // Extraemos `extendedProps` para acceder más fácilmente

@@ -1,14 +1,18 @@
 export interface Horario {
-  id?: number;  // Agregado para evitar errores en actualizaciones
-  fecha: string;
-  dia: string;
-  horaInicio: string;
-  horaFin: string;
-  clase: {
-    idClase: number;
-    materia?: { idMateria: number; nombre: string };
-    docente?: { nombreDocente: string };
-    periodo?: { nombrePeriodo: string };
+  idHorario?: number; // ID único del horario
+  dia: string; // Día (e.g., "LUNES")
+  horaInicio: string; // Hora de inicio (e.g., "07:00")
+  horaFin: string; // Hora de fin (e.g., "09:00")
+  materia?: {
+    idMateria?: number;
+    nombreMateria?: string;
   };
-  laboratorio: { idLaboratorio: number; nombreLaboratorio: string };
+  docente?: {
+    idDocente?: number;
+    nombreDocente?: string;
+  };
+  laboratorio?: {
+    idLaboratorio?: number;
+    nombreLaboratorio?: string;
+  };
 }

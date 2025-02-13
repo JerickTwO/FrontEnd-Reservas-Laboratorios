@@ -12,7 +12,6 @@ import { isAuthenticatedGuard } from 'src/app/guards/is-authenticated.guard';
 import { DepartamentosComponent } from './views/departamentos/departamentos.component';
 import { CarrerasComponent } from './views/carreras/carreras.component';
 import { HorariosComponent } from './views/horarios/horarios.component';
-import { ClaseComponent } from './clases/clases.component';
 
 const home: string = 'dashboard';
 const laboratorio: string = 'laboratorio';
@@ -25,7 +24,6 @@ const estudiante: string = 'estudiantes';
 const carreras: string = 'carreras';
 const departamentos: string = 'departamentos';
 const horarios: string = 'horarios'
-const clases: string = 'clases'
 export const routesArrayModulo1: string[] = [
   '/' + home,
   '/' + laboratorio,
@@ -38,8 +36,6 @@ export const routesArrayModulo1: string[] = [
   '/' + carreras,
   '/' + departamentos,
   '/' + horarios,
-  '/' + clases,
-
 ];
 
 // Convertir primera en mayuscula
@@ -138,14 +134,6 @@ export const routesModulo1: Routes = [
         component: HorariosComponent,
         data: {
           title: capitalizeFirstLetter(horarios),
-        },
-      },
-      {
-        path: clases,
-        canActivate: [isAuthenticatedGuard],
-        component: ClaseComponent,
-        data: {
-          title: capitalizeFirstLetter(clases),
         },
       },
     ],

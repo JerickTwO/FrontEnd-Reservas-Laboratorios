@@ -1,84 +1,122 @@
-<div class="container mt-4">
-  <h2 class="text-center">Calendario de Horarios</h2>
-  <full-calendar [options]="calendarOptions"></full-calendar>
-
-  <div *ngIf="modalVisible" class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0, 0, 0, 0.5);">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Crear Horario</h5>
-          <button type="button" class="btn-close" (click)="cerrarModal()"></button>
-        </div>
-        <div class="modal-body">
-          <form (ngSubmit)="guardarHorario()">
-
-            <!-- Campo de Fecha -->
-            <div class="mb-3">
-              <label for="fecha" class="form-label">Fecha</label>
-              <input type="date" [(ngModel)]="nuevoHorario.fecha" name="fecha" id="fecha" class="form-control"
-                required />
-            </div>
-
-            <!-- Selector de Día -->
-            <div class="mb-3">
-              <label for="dia" class="form-label">Día</label>
-              <select [(ngModel)]="nuevoHorario.dia" name="dia" id="dia" class="form-select" required>
-                <option value="" disabled selected>Seleccione un día</option>
-                <option *ngFor="let dia of dias" [value]="dia">{{ dia }}</option>
-              </select>
-            </div>
-
-            <!-- Selector de Hora de Inicio -->
-            <div class="mb-3">
-              <label for="horaInicio" class="form-label">Hora de Inicio</label>
-              <select [(ngModel)]="nuevoHorario.horaInicio" name="horaInicio" id="horaInicio" class="form-select"
-                required>
-                <option value="" disabled selected>Seleccione la hora de inicio</option>
-                <option *ngFor="let franja of franjasPermitidas" [value]="franja.horaInicio">{{ franja.horaInicio }}
-                </option>
-              </select>
-            </div>
-
-            <!-- Selector de Hora de Fin -->
-            <div class="mb-3">
-              <label for="horaFin" class="form-label">Hora de Fin</label>
-              <select [(ngModel)]="nuevoHorario.horaFin" name="horaFin" id="horaFin" class="form-select" required>
-                <option value="" disabled selected>Seleccione la hora de fin</option>
-                <option *ngFor="let franja of franjasPermitidas" [value]="franja.horaFin">{{ franja.horaFin }}</option>
-              </select>
-            </div>
-
-
-            <!-- Selector de Clase -->
-            <div class="mb-3">
-              <label for="clase" class="form-label">Clase</label>
-              <select [(ngModel)]="nuevoHorario.clase.idClase" name="clase" id="clase" class="form-select" required>
-                <option value="" disabled selected>Seleccione una clase</option>
-                <option *ngFor="let clase of clases" [value]="clase.idClase">
-                  {{ clase.nombreMostrar }}
-                </option>
-              </select>
-            </div>
-
-            <!-- Selector de Laboratorio -->
-            <div class="mb-3">
-              <label for="laboratorio" class="form-label">Laboratorio</label>
-              <select [(ngModel)]="nuevoHorario.laboratorio.idLaboratorio" name="laboratorio" id="laboratorio"
-                class="form-select" required>
-                <option value="" disabled selected>Seleccione un laboratorio</option>
-                <option *ngFor="let laboratorio of laboratorios" [value]="laboratorio.idLaboratorio">{{
-                  laboratorio.nombreLaboratorio }}</option>
-              </select>
-            </div>
-
-            <!-- Botones -->
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" (click)="cerrarModal()">Cancelar</button>
-              <button type="submit" class="btn btn-primary">Guardar</button>
-            </div>
-          </form>
+<div>
+    <h2 class="text-center text-primary fw-bold mb-4">LABORATORIO 1 - Horario de Clases</h2>
+    <!-- Tabla de horarios -->
+    <div class="table-responsive">
+      <table class="table table-bordered table-striped text-center align-middle">
+        <thead class="table-dark">
+          <tr>
+            <th>HORAS</th>
+            <th *ngFor="let dia of dias">{{ dia }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let hora of horas">
+            <td class="fw-bold">{{ hora }}</td>
+            <td
+              *ngFor="let dia of dias"
+              class="clickable-cell"
+              (click)="abrirModal(hora, dia)"
+            >
+              {{ obtenerHorario(hora, dia) || 'Disponible' }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  
+    <!-- Modal para ingresar horarios -->
+    <div
+      class="modal fade"
+      [ngClass]="{ 'show d-block': modalVisible }"
+      style="background-color: rgba(0, 0, 0, 0.5);"
+      tabindex="-1"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header bg-primary text-white">
+            <h5 class="modal-title">Ingresar Horario</h5>
+            <button
+              type="button"
+              class="btn-close"
+              (click)="cerrarModal()"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form (ngSubmit)="guardarCambios()">
+              <!-- Selector de materia -->
+              <div class="mb-3">
+                <label for="materia" class="form-label">Materia</label>
+                <select
+                  [(ngModel)]="modalHorario.idMateria"
+                  name="idMateria"
+                  id="materia"
+                  class="form-select"
+                  required
+                >
+                  <option value="" disabled selected>Seleccione una materia</option>
+                  <option *ngFor="let materia of materias" [value]="materia.idMateria">
+                    {{ materia.nombreMateria }}
+                  </option>
+                </select>
+              </div>
+  
+              <!-- Selector de docente -->
+              <div class="mb-3">
+                <label for="docente" class="form-label">Docente</label>
+                <select
+                  [(ngModel)]="modalHorario.idDocente"
+                  name="idDocente"
+                  id="docente"
+                  class="form-select"
+                  required
+                >
+                  <option value="" disabled selected>Seleccione un docente</option>
+                  <option *ngFor="let docente of docentes" [value]="docente.idDocente">
+                    {{ docente.nombreDocente }}
+                  </option>
+                </select>
+              </div>
+  
+              <!-- Selector de laboratorio -->
+              <div class="mb-3">
+                <label for="laboratorio" class="form-label">Laboratorio</label>
+                <select
+                  [(ngModel)]="modalHorario.idLaboratorio"
+                  name="idLaboratorio"
+                  id="laboratorio"
+                  class="form-select"
+                  required
+                >
+                  <option value="" disabled selected>Seleccione un laboratorio</option>
+                  <option *ngFor="let laboratorio of laboratorios" [value]="laboratorio.idLaboratorio">
+                    {{ laboratorio.nombreLaboratorio }}
+                  </option>
+                </select>
+              </div>
+  
+              <!-- Botones del modal -->
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" (click)="cerrarModal()">
+                  Cancelar
+                </button>
+                <button type="submit" class="btn btn-primary">Guardar</button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
+  
+  <style>
+    .clickable-cell {
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+  
+    .clickable-cell:hover {
+      background-color: rgba(0, 123, 255, 0.1);
+    }
+  </style>
+  

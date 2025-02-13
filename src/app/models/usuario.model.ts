@@ -6,7 +6,7 @@ export interface Usuario {
   apellido: string;
   correo: string;
   contrasena: string;
-  rol: Roles; // Aquí asumo que tienes un modelo 'Roles' similar a 'Usuario'
+  rol: Roles; 
   primerLogin: boolean;
   estado: boolean;
 }

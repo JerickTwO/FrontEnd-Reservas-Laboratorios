@@ -1,200 +1,208 @@
-import { Component, OnInit } from '@angular/core';
-import { CalendarOptions, DateSelectArg, EventClickArg } from '@fullcalendar/core';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import timeGridPlugin from '@fullcalendar/timegrid';
-import interactionPlugin from '@fullcalendar/interaction';
-import esLocale from '@fullcalendar/core/locales/es';
-import { FullCalendarModule } from '@fullcalendar/angular';
-import { HorarioService } from 'src/app/core/services/horario.service';
-import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { DocenteService } from 'src/app/core/services/docente.service';
+import { HorarioService } from 'src/app/core/services/horario.service';
+import { MateriaService } from 'src/app/core/services/materia.service';
+import { Docente } from 'src/app/models/docente.model';
 import { Horario } from 'src/app/models/horario.model';
-import { Clase } from 'src/app/models/clase.model';
+import { Laboratorio } from 'src/app/models/laboratorio.model';
+import { Materia } from 'src/app/models/materia.model';
 
 @Component({
   selector: 'app-horarios',
   standalone: true,
-  imports: [FormsModule, CommonModule, FullCalendarModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './horarios.component.html',
-  styleUrls: ['./horarios.component.scss'],
+  styleUrl: './horarios.component.scss'
 })
-export class HorariosComponent implements OnInit {
-  franjasPermitidas: { horaInicio: string, horaFin: string }[] = [
-    { horaInicio: "07:00", horaFin: "09:00" },
-    { horaInicio: "09:00", horaFin: "11:00" },
-    { horaInicio: "11:00", horaFin: "13:00" },
-    { horaInicio: "13:30", horaFin: "15:30" },
-  ];
+export class HorariosComponent implements OnInit{
   dias: string[] = ['LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES'];
+  horas: string[] = ['07:00-09:00', '09:00-11:00', '11:00-13:00', '13:30-15:30'];
+  horarios: Horario[] = [];
+  materias: Materia[] = [];
+  docentes: Docente[] = [];
+  laboratorios: Laboratorio[] = []; // Nueva lista de laboratorios
+  modalVisible: boolean = false;
 
-  eventos: any[] = [];
-  clases: any[] = [];
-  laboratorios: { idLaboratorio: number; nombreLaboratorio: string }[] = [];
-  modalVisible = false;
-
-  nuevoHorario: Horario = {
-
-    fecha: '',
+  modalHorario: {
+    dia: string;
+    hora: string;
+    idMateria: number;
+    idDocente: number;
+    idLaboratorio: number; // Agregado para el laboratorio
+  } = {
     dia: '',
-    horaInicio: '',
-    horaFin: '',
-    clase: {
-      idClase: 0,
-      materia: { idMateria: 0, nombre: '' }
-    },
-    laboratorio: { idLaboratorio: 0, nombreLaboratorio: '' },
+    hora: '',
+    idMateria: 0,
+    idDocente: 0,
+    idLaboratorio: 0,
   };
 
-
-
-  calendarOptions: CalendarOptions = {
-    plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
-    initialView: 'timeGridWeek',
-    selectable: true,
-    editable: true,
-    events: [],
-    locale: esLocale,
-    slotMinTime: '07:00:00',
-    slotMaxTime: '15:30:00',
-    hiddenDays: [0, 6],
-    select: this.abrirModal.bind(this),
-    eventClick: this.editarHorario.bind(this),
-  };
-
-  constructor(private horarioService: HorarioService) {}
+  constructor(
+    private horarioService: HorarioService,
+    private materiaService: MateriaService,
+    private docenteService: DocenteService
+  ) {}
 
   ngOnInit(): void {
     this.cargarHorarios();
-    this.cargarClases();
-    this.cargarLaboratorios();
+    this.cargarMaterias();
+    this.cargarDocentes();
+    this.cargarLaboratorios(); // Cargar laboratorios
   }
 
   cargarHorarios(): void {
-    this.horarioService.obtenerHorarios().subscribe((horarios: Horario[]) => {
-      this.eventos = horarios.map((horario) => ({
-        title: `${horario.clase.materia?.nombre || ''} - ${horario.laboratorio?.nombreLaboratorio || ''}`,
-        start: `${horario.fecha}T${horario.horaInicio}`,
-        end: `${horario.fecha}T${horario.horaFin}`,
-        extendedProps: { ...horario },
-      }));
-      this.calendarOptions.events = this.eventos;
-    });
+    this.horarioService.obtenerHorarios().subscribe(
+      (data: Horario[]) => {
+        this.horarios = data;
+      },
+      (error: any) => {
+        console.error('Error al cargar los horarios:', error);
+      }
+    );
   }
 
-  cargarClases(): void {
-    this.horarioService.getClases().subscribe((clases: Clase[]) => {
-      this.clases = clases.map((clase: Clase) => ({
-        idClase: clase.idClase,
-        nombreMostrar: `${clase.materia.nombreMateria} - ${clase.docente.nombreDocente} - ${clase.periodo.nombrePeriodo}`,
-        materia: clase.materia,
-        docente: clase.docente,
-        periodo: clase.periodo
-      }));
-    });
+  cargarMaterias(): void {
+    this.materiaService.getMaterias().subscribe(
+      (data: Materia[]) => {
+        this.materias = data;
+      },
+      (error: any) => {
+        console.error('Error al cargar las materias:', error);
+      }
+    );
+  }
+
+  cargarDocentes(): void {
+    this.docenteService.getDocentes().subscribe(
+      (data: Docente[]) => {
+        this.docentes = data;
+      },
+      (error: any) => {
+        console.error('Error al cargar los docentes:', error);
+      }
+    );
   }
 
   cargarLaboratorios(): void {
-    this.horarioService.getLaboratorios().subscribe((laboratorios) => {
-      this.laboratorios = laboratorios;
-    });
+    // Suponiendo que tienes un servicio para obtener laboratorios
+    this.horarioService.getLaboratorios().subscribe(
+      (data: Laboratorio[]) => {
+        this.laboratorios = data;
+      },
+      (error: any) => {
+        console.error('Error al cargar los laboratorios:', error);
+      }
+    );
   }
 
-  abrirModal(selectInfo: DateSelectArg): void {
-    const fechaSeleccionada = selectInfo.start;
-    const diaSemana = fechaSeleccionada.toLocaleDateString('es-ES', { weekday: 'long' }).toUpperCase();
+  abrirModal(hora: string, dia: string): void {
+    const horarioExistente = this.horarios.find(
+      (h) => h.dia === dia && `${h.horaInicio}-${h.horaFin}` === hora
+    );
 
-    if (diaSemana === 'SÁBADO' || diaSemana === 'DOMINGO') {
-      alert('No se pueden registrar horarios en sábados o domingos.');
-      return;
-    }
+    this.modalHorario = horarioExistente
+      ? {
+          dia: dia,
+          hora: hora,
+          idMateria: horarioExistente.materia?.idMateria || 0,
+          idDocente: horarioExistente.docente?.idDocente || 0,
+          idLaboratorio: horarioExistente.laboratorio?.idLaboratorio || 0,
+        }
+      : {
+          dia: dia,
+          hora: hora,
+          idMateria: 0,
+          idDocente: 0,
+          idLaboratorio: 0,
+        };
 
-    this.nuevoHorario.fecha = fechaSeleccionada.toISOString().split('T')[0];
-    this.nuevoHorario.dia = diaSemana;
-    this.nuevoHorario.horaInicio = fechaSeleccionada.toISOString().slice(11, 19);
-    this.nuevoHorario.horaFin = selectInfo.end.toISOString().slice(11, 19);
     this.modalVisible = true;
   }
 
   cerrarModal(): void {
     this.modalVisible = false;
-    this.nuevoHorario = {
-      fecha: '',
-      dia: '',
-      horaInicio: '',
-      horaFin: '',
-      clase: {
-        idClase: 0,
-        materia: { idMateria: 0, nombre: '' } // Se eliminan `docente` y `periodo`
-      },
-      laboratorio: { idLaboratorio: 0, nombreLaboratorio: '' },
-    };
   }
 
-
-  guardarHorario(): void {
-    this.nuevoHorario.dia = this.quitarTildes(this.nuevoHorario.dia);
-
-    this.horarioService.crearHorario(this.nuevoHorario).subscribe(
-      () => {
-        this.cerrarModal();
-        window.location.reload(); // Recargar la página siempre
-      },
-      () => {
-        this.cerrarModal();
-        window.location.reload(); // Recargar la página incluso en caso de error
-      }
+  guardarCambios(): void {
+    const horarioExistente = this.horarios.find(
+      (h) =>
+        h.dia === this.modalHorario.dia &&
+        `${h.horaInicio}-${h.horaFin}` === this.modalHorario.hora
     );
-  }
 
-  quitarTildes(texto: string): string {
-    return texto.normalize('NFD').replace(/[\u0300-\u036f]/g, "");
-  }
+    if (horarioExistente) {
+      horarioExistente.materia = {
+        idMateria: this.modalHorario.idMateria,
+        nombreMateria: this.materias.find((m) => m.idMateria === this.modalHorario.idMateria)
+          ?.nombreMateria || '',
+      };
+      horarioExistente.docente = {
+        idDocente: this.modalHorario.idDocente,
+        nombreDocente: this.docentes.find((d) => d.idDocente === this.modalHorario.idDocente)
+          ?.nombreDocente || '',
+      };
+      horarioExistente.laboratorio = {
+        idLaboratorio: this.modalHorario.idLaboratorio,
+        nombreLaboratorio: this.laboratorios.find((l) => l.idLaboratorio === this.modalHorario.idLaboratorio)
+          ?.nombreLaboratorio || '',
+      };
 
-  editarHorario(eventClick: EventClickArg): void {
-    const props = eventClick.event.extendedProps; // Extraemos `extendedProps` para acceder más fácilmente
+      this.horarioService.actualizarHorario(horarioExistente).subscribe(() => {
+        console.log('Horario actualizado correctamente.');
+        this.cerrarModal();
+      });
+    } else {
+      const nuevoHorario: Horario = {
+        dia: this.modalHorario.dia,
+        horaInicio: this.modalHorario.hora.split('-')[0],
+        horaFin: this.modalHorario.hora.split('-')[1],
+        materia: {
+          idMateria: this.modalHorario.idMateria,
+          nombreMateria: this.materias.find((m) => m.idMateria === this.modalHorario.idMateria)
+            ?.nombreMateria || '',
+        },
+        docente: {
+          idDocente: this.modalHorario.idDocente,
+          nombreDocente: this.docentes.find((d) => d.idDocente === this.modalHorario.idDocente)
+            ?.nombreDocente || '',
+        },
+        laboratorio: {
+          idLaboratorio: this.modalHorario.idLaboratorio,
+          nombreLaboratorio: this.laboratorios.find((l) => l.idLaboratorio === this.modalHorario.idLaboratorio)
+            ?.nombreLaboratorio || '',
+        },
+      };
 
-    this.nuevoHorario = {
-      id: props['id'], // Usamos corchetes en lugar de la notación de punto
-      fecha: props['fecha'],
-      dia: props['dia'],
-      horaInicio: props['horaInicio'],
-      horaFin: props['horaFin'],
-      clase: {
-        idClase: props['clase']['idClase'],
-        materia: props['clase']['materia'],
-        docente: props['clase']['docente'],
-        periodo: props['clase']['periodo'],
-      },
-      laboratorio: {
-        idLaboratorio: props['laboratorio']['idLaboratorio'],
-        nombreLaboratorio: props['laboratorio']['nombreLaboratorio'],
-      }
-    };
-
-    this.modalVisible = true;
-  }
-
-
-
-
-  actualizarHorario(): void {
-    if (!this.nuevoHorario.id) {
-      console.error("El horario no tiene un ID válido para actualizar.");
-      return;
+      this.horarioService.crearHorario(nuevoHorario).subscribe((horarioCreado) => {
+        this.horarios.push(horarioCreado);
+        console.log('Horario creado correctamente.');
+        this.cerrarModal();
+      });
     }
-
-    this.horarioService.actualizarHorario(this.nuevoHorario.id, this.nuevoHorario).subscribe(
-      () => {
-        this.cerrarModal();
-        window.location.reload(); // Recargar la página siempre
-      },
-      () => {
-        this.cerrarModal();
-        window.location.reload(); // Recargar la página incluso en caso de error
-      }
-    );
   }
 
+  obtenerHorario(hora: string, dia: string): string {
+    const horario = this.horarios.find(
+      (h) => h.dia === dia && `${h.horaInicio}-${h.horaFin}` === hora
+    );
+    return horario
+      ? `${horario.materia?.nombreMateria || ''} - ${horario.docente?.nombreDocente || ''} - ${horario.laboratorio?.nombreLaboratorio || ''}`
+      : 'Disponible';
+  }
 
+  onCellClicked(event: any): void {
+    const action = event.event.target.getAttribute('data-action');
+    const horario = event.data;
 
+    if (action === 'edit') {
+      this.abrirModal(`${horario.horaInicio}-${horario.horaFin}`, horario.dia);
+    } else if (action === 'delete') {
+      this.horarios = this.horarios.filter(
+        (h) => !(h.dia === horario.dia && h.horaInicio === horario.horaInicio)
+      );
+      console.log('Horario eliminado correctamente.');
+    }
+  }
 }

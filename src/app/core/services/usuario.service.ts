@@ -108,7 +108,7 @@ export class UsuarioService {
   // Realizar login y guardar el token
   login(formData: LoginForm) {
     return this.http
-      .post<any>(`${environment.urlBase}/auth/login`, formData)
+      .post<any>(`${environment.urlBase}/auth/login`, formData) // Se corrigió el uso de backticks
       .pipe(
         tap((resp) => {
           if (resp && resp.resultado) {
@@ -117,21 +117,30 @@ export class UsuarioService {
           } else {
             console.error('Error: La respuesta del backend no tiene el formato esperado.');
           }
+        }),
+        catchError((error) => {
+          console.error('Error en la autenticación:', error);
+          return of(null); // Devuelve null en caso de error para evitar fallos
         })
       );
   }
+
 
   // Obtener más datos de usuario desde el servidor
   obtenerDatosUsuario() {
     return this.http.get<Usuario>(`${environment.urlBase}/usuario/datos`, this.headers).pipe(
       tap((usuario) => {
-        // Actualiza los datos del usuario con la información adicional del servidor
+        if (usuario instanceof ArrayBuffer) {
+          console.error('Error: Respuesta del servidor es un ArrayBuffer en lugar de un objeto Usuario.');
+          return;
+        }
         this.setUsuario(usuario);
       }),
       catchError((error) => {
         console.error('Error al obtener los datos del usuario:', error);
-        return of(null); // Puedes manejar este error según sea necesario
+        return of(null);
       })
     );
   }
+
 }

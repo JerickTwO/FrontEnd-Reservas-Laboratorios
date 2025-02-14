@@ -113,7 +113,26 @@
             <li class="dividers">
               Horarios
             </li>
+
             <a [routerLink]="routes[10]" routerLinkActive="active-section"
+              [class.active-section]="activeLink.includes(routes[11])">
+              <div class="icon-sidebar-item">
+                <i class="bx bxs-book"></i>
+              </div>
+              <div class="name-sidebar-item">
+                <li>Clases</li>
+              </div>
+            </a>
+            <a [routerLink]="routes[11]" routerLinkActive="active-section"
+              [class.active-section]="activeLink.includes(routes[11])">
+              <div class="icon-sidebar-item">
+                <i class="bx bxs-book"></i>
+              </div>
+              <div class="name-sidebar-item">
+                <li>Periodo</li>
+              </div>
+            </a>
+            <a [routerLink]="routes[12]" routerLinkActive="active-section"
               [class.active-section]="activeLink.includes(routes[10])">
               <div class="icon-sidebar-item">
                 <i class="bx bxs-time"></i>
@@ -123,15 +142,6 @@
               </div>
             </a>
 
-            <a [routerLink]="routes[11]" routerLinkActive="active-section"
-              [class.active-section]="activeLink.includes(routes[11])">
-              <div class="icon-sidebar-item">
-                <i class="bx bxs-book"></i>
-              </div>
-              <div class="name-sidebar-item">
-                <li>Clases</li>
-              </div>
-            </a>
 
           </ul>
           }

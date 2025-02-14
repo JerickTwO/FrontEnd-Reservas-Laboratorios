@@ -13,6 +13,7 @@ import { DepartamentosComponent } from './views/departamentos/departamentos.comp
 import { CarrerasComponent } from './views/carreras/carreras.component';
 import { HorariosComponent } from './views/horarios/horarios.component';
 import { ClaseComponent } from './views/clases/clases.component';
+import { PeriodoComponent } from './views/periodo/periodo.component';
 
 const home: string = 'dashboard';
 const laboratorio: string = 'laboratorio';
@@ -24,8 +25,9 @@ const docente: string = 'docentes';
 const estudiante: string = 'estudiantes';
 const carreras: string = 'carreras';
 const departamentos: string = 'departamentos';
-const horarios: string = 'horarios'
 const clases: string = 'clases'
+const periodos: string = 'periodos'
+const horarios: string = 'horarios'
 export const routesArrayModulo1: string[] = [
   '/' + home,
   '/' + laboratorio,
@@ -37,8 +39,9 @@ export const routesArrayModulo1: string[] = [
   '/' + estudiante,
   '/' + carreras,
   '/' + departamentos,
-  '/' + horarios,
   '/' + clases,
+  '/' + periodos,
+  '/' + horarios,
 ];
 
 // Convertir primera en mayuscula
@@ -132,19 +135,27 @@ export const routesModulo1: Routes = [
         },
       },
       {
-        path: horarios,
-        canActivate: [isAuthenticatedGuard],
-        component: HorariosComponent,
-        data: {
-          title: capitalizeFirstLetter(horarios),
-        },
-      },
-      {
         path: clases,
         canActivate: [isAuthenticatedGuard],
         component: ClaseComponent,
         data: {
           title: capitalizeFirstLetter(clases),
+        },
+      },
+      {
+        path: periodos,
+        canActivate: [isAuthenticatedGuard],
+        component: PeriodoComponent,
+        data: {
+          title: capitalizeFirstLetter(periodos),
+        },
+      },
+      {
+      path: horarios,
+        canActivate: [isAuthenticatedGuard],
+        component: HorariosComponent,
+        data: {
+          title: capitalizeFirstLetter(horarios),
         },
       },
     ],

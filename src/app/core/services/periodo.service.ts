@@ -7,7 +7,7 @@ import { Periodo } from 'src/app/models/periodo.model';
   providedIn: 'root',
 })
 export class PeriodoService {
-  private apiUrl = 'http://localhost:8080/api/periodos'; // URL base del backend
+  private apiUrl = 'http://localhost:8080/api/v1/periodos'; // URL base del backend
 
   constructor(private http: HttpClient) {}
 
@@ -31,6 +31,7 @@ export class PeriodoService {
   agregarPeriodo(periodo: Periodo): Observable<Periodo> {
     return this.http.post<Periodo>(this.apiUrl, periodo);
   }
+  
 
   /**
    * Editar un periodo existente.

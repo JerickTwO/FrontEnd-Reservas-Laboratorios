@@ -1,0 +1,180 @@
+<div class="">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <button
+      class="rounded-lg text-white text-sm py-2 px-3 bg-gray-800 hover:bg-gray-900"
+      (click)="openAddClaseModal()"
+      data-bs-toggle="modal"
+      data-bs-target="#claseModal"
+    >
+      <i class="bi bi-plus-circle"></i> Nueva Clase
+    </button>
+    <p class="text-muted mb-0">
+      Total: {{ clases.length }} clases registradas.
+    </p>
+  </div>
+
+  <div class="w-full overflow-hidden rounded-lg shadow-lg bg-white">
+    <div *ngIf="clases.length === 0 && !isLoading" class="text-center p-4">
+      <p class="text-gray-500">No hay clases disponibles.</p>
+    </div>
+    <div *ngIf="isLoading" class="text-center p-4">
+      <p class="text-gray-500">Cargando clases...</p>
+    </div>
+    <div *ngIf="clases.length > 0">
+      <div class="w-full overflow-x-auto">
+        <table class="w-full text-sm text-gray-700">
+          <thead class="bg-gray-800 text-white uppercase text-xs font-semibold">
+            <tr>
+              <th class="px-6 py-3 text-left">Materia</th>
+              <th class="px-6 py-3 text-left">Docente</th>
+              <th class="px-6 py-3 text-left">Periodo</th>
+              <th class="px-6 py-3 text-left">Acciones</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200">
+            <tr
+              *ngFor="let clase of clases; trackBy: trackById"
+              class="hover:bg-gray-100 transition"
+            >
+              <td class="px-6 py-4 font-medium">
+                {{ clase.materia.nombreMateria }}
+              </td>
+              <td class="px-6 py-4">
+                {{ clase.docente.nombreDocente }} {{ clase.docente.apellidoDocente }}
+              </td>
+              <td class="px-6 py-4">{{ clase.periodo.nombrePeriodo }}</td>
+              <td class="text-center">
+                <button
+                  class="btn btn-sm btn-outline-dark mr-2"
+                  (click)="openEditClaseModal(clase)"
+                >
+                  <i class="bx bxs-edit-alt"></i> Editar
+                </button>
+                <button
+                  class="btn btn-sm btn-outline-danger"
+                  (click)="eliminarClase(clase.idClase)"
+                >
+                  <i class="bx bxs-trash-alt"></i> Eliminar
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de agregar/editar clase -->
+  <div
+    class="modal fade"
+    id="claseModal"
+    tabindex="-1"
+    aria-labelledby="claseModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title" id="claseModalLabel">
+            {{ isEditing ? 'Editar Clase' : 'Agregar Clase' }}
+          </h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <form (ngSubmit)="guardarClase()">
+            <!-- Selector de Materia -->
+            <div class="mb-3">
+              <label for="materia" class="form-label">Materia:</label>
+              <select
+                id="materia"
+                [(ngModel)]="newClase.materia.idMateria"
+                name="materia"
+                class="form-select"
+                required
+              >
+                <option [value]="null" disabled>Selecciona una materia</option>
+                <option
+                  *ngFor="let materia of materias"
+                  [value]="materia.idMateria"
+                >
+                  {{ materia.nombreMateria }}
+                </option>
+              </select>
+              <div *ngIf="!newClase.materia.idMateria" class="text-danger">
+                Selecciona una materia válida.
+              </div>
+            </div>
+
+            <!-- Selector de Docente -->
+            <div class="mb-3">
+              <label for="docente" class="form-label">Docente:</label>
+              <select
+                id="docente"
+                [(ngModel)]="newClase.docente.idDocente"
+                name="docente"
+                class="form-select"
+                required
+              >
+                <option [value]="null" disabled>Selecciona un docente</option>
+                <option
+                  *ngFor="let docente of docentes"
+                  [value]="docente.idDocente"
+                >
+                  {{ docente.nombreDocente }} {{ docente.apellidoDocente }}
+                </option>
+              </select>
+              <div *ngIf="!newClase.docente.idDocente" class="text-danger">
+                Selecciona un docente válido.
+              </div>
+            </div>
+
+            <!-- Selector de Periodo -->
+            <div class="mb-3">
+              <label for="periodo" class="form-label">Periodo:</label>
+              <select
+                id="periodo"
+                [(ngModel)]="newClase.periodo.idPeriodo"
+                name="periodo"
+                class="form-select"
+                required
+              >
+                <option [value]="null" disabled>Selecciona un periodo</option>
+                <option
+                  *ngFor="let periodo of periodos"
+                  [value]="periodo.idPeriodo"
+                >
+                  {{ periodo.nombrePeriodo }}
+                </option>
+              </select>
+              <div *ngIf="!newClase.periodo.idPeriodo" class="text-danger">
+                Selecciona un periodo válido.
+              </div>
+            </div>
+
+            <!-- Botón de guardar -->
+            <button
+              type="submit"
+              class="btn btn-primary w-100"
+              [disabled]="!newClase.materia.idMateria || !newClase.docente.idDocente || !newClase.periodo.idPeriodo"
+            >
+              <i class="bi bi-save"></i>
+              {{ isEditing ? 'Guardar Cambios' : 'Agregar Clase' }}
+            </button>
+            <button
+              type="button"
+              class="btn btn-warning w-100 mt-2"
+              data-bs-dismiss="modal"
+            >
+              Cancelar
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

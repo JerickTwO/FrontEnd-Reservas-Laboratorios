@@ -107,7 +107,7 @@
                                 <select [(ngModel)]="nuevaReserva.horaFin" name="horaFin" id="horaFin"
                                     class="form-select" required>
                                     <option value="" disabled selected>Seleccione la hora de fin</option>
-                                    <option *ngFor="let franja of franjasPermitidas" [value]="franja.horaFin">
+                                    <option *ngFor="let franja of franjasPermitidas" [ngValue]="franja.horaFin">
                                         {{ franja.horaFin }}
                                     </option>
                                 </select>

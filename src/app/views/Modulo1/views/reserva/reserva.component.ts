@@ -82,7 +82,6 @@ export class ReservaComponent implements OnInit {
         console.log('Rol del usuario:', this.userRole); // Verificar si el rol se asigna correctamente
       }
     });
-    console.log(this.franjasPermitidas);
 
   }
 
@@ -92,6 +91,12 @@ export class ReservaComponent implements OnInit {
         this.reservas = data;
         this.totalPages = Math.ceil(this.reservas.length / this.itemsPerPage);
         this.actualizarPaginacion();
+        this.franjasPermitidas = data.map((reserva) => {
+          return {
+            horaInicio: reserva.horaInicio,
+            horaFin: reserva.horaFin,
+          };
+        });
       },
       error: (err) => console.error('Error al cargar las reservas:', err),
     });
@@ -133,7 +138,6 @@ export class ReservaComponent implements OnInit {
       });
     }
   }
-
   cambiarEstadoPendiente(reserva: Reserva): void {
     if (reserva.idReserva === undefined || reserva.idReserva === null) {
       console.error('ID de reserva no definido.');
@@ -193,7 +197,7 @@ export class ReservaComponent implements OnInit {
   abrirModal(): void {
     this.isEditing = false;
     this.nuevaReserva = this.resetNuevaReservaData();
-
+    console.log(this.franjasPermitidas);
     this.modalReserva.show();
   }
 

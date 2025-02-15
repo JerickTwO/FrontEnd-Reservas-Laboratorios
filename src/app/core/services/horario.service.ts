@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { catchError, Observable, throwError } from 'rxjs';
 import { Horario } from 'src/app/models/horario.model';
 import { Laboratorio } from 'src/app/models/laboratorio.model'; // Importar el modelo de laboratorio
 import { environment } from 'src/environments/environment.development';
@@ -13,7 +13,7 @@ export class HorarioService {
   private laboratorioApiUrl = `${environment.urlBase}/laboratorios`;
 
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   // Obtener todos los horarios
   obtenerHorarios(): Observable<Horario[]> {
@@ -48,5 +48,15 @@ export class HorarioService {
   // Actualizar un laboratorio existente (si es necesario)
   actualizarLaboratorio(laboratorio: Laboratorio): Observable<Laboratorio> {
     return this.http.put<Laboratorio>(`${this.laboratorioApiUrl}/${laboratorio.idLaboratorio}`, laboratorio);
+  }
+  obtenerHorariosConReservaAprobada(): Observable<Horario[]> {
+    return this.http.get<Horario[]>(`${this.apiUrl}/aprobadas`).pipe(
+      catchError(this.handleError)
+    );
+  }
+  // Manejo de errores
+  private handleError(error: any): Observable<never> {
+    console.error('Ocurrió un error:', error);
+    return throwError(() => new Error('Error al comunicarse con el servidor.'));
   }
 }

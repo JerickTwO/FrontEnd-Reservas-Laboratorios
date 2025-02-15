@@ -129,6 +129,16 @@
                                 </select>
                             </div>
                             }
+                            <div class="mb-1">
+                                <label for="dia" class="form-label">Día</label>
+                                <select [(ngModel)]="nuevaReserva.dia" name="horaFin" id="horaFin"
+                                class="form-select" required>
+                                <option value="" disabled selected>Seleccione la hora de fin</option>
+                                <option *ngFor="let dia of dias" [ngValue]="dia">
+                                    {{ dia }}
+                                </option>
+                            </select>
+                            </div>
 
                             <div class="col-span-2 mb-1">
                                 <label for="motivoReserva" class="form-label">Motivo</label>

@@ -1,122 +1,49 @@
 <div>
-    <h2 class="text-center text-primary fw-bold mb-4">LABORATORIO 1 - Horario de Clases</h2>
-    <!-- Tabla de horarios -->
-    <div class="table-responsive">
-      <table class="table table-bordered table-striped text-center align-middle">
-        <thead class="table-dark">
-          <tr>
-            <th>HORAS</th>
-            <th *ngFor="let dia of dias">{{ dia }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let hora of horas">
-            <td class="fw-bold">{{ hora }}</td>
-            <td
-              *ngFor="let dia of dias"
-              class="clickable-cell"
-              (click)="abrirModal(hora, dia)"
-            >
-              {{ obtenerHorario(hora, dia) || 'Disponible' }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  
-    <!-- Modal para ingresar horarios -->
-    <div
-      class="modal fade"
-      [ngClass]="{ 'show d-block': modalVisible }"
-      style="background-color: rgba(0, 0, 0, 0.5);"
-      tabindex="-1"
-    >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header bg-primary text-white">
-            <h5 class="modal-title">Ingresar Horario</h5>
-            <button
-              type="button"
-              class="btn-close"
-              (click)="cerrarModal()"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <form (ngSubmit)="guardarCambios()">
-              <!-- Selector de materia -->
-              <div class="mb-3">
-                <label for="materia" class="form-label">Materia</label>
-                <select
-                  [(ngModel)]="modalHorario.idMateria"
-                  name="idMateria"
-                  id="materia"
-                  class="form-select"
-                  required
-                >
-                  <option value="" disabled selected>Seleccione una materia</option>
-                  <option *ngFor="let materia of materias" [value]="materia.idMateria">
-                    {{ materia.nombreMateria }}
-                  </option>
-                </select>
+  <h2 class="text-center text-blue-600 font-bold mb-4 text-xl">LABORATORIO 1 - Horario de Clases</h2>
+  <!-- Tabla de horarios -->
+  <div class="overflow-x-auto">
+    <table class="min-w-full table-auto border-collapse border border-gray-300 text-center align-middle">
+      <thead class="bg-gray-800 text-white">
+        <tr>
+          <th class="px-4 py-2 text-lg font-semibold">HORAS</th>
+          <th *ngFor="let dia of dias" class="px-4 py-2 text-lg font-semibold">{{ dia }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let hora of horas">
+          <td class="font-bold px-4 py-2">{{ hora }}</td>
+          <td *ngFor="let dia of dias" class="cursor-pointer hover:bg-blue-100 px-4 py-2">
+            <!-- Aquí se verifica el estado de la reserva -->
+            <!-- <ng-container *ngIf="obtenerHorario(hora, dia)?.reserva?.estado === 'APROBADA'; else disponible">
+              <div>
+                <strong>Reserva Confirmada:</strong><br>
+                Nombre: {{ obtenerHorario(hora, dia) ?.reserva?.nombreCompleto }}<br>
+                Correo: {{ obtenerHorario(hora, dia)?.reserva?.correo }}<br>
+                Participantes: {{ obtenerHorario(hora, dia)?.reserva?.cantidadParticipantes }}<br>
+                Hora: {{ obtenerHorario(hora, dia)?.reserva?.horaInicio }} - {{ obtenerHorario(hora, dia)?.reserva?.horaFin }}<br>
+                Laboratorio: {{ obtenerHorario(hora, dia)?.reserva?.laboratorio?.nombreLaboratorio }}<br>
+                Ubicación: {{ obtenerHorario(hora, dia)?.reserva?.laboratorio?.ubicacion }}<br>
               </div>
-  
-              <!-- Selector de docente -->
-              <div class="mb-3">
-                <label for="docente" class="form-label">Docente</label>
-                <select
-                  [(ngModel)]="modalHorario.idDocente"
-                  name="idDocente"
-                  id="docente"
-                  class="form-select"
-                  required
-                >
-                  <option value="" disabled selected>Seleccione un docente</option>
-                  <option *ngFor="let docente of docentes" [value]="docente.idDocente">
-                    {{ docente.nombreDocente }}
-                  </option>
-                </select>
-              </div>
-  
-              <!-- Selector de laboratorio -->
-              <div class="mb-3">
-                <label for="laboratorio" class="form-label">Laboratorio</label>
-                <select
-                  [(ngModel)]="modalHorario.idLaboratorio"
-                  name="idLaboratorio"
-                  id="laboratorio"
-                  class="form-select"
-                  required
-                >
-                  <option value="" disabled selected>Seleccione un laboratorio</option>
-                  <option *ngFor="let laboratorio of laboratorios" [value]="laboratorio.idLaboratorio">
-                    {{ laboratorio.nombreLaboratorio }}
-                  </option>
-                </select>
-              </div>
-  
-              <!-- Botones del modal -->
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" (click)="cerrarModal()">
-                  Cancelar
-                </button>
-                <button type="submit" class="btn btn-primary">Guardar</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
+            </ng-container>            
+            
+            <ng-template #disponible>
+              {{hora}}{{dia}}
+              {{ obtenerHorario(hora, dia)?.reserva?.estado || 'Disponible' }}
+            </ng-template> -->
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-  
-  <style>
-    .clickable-cell {
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-  
-    .clickable-cell:hover {
-      background-color: rgba(0, 123, 255, 0.1);
-    }
-  </style>
-  
+</div>
+
+<style>
+  .clickable-cell {
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .clickable-cell:hover {
+    background-color: rgba(0, 123, 255, 0.1);
+  }
+</style>

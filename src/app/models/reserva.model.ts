@@ -10,6 +10,7 @@ export class Reserva {
       ubicacion?: string;
       capacidad?: number;
   };
+  dia: 'LUNES' | 'MARTES' | 'MIERCOLES' | 'JUEVES' | 'VIERNES';
   horaInicio: string;
   horaFin: string;
   motivoReserva: string;

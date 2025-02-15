@@ -34,33 +34,17 @@ export class ReservaComponent implements OnInit {
   userRole: string | undefined;
 
 
-  franjasPermitidas: { horaInicio: string, horaFin: string }[] = [
-    { horaInicio: "07:00", horaFin: "09:00" },
-    { horaInicio: "09:00", horaFin: "11:00" },
-    { horaInicio: "11:00", horaFin: "13:00" },
-    { horaInicio: "13:30", horaFin: "15:30" },
-  ];
+  franjasPermitidas:
+    { horaInicio: string, horaFin: string }[] = [
+      { horaInicio: "07:00", horaFin: "09:00" },
+      { horaInicio: "09:00", horaFin: "11:00" },
+      { horaInicio: "11:00", horaFin: "13:00" },
+      { horaInicio: "13:30", horaFin: "15:30" },
+    ];
   dias: string[] = ['LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES'];
-
   eventos: any[] = [];
   clases: any[] = [];
-  nuevoHorario: Horario = {
-    dia: '',
-    horaInicio: '',
-    horaFin: '',
-    materia: {
-      idMateria: 0,
-      nombreMateria: ''
-    },
-    docente: {
-      idDocente: 0,
-      nombreDocente: ''
-    },
-    laboratorio: {
-      idLaboratorio: 0,
-      nombreLaboratorio: ''
-    }
-  };
+
   constructor(
     private reservaService: ReservaService,
     private laboratorioService: LaboratorioService,
@@ -75,14 +59,19 @@ export class ReservaComponent implements OnInit {
     document.getElementById('modalReserva')?.addEventListener('hidden.bs.modal', () => {
       this.cerrarModal();
     });
-
     this.usuarioService.usuario$.subscribe((usuario) => {
       if (usuario) {
-        this.userRole = usuario.rol.nombre; // Obtener el rol desde el usuario
-        console.log('Rol del usuario:', this.userRole); // Verificar si el rol se asigna correctamente
+        this.userRole = usuario.rol.nombre;
+        console.log('Rol del usuario:', this.userRole);
       }
     });
-
+    this.franjasPermitidas = [
+      { horaInicio: "07:00", horaFin: "09:00" },
+      { horaInicio: "09:00", horaFin: "11:00" },
+      { horaInicio: "11:00", horaFin: "13:00" },
+      { horaInicio: "13:30", horaFin: "15:30" },
+    ];
+    this.getReservas(); 
   }
 
   getReservas(): void {
@@ -91,12 +80,11 @@ export class ReservaComponent implements OnInit {
         this.reservas = data;
         this.totalPages = Math.ceil(this.reservas.length / this.itemsPerPage);
         this.actualizarPaginacion();
-        this.franjasPermitidas = data.map((reserva) => {
-          return {
-            horaInicio: reserva.horaInicio,
-            horaFin: reserva.horaFin,
-          };
-        });
+        if (this.reservas.length > 0) {
+          this.franjasPermitidas = data.map((reserva) => {
+            return { horaInicio: reserva.horaInicio, horaFin: reserva.horaFin };
+          });
+        }
       },
       error: (err) => console.error('Error al cargar las reservas:', err),
     });
@@ -110,9 +98,10 @@ export class ReservaComponent implements OnInit {
   }
 
   guardarReserva(): void {
-    // Formateamos las horas antes de enviarlas
     this.nuevaReserva.horaInicio = this.formatTime(this.nuevaReserva.horaInicio);
     this.nuevaReserva.horaFin = this.formatTime(this.nuevaReserva.horaFin);
+    console.log(this.franjasPermitidas);
+
 
     if (this.isEditing) {
       if (!this.nuevaReserva.idReserva) {
@@ -129,7 +118,9 @@ export class ReservaComponent implements OnInit {
       });
     } else {
       this.reservaService.crearReserva(this.nuevaReserva).subscribe({
+
         next: (reservaCreada) => {
+
           console.log('Reserva creada:', reservaCreada);
           this.getReservas();
           this.cerrarModal();
@@ -197,7 +188,9 @@ export class ReservaComponent implements OnInit {
   abrirModal(): void {
     this.isEditing = false;
     this.nuevaReserva = this.resetNuevaReservaData();
-    console.log(this.franjasPermitidas);
+    this.getReservas();
+    console.log('Franjas permitidas al abrir modal:', this.franjasPermitidas);
+ 
     this.modalReserva.show();
   }
 
@@ -206,6 +199,7 @@ export class ReservaComponent implements OnInit {
     this.nuevaReserva = { ...reserva };
     this.nuevaReserva.horaInicio = reserva.horaInicio;
     this.nuevaReserva.horaFin = reserva.horaFin;
+    console.log('Franjas permitidas al abrir modal:', this.franjasPermitidas);
     this.modalReserva.show();
   }
 
@@ -236,6 +230,7 @@ export class ReservaComponent implements OnInit {
       idReserva: 0,
       nombreCompleto: '',
       correo: '',
+      dia: 'LUNES',
       telefono: '',
       ocupacionLaboral: '',
       laboratorio: { idLaboratorio: 0, nombreLaboratorio: '' },

@@ -14,7 +14,7 @@ import { Reserva } from 'src/app/models/reserva.model';
   styleUrl: './horarios.component.scss'
 })
 export class HorariosComponent implements OnInit {
-  dias: string[] = ['LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES'];
+  dias: string[] = ['LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES'];
   horas: string[] = ['07:00-09:00', '09:00-11:00', '11:00-13:00', '13:30-15:30'];
   horarios: any[] = []; // Arreglo para los horarios y las reservas
 

@@ -41,7 +41,7 @@ export class ReservaComponent implements OnInit {
       { horaInicio: "11:00", horaFin: "13:00" },
       { horaInicio: "13:30", horaFin: "15:30" },
     ];
-  dias: string[] = ['LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES'];
+  dias: string[] = ['LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES'];
   eventos: any[] = [];
   clases: any[] = [];
 

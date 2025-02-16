@@ -16,24 +16,43 @@ import { Reserva } from 'src/app/models/reserva.model';
 export class HorariosComponent implements OnInit {
   dias: string[] = ['LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES'];
   horas: string[] = ['07:00-09:00', '09:00-11:00', '11:00-13:00', '13:30-15:30'];
-  horarios: Horario[] = [];
-  reservas: Reserva[] = []; // Nueva lista para reservas
-  constructor(
-    private horarioService: HorarioService,
-  ) { }
+  horarios: any[] = []; // Arreglo para los horarios y las reservas
+
+  constructor(private horarioService: HorarioService) {}
 
   ngOnInit(): void {
-    this.cargarHorariosAprobados();
+    this.cargarHorarios();
   }
-  cargarHorariosAprobados(): void {
+
+  cargarHorarios(): void {
     this.horarioService.obtenerHorariosConReservaAprobada().subscribe(
-      (data: Horario[]) => {
+      (data) => {
         this.horarios = data;
-        console.log(this.horarios)
+        console.log('Horarios con reservas aprobadas:', this.horarios);
       },
-      (error: any) => {
+      (error) => {
         console.error('Error al cargar los horarios:', error);
       }
     );
+  }
+
+  obtenerReservaEnHorario(dia: string, hora: string): any {
+    // "hora" viene en formato "HH:mm-HH:mm" (p. ej. "07:00-09:00").
+    const [horaInicioTabla, horaFinTabla] = hora.split('-'); 
+    // horaInicioTabla = "07:00", horaFinTabla = "09:00"
+
+    // Buscamos en this.horarios un objeto que coincida en día y en las horas
+    return this.horarios.find((horario) => {
+      // Los horarios del backend suelen venir "07:00:00". Cortamos a los primeros 5 caracteres: "07:00"
+      const inicioBackend = horario?.reserva.horaInicio?.substring(0, 5); // "07:00"
+      const finBackend = horario?.reserva.horaFin?.substring(0, 5);       // "09:00"
+      const diaBackend = (horario?.reserva.dia || '').toUpperCase();      // "LUNES", "MARTES", etc.
+
+      return (
+        diaBackend === dia && 
+        inicioBackend === horaInicioTabla && 
+        finBackend === horaFinTabla
+      );
+    });
   }
 }

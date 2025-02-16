@@ -1,49 +1,38 @@
-<div>
-  <h2 class="text-center text-blue-600 font-bold mb-4 text-xl">LABORATORIO 1 - Horario de Clases</h2>
-  <!-- Tabla de horarios -->
-  <div class="overflow-x-auto">
-    <table class="min-w-full table-auto border-collapse border border-gray-300 text-center align-middle">
-      <thead class="bg-gray-800 text-white">
-        <tr>
-          <th class="px-4 py-2 text-lg font-semibold">HORAS</th>
-          <th *ngFor="let dia of dias" class="px-4 py-2 text-lg font-semibold">{{ dia }}</th>
+<div class="">
+  <h2 class="text-center text-[#0066CC] font-bold mb-6 text-2xl">
+    LABORATORIO 1 - Horario de Clases
+  </h2>
+  
+  <div class=" rounded-xlborder shadow-sm">
+    <table class="w-full border-collapse bg-white">
+      <thead>
+        <tr class="bg-[#0066CC]">
+          <th class="p-3 font-bold text-white">HORAS</th>
+          <th *ngFor="let dia of dias" class="text-center font-bold text-white">
+            {{ dia }}
+          </th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let hora of horas">
-          <td class="font-bold px-4 py-2">{{ hora }}</td>
-          <td *ngFor="let dia of dias" class="cursor-pointer hover:bg-blue-100 px-4 py-2">
-            <!-- Aquí se verifica el estado de la reserva -->
-            <!-- <ng-container *ngIf="obtenerHorario(hora, dia)?.reserva?.estado === 'APROBADA'; else disponible">
-              <div>
-                <strong>Reserva Confirmada:</strong><br>
-                Nombre: {{ obtenerHorario(hora, dia) ?.reserva?.nombreCompleto }}<br>
-                Correo: {{ obtenerHorario(hora, dia)?.reserva?.correo }}<br>
-                Participantes: {{ obtenerHorario(hora, dia)?.reserva?.cantidadParticipantes }}<br>
-                Hora: {{ obtenerHorario(hora, dia)?.reserva?.horaInicio }} - {{ obtenerHorario(hora, dia)?.reserva?.horaFin }}<br>
-                Laboratorio: {{ obtenerHorario(hora, dia)?.reserva?.laboratorio?.nombreLaboratorio }}<br>
-                Ubicación: {{ obtenerHorario(hora, dia)?.reserva?.laboratorio?.ubicacion }}<br>
+        <tr *ngFor="let hora of horas; let i = index" 
+            [ngClass]="{'bg-gray-50': i % 2 === 0, 'bg-white': i % 2 !== 0}">
+          <td class="p-3 font-bold text-center border border-gray-200">{{ hora }}</td>
+          <td *ngFor="let dia of dias" 
+              class="p-3 text-center border border-gray-200 hover:bg-blue-50 transition-colors cursor-pointer">
+            <ng-container *ngIf="obtenerReservaEnHorario(dia, hora) as horarioEncontrado; else disponible">
+              <div class="p-2">
+                <strong class="block text-[#0066CC] mb-1">Reserva Confirmada:</strong>
+                <span class="block text-sm">Nombre: {{ horarioEncontrado.reserva.nombreCompleto }}</span>
+                <span class="block text-sm">Correo: {{ horarioEncontrado.reserva.correo }}</span>
+                <span class="block text-sm">Motivo: {{ horarioEncontrado.reserva.motivoReserva }}</span>
               </div>
-            </ng-container>            
-            
+            </ng-container>
             <ng-template #disponible>
-              {{hora}}{{dia}}
-              {{ obtenerHorario(hora, dia)?.reserva?.estado || 'Disponible' }}
-            </ng-template> -->
+              <span class="text-gray-500">Disponible</span>
+            </ng-template>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
 </div>
-
-<style>
-  .clickable-cell {
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-
-  .clickable-cell:hover {
-    background-color: rgba(0, 123, 255, 0.1);
-  }
-</style>

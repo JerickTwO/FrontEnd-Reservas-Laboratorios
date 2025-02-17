@@ -14,7 +14,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let hora of horas; let i = index" 
+        <tr *ngFor="let hora of horaslabO; let i = index" 
             [ngClass]="{'bg-gray-50': i % 2 === 0, 'bg-white': i % 2 !== 0}">
           <td class="p-3 font-bold text-center border border-gray-200">{{ hora }}</td>
           <td *ngFor="let dia of dias" 

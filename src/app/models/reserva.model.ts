@@ -1,15 +1,11 @@
+import { Laboratorio } from "./laboratorio.model";
 export class Reserva {
   idReserva: number; // Opcional en caso de creación
   nombreCompleto: string;
   correo: string;
   telefono: string;
   ocupacionLaboral: string;
-  laboratorio: {
-      idLaboratorio: number;
-      nombreLaboratorio?: string;
-      ubicacion?: string;
-      capacidad?: number;
-  };
+  laboratorio: Laboratorio;
   dia: 'LUNES' | 'MARTES' | 'MIERCOLES' | 'JUEVES' | 'VIERNES';
   horaInicio: string;
   horaFin: string;

@@ -14,6 +14,7 @@ import { CarrerasComponent } from './views/carreras/carreras.component';
 import { HorariosComponent } from './views/horarios/horarios.component';
 import { ClaseComponent } from './views/clases/clases.component';
 import { PeriodoComponent } from './views/periodo/periodo.component';
+import { LaboratorioService } from 'src/app/core/services/laboratorio.service';
 
 const home: string = 'dashboard';
 const laboratorio: string = 'laboratorio';
@@ -43,6 +44,17 @@ export const routesArrayModulo1: string[] = [
   '/' + periodos,
   '/' + horarios,
 ];
+
+function obtenerLaboratorios(laboratorioService: LaboratorioService): void {
+  laboratorioService.getLaboratorios().subscribe(
+    (laboratorios) => {
+      console.log('Laboratorios:', laboratorios);
+    },
+    (error) => {
+      console.error('Error al obtener laboratorios:', error);
+    }
+  );
+}
 
 // Convertir primera en mayuscula
 function capitalizeFirstLetter(string: string): string {

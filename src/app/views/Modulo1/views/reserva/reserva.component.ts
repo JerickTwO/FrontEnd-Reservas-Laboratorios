@@ -233,7 +233,7 @@ export class ReservaComponent implements OnInit {
       dia: 'LUNES',
       telefono: '',
       ocupacionLaboral: '',
-      laboratorio: { idLaboratorio: 0, nombreLaboratorio: '' },
+      laboratorio: { idLaboratorio: 0,nombreLaboratorio:'',ubicacion:'',capacidad:0,franjasHorario:[] },
       horaInicio: '',
       horaFin: '',
       motivoReserva: '',

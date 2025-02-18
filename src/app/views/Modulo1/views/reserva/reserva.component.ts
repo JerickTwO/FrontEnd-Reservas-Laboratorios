@@ -71,7 +71,7 @@ export class ReservaComponent implements OnInit {
       { horaInicio: "11:00", horaFin: "13:00" },
       { horaInicio: "13:30", horaFin: "15:30" },
     ];
-    this.getReservas(); 
+    this.getReservas();
   }
 
   getReservas(): void {
@@ -190,7 +190,7 @@ export class ReservaComponent implements OnInit {
     this.nuevaReserva = this.resetNuevaReservaData();
     this.getReservas();
     console.log('Franjas permitidas al abrir modal:', this.franjasPermitidas);
- 
+
     this.modalReserva.show();
   }
 
@@ -233,7 +233,7 @@ export class ReservaComponent implements OnInit {
       dia: 'LUNES',
       telefono: '',
       ocupacionLaboral: '',
-      laboratorio: { idLaboratorio: 0,nombreLaboratorio:'',ubicacion:'',capacidad:0,franjasHorario:[] },
+      laboratorio: { idLaboratorio: 0, nombreLaboratorio: '', ubicacion: '', capacidad: 0, franjasHorario: [], diasHorario: [] },
       horaInicio: '',
       horaFin: '',
       motivoReserva: '',

@@ -28,7 +28,7 @@ const carreras: string = 'carreras';
 const departamentos: string = 'departamentos';
 const clases: string = 'clases'
 const periodos: string = 'periodos'
-const horarios: string = 'horarios'
+const horarios: string = 'horario'
 export const routesArrayModulo1: string[] = [
   '/' + home,
   '/' + laboratorio,
@@ -45,16 +45,16 @@ export const routesArrayModulo1: string[] = [
   '/' + horarios,
 ];
 
-function obtenerLaboratorios(laboratorioService: LaboratorioService): void {
-  laboratorioService.getLaboratorios().subscribe(
-    (laboratorios) => {
-      console.log('Laboratorios:', laboratorios);
-    },
-    (error) => {
-      console.error('Error al obtener laboratorios:', error);
-    }
-  );
-}
+// function obtenerLaboratorios(laboratorioService: LaboratorioService): void {
+//   laboratorioService.getLaboratorios().subscribe(
+//     (laboratorios) => {
+//       console.log('Laboratorios:', laboratorios);
+//     },
+//     (error) => {
+//       console.error('Error al obtener laboratorios:', error);
+//     }
+//   );
+// }
 
 // Convertir primera en mayuscula
 function capitalizeFirstLetter(string: string): string {
@@ -163,12 +163,20 @@ export const routesModulo1: Routes = [
         },
       },
       {
-      path: horarios,
+        path: horarios,
         canActivate: [isAuthenticatedGuard],
         component: HorariosComponent,
         data: {
           title: capitalizeFirstLetter(horarios),
         },
+      },
+      {
+        path: 'horario/:id',
+        canActivate: [isAuthenticatedGuard],
+        component: HorariosComponent,
+        data: {
+          title: capitalizeFirstLetter(horarios),
+        }
       },
     ],
   },

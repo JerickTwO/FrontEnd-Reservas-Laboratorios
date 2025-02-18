@@ -4,6 +4,8 @@ import { TooltipModule } from 'primeng/tooltip';
 import { CommonModule } from '@angular/common';
 import { UsuarioService } from 'src/app/core/services/usuario.service';
 import { Usuario } from 'src/app/models/usuario.model';
+import { LaboratorioService } from 'src/app/core/services/laboratorio.service';
+import { Laboratorio } from 'src/app/models/laboratorio.model';
 
 @Component({
   selector: 'app-sidebar',
@@ -20,20 +22,32 @@ export class SidebarComponent implements OnInit {
   usuario!: Usuario; // Define el tipo correcto para el usuario
   userRole: string | undefined;
   submenuOpen = false;
+  laboratorios: Laboratorio[];
 
-  constructor(private usuarioService: UsuarioService) {}
+  constructor(private usuarioService: UsuarioService, private laboratorioService: LaboratorioService) {}
 
   ngOnInit(): void {
-    // Suscribirse al observable del usuario para obtener el rol cuando esté disponible
+    this.obtenerLaboratorios();
     this.usuarioService.usuario$.subscribe((usuario) => {
       if (usuario) {
-        this.userRole = usuario.rol.nombre; // Obtener el rol desde el usuario
-        console.log('Rol del usuario:', this.userRole); // Verificar si el rol se asigna correctamente
+        this.userRole = usuario.rol.nombre; 
+        console.log('Rol del usuario:', this.userRole);
       }
     });
   }
 
   toggleSubmenu() {
     this.submenuOpen = !this.submenuOpen;
+  }
+  obtenerLaboratorios(): void {
+    this.laboratorioService.getLaboratorios().subscribe(
+      (laboratorios) => {
+        this.laboratorios = laboratorios;
+        console.log('Laboratorios:', laboratorios);
+      },
+      (error) => {
+        console.error('Error al obtener laboratorios:', error);
+      }
+    );
   }
 }

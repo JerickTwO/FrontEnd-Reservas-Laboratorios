@@ -7,7 +7,7 @@ import { NavbarComponent } from './designs/navbar/navbar.component';
 import { ToastModule } from 'primeng/toast';
 import { SidebarComponent } from './designs/sidebar/sidebar.component';
 import { NgClass } from '@angular/common';
-
+import { LaboratorioService } from 'src/app/core/services/laboratorio.service';
 
 @Component({
   selector: 'modulo1-root',
@@ -17,6 +17,7 @@ import { NgClass } from '@angular/common';
   imports: [RouterOutlet, NavbarComponent, SidebarComponent, NgClass, ToastModule]
 })
 export class Modulo1Component implements OnInit {
+  laboratorios: any[] = []; // Variable para almacenar los laboratorios
 
   // Titulos
   title = 'Agenda Citas';
@@ -32,6 +33,7 @@ export class Modulo1Component implements OnInit {
   constructor(
     private titleService: Title,
     private sidebarService: SidebarService,
+    private laboratorioService: LaboratorioService,
     private router: Router
   ) {
     // Suscribirse a eventos de cambio de navegación
@@ -87,7 +89,6 @@ export class Modulo1Component implements OnInit {
     }
   }
 
-
   // Capitalizar la primera letra de una cadena y reemplazar guiones con espacios
   formatTitle(text: string): string {
     const titleWithoutDash = text.replace(/-/g, ' ');
@@ -99,8 +100,18 @@ export class Modulo1Component implements OnInit {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
+  obtenerLaboratorios(): void {
+    this.laboratorioService.getLaboratorios().subscribe(
+      (laboratorios) => {
+        this.laboratorios = laboratorios;
+        console.log('Laboratorios:', laboratorios);
+      },
+      (error) => {
+        console.error('Error al obtener laboratorios:', error);
+      }
+    );
+  }
 
-  // Redimencionar el contenido del contenedor
   ngAfterViewInit() {
     this.adjustViewsMinHeight();
     window.addEventListener('resize', () => this.adjustViewsMinHeight());

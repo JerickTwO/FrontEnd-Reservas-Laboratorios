@@ -17,8 +17,11 @@
           @if (userRole === "admin") {
           <ul class="nav-list">
             <!-- <div *ngIf="usuario.role !== 'Customer'"> -->
-            <a [routerLink]="routes[0]" routerLinkActive="active-section"
-              [class.active-section]="activeLink.includes(routes[0])">
+            <a
+              [routerLink]="routes[0]"
+              routerLinkActive="active-section"
+              [class.active-section]="activeLink.includes(routes[0])"
+            >
               <div class="icon-sidebar-item">
                 <i class="bx bxs-dashboard"></i>
               </div>
@@ -27,9 +30,11 @@
               </div>
             </a>
 
-
-            <a [routerLink]="routes[1]" routerLinkActive="active-section"
-              [class.active-section]="activeLink.includes(routes[1])">
+            <a
+              [routerLink]="routes[1]"
+              routerLinkActive="active-section"
+              [class.active-section]="activeLink.includes(routes[1])"
+            >
               <div class="icon-sidebar-item">
                 <i class="bx bxs-flask"></i>
               </div>
@@ -37,8 +42,11 @@
                 <li>Laboratorios</li>
               </div>
             </a>
-            <a [routerLink]="routes[2]" routerLinkActive="active-section"
-              [class.active-section]="activeLink.includes(routes[2])">
+            <a
+              [routerLink]="routes[2]"
+              routerLinkActive="active-section"
+              [class.active-section]="activeLink.includes(routes[2])"
+            >
               <div class="icon-sidebar-item">
                 <i class="bx bxs-calendar-check"></i>
               </div>
@@ -46,8 +54,11 @@
                 <li>Reservas</li>
               </div>
             </a>
-            <a [routerLink]="routes[3]" routerLinkActive="active-section"
-              [class.active-section]="activeLink.includes(routes[3])">
+            <a
+              [routerLink]="routes[3]"
+              routerLinkActive="active-section"
+              [class.active-section]="activeLink.includes(routes[3])"
+            >
               <div class="icon-sidebar-item">
                 <i class="bx bxs-book"></i>
               </div>
@@ -56,13 +67,13 @@
               </div>
             </a>
 
+            <li class="dividers">Usuarios</li>
 
-            <li class="dividers">
-              Usuarios
-            </li>
-
-            <a [routerLink]="routes[5]" routerLinkActive="active-section"
-              [class.active-section]="activeLink.includes(routes[4])">
+            <a
+              [routerLink]="routes[5]"
+              routerLinkActive="active-section"
+              [class.active-section]="activeLink.includes(routes[4])"
+            >
               <div class="icon-sidebar-item">
                 <i class="bx bxs-user-badge"></i>
               </div>
@@ -70,8 +81,11 @@
                 <li>Administradores</li>
               </div>
             </a>
-            <a [routerLink]="routes[6]" routerLinkActive="active-section"
-              [class.active-section]="activeLink.includes(routes[4])">
+            <a
+              [routerLink]="routes[6]"
+              routerLinkActive="active-section"
+              [class.active-section]="activeLink.includes(routes[4])"
+            >
               <div class="icon-sidebar-item">
                 <i class="bx bxs-chalkboard"></i>
               </div>
@@ -79,8 +93,11 @@
                 <li>Docentes</li>
               </div>
             </a>
-            <a [routerLink]="routes[7]" routerLinkActive="active-section"
-              [class.active-section]="activeLink.includes(routes[4])">
+            <a
+              [routerLink]="routes[7]"
+              routerLinkActive="active-section"
+              [class.active-section]="activeLink.includes(routes[4])"
+            >
               <div class="icon-sidebar-item">
                 <i class="bx bxs-user"></i>
               </div>
@@ -88,11 +105,12 @@
                 <li>Estudiantes</li>
               </div>
             </a>
-            <li class="dividers">
-              Áreas
-            </li>
-            <a [routerLink]="routes[8]" routerLinkActive="active-section"
-              [class.active-section]="activeLink.includes(routes[8])">
+            <li class="dividers">Áreas</li>
+            <a
+              [routerLink]="routes[8]"
+              routerLinkActive="active-section"
+              [class.active-section]="activeLink.includes(routes[8])"
+            >
               <div class="icon-sidebar-item">
                 <i class="bx bxs-graduation"></i>
               </div>
@@ -100,8 +118,11 @@
                 <li>Carreras</li>
               </div>
             </a>
-            <a [routerLink]="routes[9]" routerLinkActive="active-section"
-              [class.active-section]="activeLink.includes(routes[9])">
+            <a
+              [routerLink]="routes[9]"
+              routerLinkActive="active-section"
+              [class.active-section]="activeLink.includes(routes[9])"
+            >
               <div class="icon-sidebar-item">
                 <i class="bx bxs-building"></i>
               </div>
@@ -110,12 +131,13 @@
               </div>
             </a>
 
-            <li class="dividers">
-              Horarios
-            </li>
+            <li class="dividers">Horarios</li>
 
-            <a [routerLink]="routes[10]" routerLinkActive="active-section"
-              [class.active-section]="activeLink.includes(routes[11])">
+            <a
+              [routerLink]="routes[10]"
+              routerLinkActive="active-section"
+              [class.active-section]="activeLink.includes(routes[11])"
+            >
               <div class="icon-sidebar-item">
                 <i class="bx bxs-book"></i>
               </div>
@@ -123,8 +145,11 @@
                 <li>Clases</li>
               </div>
             </a>
-            <a [routerLink]="routes[11]" routerLinkActive="active-section"
-              [class.active-section]="activeLink.includes(routes[11])">
+            <a
+              [routerLink]="routes[11]"
+              routerLinkActive="active-section"
+              [class.active-section]="activeLink.includes(routes[11])"
+            >
               <div class="icon-sidebar-item">
                 <i class="bx bxs-book"></i>
               </div>
@@ -132,8 +157,11 @@
                 <li>Periodo</li>
               </div>
             </a>
-            <a [routerLink]="routes[12]" routerLinkActive="active-section"
-              [class.active-section]="activeLink.includes(routes[10])">
+            <a
+              [routerLink]="routes[12]"
+              routerLinkActive="active-section"
+              [class.active-section]="activeLink.includes(routes[10])"
+            >
               <div class="icon-sidebar-item">
                 <i class="bx bxs-time"></i>
               </div>
@@ -142,17 +170,51 @@
               </div>
             </a>
 
+            @if (laboratorios.length > 0) {
+            <!-- <a
+              [routerLink]="routes[1]"
+              routerLinkActive="active-section"
+              [class.active-section]="activeLink.includes(routes[1])"
+            >
+              <div class="icon-sidebar-item">
+                <i class="bx bxs-flask"></i>
+              </div>
+              <div class="name-sidebar-item">
+                <li>Laboratorios</li>
+              </div>
+            </a> -->
 
+            <ul class="nav-list">
+              @for (laboratorio of laboratorios; track $index) {
+              <li>
+                <a
+                  [routerLink]="'/horario/' + laboratorio.idLaboratorio"
+                  routerLinkActive="active-section"
+                  [class.active-section]="
+                    activeLink.includes('/horario/' + laboratorio.idLaboratorio)
+                  "
+                >
+                  <div class="icon-sidebar-item">
+                    <i class="bx bxs-time"></i>
+                  </div>
+                  <div class="name-sidebar-item">
+                    <li>{{ "Horario " + ($index + 1) }}</li>
+                    <!-- Mostrar "Horario X" -->
+                  </div>
+                </a>
+              </li>
+              }
+            </ul>
+            }
           </ul>
-          }
-          @if (userRole === "docente") {
+          } @if (userRole === "docente") {
           <ul class="nav-list">
             <!-- <div *ngIf="usuario.role !== 'Customer'"> -->
-
-
-
-            <a [routerLink]="routes[2]" routerLinkActive="active-section"
-              [class.active-section]="activeLink.includes(routes[2])">
+            <a
+              [routerLink]="routes[2]"
+              routerLinkActive="active-section"
+              [class.active-section]="activeLink.includes(routes[2])"
+            >
               <div class="icon-sidebar-item">
                 <i class="bx bxs-calendar-check"></i>
               </div>
@@ -161,12 +223,12 @@
               </div>
             </a>
 
-
-            <li class="dividers">
-              Horarios
-            </li>
-            <a [routerLink]="routes[10]" routerLinkActive="active-section"
-              [class.active-section]="activeLink.includes(routes[10])">
+            <li class="dividers">Horarios</li>
+            <a
+              [routerLink]="routes[10]"
+              routerLinkActive="active-section"
+              [class.active-section]="activeLink.includes(routes[10])"
+            >
               <div class="icon-sidebar-item">
                 <i class="bx bxs-time"></i>
               </div>
@@ -174,10 +236,8 @@
                 <li>Horario 1</li>
               </div>
             </a>
-
           </ul>
           }
-
         </nav>
       </div>
     </div>

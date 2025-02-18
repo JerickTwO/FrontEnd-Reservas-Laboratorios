@@ -24,6 +24,7 @@ export class LaboratorioComponent implements OnInit {
     capacidad: 0,
     ubicacion: '',
     franjasHorario:[],
+    diasHorario:[],
   };
   error: string | null = null;
   currentPage = 1;
@@ -60,6 +61,7 @@ export class LaboratorioComponent implements OnInit {
       capacidad: 0,
       ubicacion: '',
       franjasHorario:[],
+      diasHorario:[],
     }; // Limpiar el formulario
     this.openModal('addLaboratorioModal');
   }

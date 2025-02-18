@@ -17,6 +17,7 @@ export class HorariosComponent implements OnInit {
   dias: string[] = ['LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES'];
   laboratorios:Laboratorio[];
   horaslabO: string[] = [];
+  diaslabO: string[] = [];
   horarios: Horario[] = [];
 
   constructor(private horarioService: HorarioService,private laboratorioService: LaboratorioService) { }
@@ -43,6 +44,7 @@ export class HorariosComponent implements OnInit {
       (data) => {
         this.laboratorios = data;
         this.horaslabO = this.laboratorios[0].franjasHorario;
+        this.diaslabO = this.laboratorios[0].diasHorario;
         console.log('Horarios con laboratorios aprobadas:', this.laboratorios);
       },
       (error) => {

@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { Modal } from 'bootstrap';
 import { PaginationComponent } from '../pagination/pagination.component';
 import { PaginationService } from 'src/app/core/services/pagination.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-laboratorio',
@@ -16,6 +17,7 @@ import { PaginationService } from 'src/app/core/services/pagination.service';
 })
 export class LaboratorioComponent implements OnInit {
   laboratorios: Laboratorio[] = [];
+  laboratorio: Laboratorio | null = null;
   laboratoriosPaginados: Laboratorio[] = [];
   selectedLaboratorio: Laboratorio | null = null; // Para la vista previa o edición
   newLaboratorio: Laboratorio = {
@@ -23,20 +25,25 @@ export class LaboratorioComponent implements OnInit {
     nombreLaboratorio: '',
     capacidad: 0,
     ubicacion: '',
-    franjasHorario:[],
-    diasHorario:[],
+    franjasHorario: [],
+    diasHorario: [],
   };
   error: string | null = null;
   currentPage = 1;
   itemsPerPage = 5;
   totalPages = 1;
+  idLaboratorio: string | null = null;
+
 
   constructor(
     private laboratorioService: LaboratorioService,
-    private paginationService: PaginationService
+    private paginationService: PaginationService,
+    private route: ActivatedRoute
+
   ) { }
 
   ngOnInit(): void {
+    this.idLaboratorio = this.route.snapshot.paramMap.get('id');
     this.cargarLaboratorios();
 
   }
@@ -52,7 +59,17 @@ export class LaboratorioComponent implements OnInit {
       },
     });
   }
-
+  // cargarLaboratorio(id: string): void {
+  //   this.laboratorioService.getLaboratorioById(id).subscribe(
+  //     (data: Laboratorio) => {
+  //     this.laboratorio = data;
+  //     console.log('Laboratorio cargado:', this.laboratorio);
+  //     },
+  //     (error: any) => {
+  //     console.error('Error al cargar el laboratorio:', error);
+  //     }
+  //   );
+  // }
   // Abrir el modal para agregar un nuevo laboratorio
   openAddLaboratorioModal(): void {
     this.newLaboratorio = {
@@ -60,8 +77,8 @@ export class LaboratorioComponent implements OnInit {
       nombreLaboratorio: '',
       capacidad: 0,
       ubicacion: '',
-      franjasHorario:[],
-      diasHorario:[],
+      franjasHorario: [],
+      diasHorario: [],
     }; // Limpiar el formulario
     this.openModal('addLaboratorioModal');
   }

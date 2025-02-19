@@ -44,7 +44,7 @@ export class Modulo1Component implements OnInit {
   }
 
   ngOnInit(): void {
-    // Rutas
+    // 
     this.routesArray = routesArrayModulo1;
 
     // Actualizar el título cuando se carga la página por primera vez
@@ -55,6 +55,10 @@ export class Modulo1Component implements OnInit {
 
     // Cambiar nombre de dividers a -
     this.sidebarService.changeNameDividers(this.sidebarHidden);
+    
+    if (this.laboratorios.length === 0) {
+      this.obtenerLaboratorios();
+    }
   }
 
 

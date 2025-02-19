@@ -153,14 +153,11 @@ export class ReservaComponent implements OnInit {
       showLoaderOnConfirm: true,  // Muestra un cargador cuando se confirme
     }).then((result) => {
       if (result.isConfirmed) {
-        // Si el usuario confirma, cambiar el estado a "APROBADA"
         reserva.estado = 'APROBADA';
-
-        // Llamar al servicio para actualizar la reserva en el backend
         this.reservaService.actualizarReserva(reserva.idReserva, reserva).subscribe({
           next: () => {
             Swal.fire('Estado actualizado', 'La reserva ha sido aprobada.', 'success');
-            this.getReservas(); // Recargar las reservas
+            this.getReservas();
           },
           error: (err) => {
             Swal.fire('Error', 'No se pudo actualizar el estado.', 'error');
@@ -244,9 +241,8 @@ export class ReservaComponent implements OnInit {
   }
 
   private formatTime(hour: string): string {
-    // Convierte la hora a formato "HH:mm:ss" si es necesario
     if (hour && !hour.includes(':')) {
-      return `${hour}:00`;  // Ajusta este formato según el caso
+      return `${hour}:00`;
     }
     return hour;
   }

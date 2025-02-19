@@ -1,6 +1,6 @@
 <div class="">
   <h2 class="text-center text-[#0066CC] font-bold mb-6 text-2xl">
-    LABORATORIO 1 - Horario de Clases
+    LABORATORIO 2 - Horario de Clases
   </h2>
 
   <div class="rounded-xlborder shadow-sm">
@@ -31,27 +31,19 @@
                 else disponible
               "
             >
-              <!-- <div class="p-2">
+              <div class="p-2">
                 <strong class="block text-[#0066CC] mb-1"
-                  >Reserva Confirmada:</strong
+                  >{{ horarioEncontrado.reserva.materia }}</strong
                 >
                 <span class="block text-sm"
-                  >Nombre: {{ horarioEncontrado.reserva.nombreCompleto }}</span
+                  > {{ horarioEncontrado.reserva.nombreCompleto }}</span
                 >
-                <span class="block text-sm"
+                <!-- <span class="block text-sm"
                   >Correo: {{ horarioEncontrado.reserva.correo }}</span
                 >
                 <span class="block text-sm"
                   >Motivo: {{ horarioEncontrado.reserva.motivoReserva }}</span
-                >
-              </div> -->
-              <div class="p-2">
-                <strong class="block text-[#0066CC] mb-1">{{
-                  horarioEncontrado.reserva.materia
-                }}</strong>
-                <span class="block text-sm">{{
-                  horarioEncontrado.reserva.nombreCompleto
-                }}</span>
+                > -->
               </div>
             </ng-container>
             <ng-template #disponible>

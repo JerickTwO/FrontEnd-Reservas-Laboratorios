@@ -13,7 +13,7 @@ import { Laboratorio } from 'src/app/models/laboratorio.model';
   templateUrl: './horarios.component.html',
   styleUrl: './horarios.component.scss'
 })
-export class HorariosComponent implements OnInit {
+export class Horario5Component implements OnInit {
   laboratorios: Laboratorio[];
   horas: string[] = [];
   dias: string[] = [];
@@ -28,7 +28,7 @@ export class HorariosComponent implements OnInit {
   cargarHorarios(): void {
     this.horarioService.obtenerHorariosConReservaAprobada().subscribe(
       (data) => {
-        this.horarios = data;
+        this.horarios = data.filter(horario => horario?.reserva?.laboratorio.idLaboratorio === 5);
         console.log('Horarios con reservas aprobadas:', this.horarios);
       },
       (error) => {

@@ -4,6 +4,7 @@ export class Reserva {
   nombreCompleto: string;
   correo: string;
   telefono: string;
+  materia?: string;
   ocupacionLaboral: string;
   laboratorio: Laboratorio;
   dia: 'LUNES' | 'MARTES' | 'MIERCOLES' | 'JUEVES' | 'VIERNES';

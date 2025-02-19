@@ -1,6 +1,6 @@
 <div class="">
   <h2 class="text-center text-[#0066CC] font-bold mb-6 text-2xl">
-    LABORATORIO 1 - Horario de Clases
+    LABORATORIO 3 - Horario de Clases
   </h2>
 
   <div class="rounded-xlborder shadow-sm">
@@ -8,21 +8,28 @@
       <thead>
         <tr class="bg-[#0066CC]">
           <th class="p-3 font-bold text-white">HORAS</th>
-          <th *ngFor="let dia of dias" class="text-center font-bold text-white">
+          @for (dia of dias; track $index) {
+          <th class="text-center font-bold text-white">
             {{ dia }}
           </th>
+          }
         </tr>
       </thead>
       <tbody>
+        @for (hora of horas; track $index) {
+
         <tr
-          *ngFor="let hora of horas; let i = index"
-          [ngClass]="{ 'bg-gray-50': i % 2 === 0, 'bg-white': i % 2 !== 0 }"
+          [ngClass]="{
+            'bg-gray-50': $index % 2 === 0,
+            'bg-white': $index % 2 !== 0
+          }"
         >
           <td class="p-3 font-bold text-center border border-gray-200">
             {{ hora }}
           </td>
+          @for (dia of dias; track $index) {
+
           <td
-            *ngFor="let dia of dias"
             class="p-3 text-center border border-gray-200 hover:bg-blue-50 transition-colors cursor-pointer"
           >
             <ng-container
@@ -58,7 +65,9 @@
               <span class="text-gray-500">Disponible</span>
             </ng-template>
           </td>
+          }
         </tr>
+        }
       </tbody>
     </table>
   </div>

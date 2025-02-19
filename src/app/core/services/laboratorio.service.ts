@@ -64,4 +64,10 @@ export class LaboratorioService {
   buscarLaboratorios(query: string): Observable<Laboratorio[]> {
     return this.http.get<Laboratorio[]>(`${this.apiUrl}/buscar?query=${query}`);
   }
+  // Obtener un laboratorio por ID
+  getLaboratorioById(id: number): Observable<Laboratorio> {
+    return this.http.get<Laboratorio>(`${this.apiUrl}/${id}`).pipe(
+      catchError(this.handleError)
+    );
+  }
 }

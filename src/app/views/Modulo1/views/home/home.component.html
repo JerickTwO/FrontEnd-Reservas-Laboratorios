@@ -1,21 +1,19 @@
 <div class="min-h-screen z-0 p-4">
     <div class="mx-6 grid pt-8 gap-y-10 gap-x-6 md:grid-cols-2 xl:grid-cols-4">
-        @for ( card of cards;track card.title) {
-        <div class="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md">
-            <div
-                class="bg-clip-border mx-4 rounded-xl overflow-hidden cursor-pointer bg-gradient-to-tr text-white {{card.gradient}} shadow-lg absolute -mt-4 grid h-12 w-12 place-items-center">
+        @for ( card of cards; track card.title) {
+        <a href="{{ card.link }}" class="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md hover:shadow-lg transition-shadow duration-300">
+            <div class="bg-clip-border mx-4 rounded-xl overflow-hidden cursor-pointer bg-gradient-to-tr text-white {{card.gradient}} shadow-lg absolute -mt-4 grid h-12 w-12 place-items-center">
                 <i class='bx {{card.icon}}' style='color:black; font-size: 34px;'></i>
             </div>
             <div class="p-4 text-right">
                 <p class="block antialiased font-sans text-sm leading-normal font-normal {{card.color}}">
                     {{ card.title }}
                 </p>
-                <h4
-                    class="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-{{card.color}}-900">
+                <h4 class="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-{{card.color}}-900">
                     {{ card.count() }}
                 </h4>
             </div>
-        </div>
+        </a>
         }
     </div>
 </div>

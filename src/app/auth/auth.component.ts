@@ -64,27 +64,41 @@ export class AuthComponent implements OnInit {
       this.errorMenssage = 'Por favor, llene todos los campos.';
       return;
     }
+
     this.loading = true;
     const { username, password_user } = this.loginForm.value;
-    console.log(username, password_user);
 
-    this.usuarioService.login({ username, password: password_user }).subscribe(
-      (resp) => {
-        this.loading = false;
-        this.router.navigateByUrl('/dashboard');
-      },
-      (err) => {
+    this.usuarioService.login({ username, password: password_user }).subscribe({
+      next: (resp) => {
         this.loading = false;
 
-        if (err.error && err.error.message) {
-          this.errorMenssage = err.error.message;
-        } else {
-          this.errorMenssage = "Error desconocido. Inténtalo nuevamente.";
+        // Verificar si es un resultado de redirección
+        if (resp && resp.detalleError) {
+          console.log('Redirigiendo a:', resp.detalleError);
+          this.router.navigateByUrl(resp.detalleError).then(() => {
+            // Forzar eliminación de query params
+            window.history.replaceState({}, '', resp.detalleError);
+          });
         }
-
-        console.error("Error en login:", err);
+        // Si es un login normal
+        else if (resp && resp.respuesta) {
+          console.log('Login exitoso:', resp);
+          this.router.navigateByUrl('/dashboard');
+        }
+        // Si hubo un problema con el login
+        else {
+          this.errorMenssage = 'Error desconocido. Inténtalo nuevamente.';
+        }
+      },
+      error: (err) => {
+        this.loading = false;
+        console.error('Error en login:', err);
+        this.errorMenssage = 'Error en la autenticación.';
       }
-    );
-
+    });
   }
+
+
+
+
 }

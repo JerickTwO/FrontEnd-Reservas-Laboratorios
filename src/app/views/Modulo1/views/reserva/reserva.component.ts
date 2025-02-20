@@ -7,16 +7,20 @@ import { LaboratorioService } from 'src/app/core/services/laboratorio.service';
 import { PaginationService } from 'src/app/core/services/pagination.service';
 import { PaginationComponent } from '../pagination/pagination.component';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { Modal } from 'bootstrap';
 import { UsuarioService } from 'src/app/core/services/usuario.service';
 import { Usuario } from 'src/app/models/usuario.model';
 import Swal from 'sweetalert2';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+
+
 @Component({
   selector: 'app-reserva',
   standalone: true,
-  imports: [PaginationComponent, CommonModule, FormsModule, HttpClientModule],
+  imports: [PaginationComponent, CommonModule, FormsModule, HttpClientModule,ReactiveFormsModule],
   styleUrls: ['./reserva.component.scss'],
   templateUrl: './reserva.component.html',
 })
@@ -32,7 +36,7 @@ export class ReservaComponent implements OnInit {
   totalPages = 1;
   modalReserva: any; usuario!: Usuario;
   userRole: string | undefined;
-
+  franjasHorario: any;
 
   franjasPermitidas:
     { horaInicio: string, horaFin: string }[] = [
@@ -65,12 +69,6 @@ export class ReservaComponent implements OnInit {
         console.log('Rol del usuario:', this.userRole);
       }
     });
-    this.franjasPermitidas = [
-      { horaInicio: "07:00", horaFin: "09:00" },
-      { horaInicio: "09:00", horaFin: "11:00" },
-      { horaInicio: "11:00", horaFin: "13:00" },
-      { horaInicio: "13:30", horaFin: "15:30" },
-    ];
     this.getReservas();
   }
 
@@ -80,11 +78,7 @@ export class ReservaComponent implements OnInit {
         this.reservas = data;
         this.totalPages = Math.ceil(this.reservas.length / this.itemsPerPage);
         this.actualizarPaginacion();
-        if (this.reservas.length > 0) {
-          this.franjasPermitidas = data.map((reserva) => {
-            return { horaInicio: reserva.horaInicio, horaFin: reserva.horaFin };
-          });
-        }
+        
       },
       error: (err) => console.error('Error al cargar las reservas:', err),
     });
@@ -192,10 +186,14 @@ export class ReservaComponent implements OnInit {
   }
 
   abrirModalEditar(reserva: Reserva): void {
+
     this.isEditing = true;
     this.nuevaReserva = { ...reserva };
     this.nuevaReserva.horaInicio = reserva.horaInicio;
     this.nuevaReserva.horaFin = reserva.horaFin;
+    console.log(reserva)
+    console.log(this.nuevaReserva.horaInicio)
+    console.log(this.nuevaReserva.horaFin)
     console.log('Franjas permitidas al abrir modal:', this.franjasPermitidas);
     this.modalReserva.show();
   }
@@ -255,4 +253,61 @@ export class ReservaComponent implements OnInit {
     this.currentPage = page;
     this.actualizarPaginacion();
   }
+  // exportarExcel(): void {
+  //   const datosExportacion = this.reservas.map(reserva => ({
+  //     Nombre: reserva.nombreCompleto,
+  //     Fecha: reserva.dia,
+  //     "Hora Inicio": reserva.horaInicio,
+  //     "Hora Fin": reserva.horaFin,
+  //     Motivo: reserva.motivoReserva
+  //   }));
+  
+  //   const hojaDeTrabajo = XLSX.utils.json_to_sheet(datosExportacion);
+  
+  //   const libroDeTrabajo: XLSX.WorkBook = {
+  //     Sheets: { 'Reservas': hojaDeTrabajo },
+  //     SheetNames: ['Reservas']
+  //   };
+  
+  //   const excelBuffer = XLSX.write(libroDeTrabajo, { bookType: 'xlsx', type: 'array' });
+  
+  //   const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+  //   saveAs(blob, 'Reservas.xlsx');
+  // }
+
+  exportarPDF(): void {
+    const doc = new jsPDF();
+  
+    // Agregar logos
+    const itinLogo = 'assets/img/logos/itin.png';
+    const espeLogo = 'assets/img/logos/espe.png';
+
+    doc.addImage(espeLogo, 'PNG', 15, 1, 70, 30); // Logo ESPE
+    doc.addImage(itinLogo, 'PNG', 130, 8, 55, 20); // Logo ITIN
+  
+    // Título
+    doc.setFontSize(14);
+    doc.text('REPORTE DE RESERVA DE LABORATORIOS', 50, 40);
+  
+    // Datos de la tabla
+    const datosExportacion = this.reservas.map(reserva => [
+      reserva.nombreCompleto,
+      reserva.dia,
+      `${reserva.horaInicio} - ${reserva.horaFin}`,
+      reserva.motivoReserva
+    ]);
+  
+    // Crear tabla
+    autoTable(doc, {
+      head: [['NOMBRE', 'FECHA', 'HORA', 'MOTIVO']],
+      body: datosExportacion,
+      startY: 45,
+      theme: 'grid',
+      headStyles: { fillColor: [0, 0, 0], textColor: [255, 255, 255]}, // Cabecera negra con letras blancas
+    });
+  
+    // Descargar PDF
+    doc.save('Reservas.pdf');
+  }
+  
 }

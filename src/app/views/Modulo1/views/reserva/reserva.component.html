@@ -1,169 +1,288 @@
 <div>
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <button class="rounded-lg text-white text-sm py-2 px-3 bg-gray-800 hover:bg-gray-900" (click)="abrirModal()">
-            <i class="bi bi-plus-circle"></i> Nueva Reserva
-        </button>
-        <p class="text-muted mb-0">Total: {{ reservas.length }} reservas registradas.</p>
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="buttons2">
+      <button
+        class="rounded-lg text-white text-sm py-2 px-3 bg-gray-800 hover:bg-gray-900"
+        (click)="abrirModal()"
+      >
+        <i class="bi bi-plus-circle"></i> Nueva Reserva
+      </button>
+      @if (userRole === "admin" && reservas.length > 0) {
+      <button class="btn btn-outline-secondary btn-sm" (click)="exportarPDF()">
+        <i class="bi bi-file-earmark-pdf"></i> Exportar a PDF
+      </button>
+      }
     </div>
-    <div class="w-full overflow-hidden rounded-lg shadow-lg bg-white">
-        <div class="w-full overflow-x-auto">
-            <table class="w-full text-sm text-gray-700">
-                <thead class="bg-gray-800 text-white uppercase text-xs font-semibold">
-                    <tr>
-                        <th class="px-6 py-3 text-left">Nombre Completo</th>
-                        <th class="px-6 py-3 text-left">Correo</th>
-                        <th class="px-6 py-3 text-left">Teléfono</th>
-                        <th class="px-6 py-3 text-left">Laboratorio</th>
-                        <th class="px-6 py-3 text-left">Hora Inicio</th>
-                        <th class="px-6 py-3 text-left">Hora Fin</th>
-                        <th class="px-6 py-3 text-left">Estado</th>
-                        <th class="px-6 py-3 text-left">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-200">
-                    <tr *ngIf="reservas.length === 0">
-                        <td colspan="8" class="text-center py-4 text-gray-500">
-                            No hay reservas disponibles.
-                        </td>
-                    </tr>
-                    <tr *ngFor="let reserva of reservasPaginadas" class="hover:bg-gray-100 transition">
-                        <td class="px-2 py-4 font-medium">{{ reserva.nombreCompleto }}</td>
-                        <td class="px-2 py-4">{{ reserva.correo }}</td>
-                        <td class="px-2 py-4">{{ reserva.telefono }}</td>
-                        <td class="px-2 py-4">{{ reserva.laboratorio.nombreLaboratorio }}</td>
-                        <td class="px-2 py-4">{{ reserva.horaInicio }}</td>
-                        <td class="px-2 py-4">{{ reserva.horaFin }}</td>
-                        <td class="px-2 py-4">
-                            <span class="px-3 py-1 text-xs font-semibold rounded-full"
-                                [class.bg-green-100]="reserva.estado === 'APROBADA'"
-                                [class.bg-yellow-100]="reserva.estado === 'PENDIENTE'"
-                                [class.bg-red-100]="reserva.estado === 'RECHAZADA'">
-                                {{ reserva.estado }}
-                            </span>
-                        </td>
-                        <td>
-                            <button class="btn btn-outline-dark btn-sm me-1" (click)="abrirModalEditar(reserva)">
-                                <i class='bx bxs-edit-alt'></i> Editar
-                            </button>
-                            @if (userRole === "admin" && reserva.estado === 'PENDIENTE') {
-                            <button class="btn btn-outline-success btn-sm me-1"
-                                (click)="cambiarEstadoPendiente(reserva)">
-                                Aprobar o Rechazar
-                            </button>
-                            }
-                            <button class="btn btn-outline-danger btn-sm" (click)="eliminarReserva(reserva.idReserva)">
-                                <i class="bx bxs-trash-alt"></i> Eliminar
-                            </button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+
+    <p class="text-muted mb-0">
+      Total: {{ reservas.length }} reservas registradas.
+    </p>
+  </div>
+  <div class="w-full overflow-hidden rounded-lg shadow-lg bg-white">
+    <div class="w-full overflow-x-auto">
+      <table class="w-full text-sm text-gray-700">
+        <thead class="bg-gray-800 text-white uppercase text-xs font-semibold">
+          <tr>
+            <th class="px-6 py-3 text-left">Nombre Completo</th>
+            <th class="px-6 py-3 text-left">Correo</th>
+            <th class="px-6 py-3 text-left">Teléfono</th>
+            <th class="px-6 py-3 text-left">Laboratorio</th>
+            <th class="px-6 py-3 text-left">Hora Inicio</th>
+            <th class="px-6 py-3 text-left">Hora Fin</th>
+            <th class="px-6 py-3 text-left">Estado</th>
+            <th class="px-6 py-3 text-left">Acciones</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+          <tr *ngIf="reservas.length === 0">
+            <td colspan="8" class="text-center py-4 text-gray-500">
+              No hay reservas disponibles.
+            </td>
+          </tr>
+          <tr
+            *ngFor="let reserva of reservasPaginadas"
+            class="hover:bg-gray-100 transition"
+          >
+            <td class="px-2 py-4 font-medium">{{ reserva.nombreCompleto }}</td>
+            <td class="px-2 py-4">{{ reserva.correo }}</td>
+            <td class="px-2 py-4">{{ reserva.telefono }}</td>
+            <td class="px-2 py-4">
+              {{ reserva.laboratorio.nombreLaboratorio }}
+            </td>
+            <td class="px-2 py-4">{{ reserva.horaInicio }}</td>
+            <td class="px-2 py-4">{{ reserva.horaFin }}</td>
+            <td class="px-2 py-4">
+              <span
+                class="px-3 py-1 text-xs font-semibold rounded-full"
+                [class.bg-green-100]="reserva.estado === 'APROBADA'"
+                [class.bg-yellow-100]="reserva.estado === 'PENDIENTE'"
+                [class.bg-red-100]="reserva.estado === 'RECHAZADA'"
+              >
+                {{ reserva.estado }}
+              </span>
+            </td>
+            <td>
+              <button
+                class="btn btn-outline-dark btn-sm me-1"
+                (click)="abrirModalEditar(reserva)"
+              >
+                <i class="bx bxs-edit-alt"></i> Editar
+              </button>
+              @if (userRole === "admin" && reserva.estado === 'PENDIENTE') {
+              <button
+                class="btn btn-outline-success btn-sm me-1"
+                (click)="cambiarEstadoPendiente(reserva)"
+              >
+                Aprobar o Rechazar
+              </button>
+              }
+              <button
+                class="btn btn-outline-danger btn-sm"
+                (click)="eliminarReserva(reserva.idReserva)"
+              >
+                <i class="bx bxs-trash-alt"></i> Eliminar
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Modal para crear o editar reserva -->
+  <div
+    class="modal fade"
+    id="modalReserva"
+    tabindex="-1"
+    aria-labelledby="modalReservaLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-gray-800 text-white">
+          <h5 class="modal-title" id="modalReservaLabel">
+            {{ isEditing ? "Editar Reserva" : "Nueva Reserva" }}
+          </h5>
+          <button
+            type="button"
+            class="btn-close"
+            aria-label="Close"
+            (click)="cerrarModal()"
+          ></button>
         </div>
-    </div>
+        <div class="modal-body">
+          <form (ngSubmit)="guardarReserva()">
+            <div class="grid grid-cols-2 gap-4">
+              <div class="mb-1">
+                <label for="telefono" class="form-label">Teléfono</label>
+                <input
+                  type="text"
+                  id="telefono"
+                  [(ngModel)]="nuevaReserva.telefono"
+                  name="telefono"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <div class="mb-1">
+                <label for="laboratorio" class="form-label">Laboratorio</label>
+                <select
+                  id="laboratorio"
+                  [(ngModel)]="nuevaReserva.laboratorio.idLaboratorio"
+                  name="laboratorio"
+                  class="form-select"
+                  required
+                >
+                  <option [value]="null" disabled selected>
+                    Seleccione un laboratorio
+                  </option>
+                  <option
+                    *ngFor="let lab of laboratorios"
+                    [value]="lab.idLaboratorio"
+                  >
+                    {{ lab.nombreLaboratorio }}
+                  </option>
+                </select>
+              </div>
 
-    <!-- Modal para crear o editar reserva -->
-    <div class="modal fade" id="modalReserva" tabindex="-1" aria-labelledby="modalReservaLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header bg-gray-800 text-white">
-                    <h5 class="modal-title" id="modalReservaLabel">
-                        {{ isEditing ? 'Editar Reserva' : 'Nueva Reserva' }}
-                    </h5>
-                    <button type="button" class="btn-close" aria-label="Close" (click)="cerrarModal()"></button>
-                </div>
-                <div class="modal-body">
-                    <form (ngSubmit)="guardarReserva()">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="mb-1">
-                                <label for="telefono" class="form-label">Teléfono</label>
-                                <input type="text" id="telefono" [(ngModel)]="nuevaReserva.telefono" name="telefono"
-                                    class="form-control" required />
-                            </div>
-                            <div class="mb-1">
-                                <label for="laboratorio" class="form-label">Laboratorio</label>
-                                <select id="laboratorio" [(ngModel)]="nuevaReserva.laboratorio.idLaboratorio"
-                                    name="laboratorio" class="form-select" required>
-                                    <option [value]="null" disabled selected>Seleccione un laboratorio</option>
-                                    <option *ngFor="let lab of laboratorios" [value]="lab.idLaboratorio">
-                                        {{ lab.nombreLaboratorio }}
-                                    </option>
-                                </select>
-                            </div>
-                            <!-- Selector de Hora de Inicio -->
-                            <div class="mb-3">
-                                <label for="horaInicio" class="form-label">Hora de Inicio</label>
-                                <select [(ngModel)]="nuevaReserva.horaInicio" name="horaInicio" id="horaInicio"
-                                    class="form-select" required>
-                                    <option value="" disabled selected>Seleccione la hora de inicio</option>
-                                    <option *ngFor="let franja of franjasPermitidas" [value]="franja.horaInicio">
-                                        {{ franja.horaInicio }}
-                                    </option>
-                                </select>
-                            </div>
+              <!-- Selector de Hora de Inicio -->
+              <div class="mb-3">
+                <label for="horaInicio" class="form-label"
+                  >Hora de Inicio</label
+                >
+                <select
+                  [(ngModel)]="nuevaReserva.horaInicio"
+                  name="nuevaReserva.horaInicio"
+                  id="horaInicio"
+                  class="form-select"
+                  required
+                >
+                  <option value="" disabled selected>
+                    Seleccione la hora de inicio
+                  </option>
+                  <option
+                    *ngFor="let franja of franjasPermitidas"
+                    [value]="franja.horaInicio"
+                  >
+                    {{ franja.horaInicio }}
+                  </option>
+                </select>
+              </div>
 
-                            <!-- Selector de Hora de Fin -->
-                            <div class="mb-3">
-                                <label for="horaFin" class="form-label">Hora de Fin</label>
-                                <select [(ngModel)]="nuevaReserva.horaFin" name="horaFin" id="horaFin"
-                                    class="form-select" required>
-                                    <option value="" disabled selected>Seleccione la hora de fin</option>
-                                    <option *ngFor="let franja of franjasPermitidas" [ngValue]="franja.horaFin">
-                                        {{ franja.horaFin }}
-                                    </option>
-                                </select>
-                            </div>
-                            <div class="mb-1">
-                                <label for="cantidadParticipantes" class="form-label">Cantidad de Participantes</label>
-                                <input type="number" id="cantidadParticipantes"
-                                    [(ngModel)]="nuevaReserva.cantidadParticipantes" name="cantidadParticipantes"
-                                    class="form-control" min="1" required />
-                            </div>
-                            @if(!isEditing){
+              <!-- Selector de Hora de Fin -->
+              <div class="mb-3">
+                <label for="horaFin" class="form-label">Hora de Fin</label>
+                <select
+                  [(ngModel)]="nuevaReserva.horaFin"
+                  name="horaFin"
+                  id="horaFin"
+                  class="form-select"
+                  required
+                >
+                  <option value="" disabled selected>
+                    Seleccione la hora de fin
+                  </option>
+                  @for (franja of franjasPermitidas; track $index) {
+                  <option>
+                    {{ franja.horaFin }}
+                  </option>
+                  }
+                </select>
+              </div>
+              <div class="mb-1">
+                <label for="cantidadParticipantes" class="form-label"
+                  >Cantidad de Participantes</label
+                >
+                <input
+                  type="number"
+                  id="cantidadParticipantes"
+                  [(ngModel)]="nuevaReserva.cantidadParticipantes"
+                  name="cantidadParticipantes"
+                  class="form-control"
+                  min="1"
+                  required
+                />
+              </div>
+              @if(!isEditing){
 
-                            <div class="mb-1">
-                                <label for="estado" class="form-label">Estado</label>
-                                <select id="estado" [(ngModel)]="nuevaReserva.estado" name="estado" class="form-select"
-                                    required>
-                                    <option value="PENDIENTE">Pendiente</option>
+              <div class="mb-1">
+                <label for="estado" class="form-label">Estado</label>
+                <select
+                  id="estado"
+                  [(ngModel)]="nuevaReserva.estado"
+                  name="estado"
+                  class="form-select"
+                  required
+                >
+                  <option value="PENDIENTE">Pendiente</option>
+                </select>
+              </div>
+              }
+              <div class="mb-1">
+                <label for="dia" class="form-label">Día</label>
+                <select
+                  [(ngModel)]="nuevaReserva.dia"
+                  name="horaFin"
+                  id="horaFin"
+                  class="form-select"
+                  required
+                >
+                  <option value="" disabled selected>
+                    Seleccione la hora de fin
+                  </option>
+                  <option *ngFor="let dia of dias" [ngValue]="dia">
+                    {{ dia }}
+                  </option>
+                </select>
+              </div>
 
-                                </select>
-                            </div>
-                            }
-                            <div class="mb-1">
-                                <label for="dia" class="form-label">Día</label>
-                                <select [(ngModel)]="nuevaReserva.dia" name="horaFin" id="horaFin"
-                                class="form-select" required>
-                                <option value="" disabled selected>Seleccione la hora de fin</option>
-                                <option *ngFor="let dia of dias" [ngValue]="dia">
-                                    {{ dia }}
-                                </option>
-                            </select>
-                            </div>
-
-                            <div class="col-span-2 mb-1">
-                                <label for="motivoReserva" class="form-label">Motivo</label>
-                                <textarea id="motivoReserva" [(ngModel)]="nuevaReserva.motivoReserva"
-                                    name="motivoReserva" class="form-control" rows="3" required></textarea>
-                            </div>
-                            <div class="col-span-2 mb-1">
-                                <label for="requerimientosTecnicos" class="form-label">Requerimientos Técnicos</label>
-                                <textarea id="requerimientosTecnicos" [(ngModel)]="nuevaReserva.requerimientosTecnicos"
-                                    name="requerimientosTecnicos" class="form-control" rows="2"></textarea>
-                            </div>
-                        </div>
-                        <div class="text-end">
-                            <button type="submit" class="btn btn-dark mr-2">
-                                {{ isEditing ? 'Guardar Cambios' : 'Crear Reserva' }}
-                            </button>
-                            <button type="button" class="btn btn-warning" (click)="cerrarModal()">Cancelar</button>
-                        </div>
-                    </form>
-                </div>
+              <div class="col-span-2 mb-1">
+                <label for="motivoReserva" class="form-label">Motivo</label>
+                <textarea
+                  id="motivoReserva"
+                  [(ngModel)]="nuevaReserva.motivoReserva"
+                  name="motivoReserva"
+                  class="form-control"
+                  rows="3"
+                  required
+                ></textarea>
+              </div>
+              <div class="col-span-2 mb-1">
+                <label for="requerimientosTecnicos" class="form-label"
+                  >Requerimientos Técnicos</label
+                >
+                <textarea
+                  id="requerimientosTecnicos"
+                  [(ngModel)]="nuevaReserva.requerimientosTecnicos"
+                  name="requerimientosTecnicos"
+                  class="form-control"
+                  rows="2"
+                ></textarea>
+              </div>
             </div>
+            <div class="text-end">
+              <button type="submit" class="btn btn-dark mr-2">
+                {{ isEditing ? "Guardar Cambios" : "Crear Reserva" }}
+              </button>
+              <button
+                type="button"
+                class="btn btn-warning"
+                (click)="cerrarModal()"
+              >
+                Cancelar
+              </button>
+            </div>
+          </form>
         </div>
+      </div>
     </div>
+  </div>
 
-    <!-- Paginación -->
-    <app-pagination [currentPage]="currentPage" [totalPages]="totalPages" (pageChange)="onPageChange($event)">
-    </app-pagination>
+  <!-- Paginación -->
+  <app-pagination
+    [currentPage]="currentPage"
+    [totalPages]="totalPages"
+    (pageChange)="onPageChange($event)"
+  >
+  </app-pagination>
 </div>

@@ -20,7 +20,7 @@ export class Modulo1Component implements OnInit {
   laboratorios: any[] = []; // Variable para almacenar los laboratorios
 
   // Titulos
-  title = 'Agenda Citas';
+  title = 'Reserva Laboratorios';
   title_component = '';
 
   // Timer

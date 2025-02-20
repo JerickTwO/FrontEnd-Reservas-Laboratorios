@@ -27,16 +27,15 @@ export class Horario4Component implements OnInit {
 
   cargarHorarios(): void {
     this.horarios = [
-      // LUNES 07:00-09:00 - Sistema de Base de Datos
+      // LUNES
       {
         idHorario: 1,
         reserva: {
           idReserva: 1,
-          materia: "Sistema de Base de Datos",
-          nombreCompleto: "paulo galarza",
+          materia: "Sistemas de Base de Datos",
+          nombreCompleto: "Paulo Galarza",
           correo: "paulo.galarza@docente.com",
           telefono: "0987654321",
-          ocupacionLaboral: "",
           laboratorio: {
             idLaboratorio: 4,
             nombreLaboratorio: "LAB-04",
@@ -46,35 +45,28 @@ export class Horario4Component implements OnInit {
               "07:00-09:00",
               "09:00-11:00",
               "11:00-13:00",
-              "13:30-15:30"
+              "13:00-15:00"
             ],
-            diasHorario: [
-              "LUNES",
-              "MARTES",
-              "MIERCOLES",
-              "JUEVES",
-              "VIERNES"
-            ]
+            diasHorario: ["LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES"]
           },
           horaInicio: "07:00:00",
           horaFin: "09:00:00",
           dia: "LUNES",
           motivoReserva: "CLASES",
           cantidadParticipantes: 20,
-          requerimientosTecnicos: "Ninguno",
-          estado: "APROBADA"
+          estado: "APROBADA",
+          ocupacionLaboral: ''
+
         }
       },
-      // MIERCOLES 11:00-13:00 - Internetworking
       {
         idHorario: 2,
         reserva: {
           idReserva: 2,
-          materia: "Internetworking",
-          nombreCompleto: "andres castillo",
-          correo: "andres.castillo@docente.com",
+          materia: "Programacion Orientada a Objetos",
+          nombreCompleto: "Hector Revelo",
+          correo: "hector.revelo@docente.com",
           telefono: "0987654321",
-          ocupacionLaboral: "",
           laboratorio: {
             idLaboratorio: 4,
             nombreLaboratorio: "LAB-04",
@@ -84,73 +76,220 @@ export class Horario4Component implements OnInit {
               "07:00-09:00",
               "09:00-11:00",
               "11:00-13:00",
-              "13:30-15:30"
+              "13:00-15:00"
             ],
-            diasHorario: [
-              "LUNES",
-              "MARTES",
-              "MIERCOLES",
-              "JUEVES",
-              "VIERNES"
-            ]
+            diasHorario: ["LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES"]
+          },
+          horaInicio: "09:00:00",
+          horaFin: "11:00:00",
+          dia: "LUNES",
+          motivoReserva: "CLASES",
+          cantidadParticipantes: 20,
+          estado: "APROBADA",
+          ocupacionLaboral: ''
+
+        }
+      },
+      {
+        idHorario: 3,
+        reserva: {
+          idReserva: 3,
+          materia: "Aplicaciones de Sistemas Operativos",
+          nombreCompleto: "Luis Castillo",
+          correo: "luis.castillo@docente.com",
+          telefono: "0987654321",
+          laboratorio: {
+            idLaboratorio: 4,
+            nombreLaboratorio: "LAB-04",
+            ubicacion: "BLOQUE D",
+            capacidad: 20,
+            franjasHorario: [
+              "07:00-09:00",
+              "09:00-11:00",
+              "11:00-13:00",
+              "13:00-15:00"
+            ],
+            diasHorario: ["LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES"]
+          },
+          horaInicio: "11:00:00",
+          horaFin: "13:00:00",
+          dia: "LUNES",
+          motivoReserva: "CLASES",
+          cantidadParticipantes: 20,
+          estado: "APROBADA",
+          ocupacionLaboral: ''
+
+        }
+      },
+
+      // MARTES
+      {
+        idHorario: 4,
+        reserva: {
+          idReserva: 4,
+          materia: "Interfaces y Multimedia",
+          nombreCompleto: "Luis Ortiz",
+          correo: "luis.ortiz@docente.com",
+          telefono: "0987654321",
+          laboratorio: {
+            idLaboratorio: 4,
+            nombreLaboratorio: "LAB-04",
+            ubicacion: "BLOQUE D",
+            capacidad: 20,
+            franjasHorario: [
+              "07:00-09:00",
+              "09:00-11:00",
+              "11:00-13:00",
+              "13:00-15:00"
+            ],
+            diasHorario: ["LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES"]
+          },
+          horaInicio: "09:00:00",
+          horaFin: "11:00:00",
+          dia: "MARTES",
+          motivoReserva: "CLASES",
+          cantidadParticipantes: 20,
+          estado: "APROBADA",
+          ocupacionLaboral: ''
+
+        }
+      },
+      {
+        idHorario: 5,
+        reserva: {
+          idReserva: 5,
+          materia: "Modelados Discretos",
+          nombreCompleto: "Pablo Puente",
+          correo: "pablo.puente@docente.com",
+          telefono: "0987654321",
+          laboratorio: {
+            idLaboratorio: 4,
+            nombreLaboratorio: "LAB-04",
+            ubicacion: "BLOQUE D",
+            capacidad: 20,
+            franjasHorario: [
+              "07:00-09:00",
+              "09:00-11:00",
+              "11:00-13:00",
+              "13:00-15:00"
+            ],
+            diasHorario: ["LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES"]
+          },
+          horaInicio: "11:00:00",
+          horaFin: "13:00:00",
+          dia: "MARTES",
+          motivoReserva: "CLASES",
+          cantidadParticipantes: 20,
+          estado: "APROBADA",
+          ocupacionLaboral: ''
+
+        }
+      },
+
+      // MIÉRCOLES
+      {
+        idHorario: 6,
+        reserva: {
+          idReserva: 6,
+          materia: "Sistemas de Base de Datos",
+          nombreCompleto: "Paulo Galarza",
+          correo: "paulo.galarza@docente.com",
+          telefono: "0987654321",
+          laboratorio: {
+            idLaboratorio: 4,
+            nombreLaboratorio: "LAB-04",
+            ubicacion: "BLOQUE D",
+            capacidad: 20,
+            franjasHorario: [
+              "07:00-09:00",
+              "09:00-11:00",
+              "11:00-13:00",
+              "13:00-15:00"
+            ],
+            diasHorario: ["LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES"]
+          },
+          horaInicio: "07:00:00",
+          horaFin: "09:00:00",
+          dia: "MIERCOLES",
+          motivoReserva: "CLASES",
+          cantidadParticipantes: 20,
+          estado: "APROBADA",
+          ocupacionLaboral: ''
+
+        }
+      },
+      {
+        idHorario: 8,
+        reserva: {
+          idReserva: 8,
+          materia: "Internetworking",
+          nombreCompleto: "Javier Cevallos",
+          correo: "javier.cevallos@docente.com",
+          telefono: "0987654321",
+          laboratorio: {
+            idLaboratorio: 4,
+            nombreLaboratorio: "LAB-04",
+            ubicacion: "BLOQUE D",
+            capacidad: 20,
+            franjasHorario: [
+              "07:00-09:00",
+              "09:00-11:00",
+              "11:00-13:00",
+              "13:00-15:00"
+            ],
+            diasHorario: ["LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES"]
+          },
+          horaInicio: "09:00:00",
+          horaFin: "11:00:00",
+          dia: "MIERCOLES",
+          motivoReserva: "CLASES",
+          cantidadParticipantes: 20,
+          estado: "APROBADA",
+          ocupacionLaboral: ''
+
+        }
+      },
+      {
+        idHorario: 9,
+        reserva: {
+          idReserva: 9,
+          materia: "Modelados Discretos",
+          nombreCompleto: "Pablo Puente",
+          correo: "pablo.puente@docente.com",
+          telefono: "0987654321",
+          laboratorio: {
+            idLaboratorio: 4,
+            nombreLaboratorio: "LAB-04",
+            ubicacion: "BLOQUE D",
+            capacidad: 20,
+            franjasHorario: [
+              "07:00-09:00",
+              "09:00-11:00",
+              "11:00-13:00",
+              "13:00-15:00"
+            ],
+            diasHorario: ["LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES"]
           },
           horaInicio: "11:00:00",
           horaFin: "13:00:00",
           dia: "MIERCOLES",
           motivoReserva: "CLASES",
           cantidadParticipantes: 20,
-          requerimientosTecnicos: "Ninguno",
-          estado: "APROBADA"
+          estado: "APROBADA",
+          ocupacionLaboral: ''
+
         }
       },
-      // MIERCOLES 13:30-15:30 - Modelos Discretos
+
+      // JUEVES
       {
-        idHorario: 3,
+        idHorario: 10,
         reserva: {
-          idReserva: 3,
-          materia: "Modelos Discretos",
-          nombreCompleto: "pablo puente",
-          correo: "pablo.puente@docente.com",
-          telefono: "0987654321",
-          ocupacionLaboral: "",
-          laboratorio: {
-            idLaboratorio: 4,
-            nombreLaboratorio: "LAB-04",
-            ubicacion: "BLOQUE D",
-            capacidad: 20,
-            franjasHorario: [
-              "07:00-09:00",
-              "09:00-11:00",
-              "11:00-13:00",
-              "13:30-15:30"
-            ],
-            diasHorario: [
-              "LUNES",
-              "MARTES",
-              "MIERCOLES",
-              "JUEVES",
-              "VIERNES"
-            ]
-          },
-          horaInicio: "13:30:00",
-          horaFin: "15:30:00",
-          dia: "MIERCOLES",
-          motivoReserva: "CLASES",
-          cantidadParticipantes: 20,
-          requerimientosTecnicos: "Ninguno",
-          estado: "APROBADA"
-        }
-      },
-      // JUEVES 13:30-15:30 - Programación Orientada a Objetos
-      {
-        idHorario: 4,
-        reserva: {
-          idReserva: 4,
+          idReserva: 10,
           materia: "Programacion Orientada a Objetos",
-          nombreCompleto: "hector revelo",
+          nombreCompleto: "Hector Revelo",
           correo: "hector.revelo@docente.com",
           telefono: "0987654321",
-          ocupacionLaboral: "",
           laboratorio: {
             idLaboratorio: 4,
             nombreLaboratorio: "LAB-04",
@@ -160,35 +299,30 @@ export class Horario4Component implements OnInit {
               "07:00-09:00",
               "09:00-11:00",
               "11:00-13:00",
-              "13:30-15:30"
+              "13:00-15:00"
             ],
-            diasHorario: [
-              "LUNES",
-              "MARTES",
-              "MIERCOLES",
-              "JUEVES",
-              "VIERNES"
-            ]
+            diasHorario: ["LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES"]
           },
-          horaInicio: "13:30:00",
-          horaFin: "15:30:00",
+          horaInicio: "11:00:00",
+          horaFin: "13:00:00",
           dia: "JUEVES",
           motivoReserva: "CLASES",
           cantidadParticipantes: 20,
-          requerimientosTecnicos: "Ninguno",
-          estado: "APROBADA"
+          estado: "APROBADA",
+          ocupacionLaboral: ''
+
         }
       },
-      // VIERNES 07:00-09:00 - Aplicaciones de Sistemas Operativos
+
+      // VIERNES
       {
-        idHorario: 5,
+        idHorario: 11,
         reserva: {
-          idReserva: 5,
+          idReserva: 11,
           materia: "Aplicaciones de Sistemas Operativos",
-          nombreCompleto: "luis castillo",
+          nombreCompleto: "Luis Castillo",
           correo: "luis.castillo@docente.com",
           telefono: "0987654321",
-          ocupacionLaboral: "",
           laboratorio: {
             idLaboratorio: 4,
             nombreLaboratorio: "LAB-04",
@@ -198,27 +332,83 @@ export class Horario4Component implements OnInit {
               "07:00-09:00",
               "09:00-11:00",
               "11:00-13:00",
-              "13:30-15:30"
+              "13:00-15:00"
             ],
-            diasHorario: [
-              "LUNES",
-              "MARTES",
-              "MIERCOLES",
-              "JUEVES",
-              "VIERNES"
-            ]
+            diasHorario: ["LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES"]
           },
           horaInicio: "07:00:00",
           horaFin: "09:00:00",
           dia: "VIERNES",
           motivoReserva: "CLASES",
           cantidadParticipantes: 20,
-          requerimientosTecnicos: "Ninguno",
-          estado: "APROBADA"
+          estado: "APROBADA",
+          ocupacionLaboral: ''
+
+        }
+      },
+      {
+        idHorario: 12,
+        reserva: {
+          idReserva: 12,
+          materia: "Aplicaciones Distribuidas",
+          nombreCompleto: "Veronica Martinez",
+          correo: "veronica.martinez@docente.com",
+          telefono: "0987654321",
+          laboratorio: {
+            idLaboratorio: 4,
+            nombreLaboratorio: "LAB-04",
+            ubicacion: "BLOQUE D",
+            capacidad: 20,
+            franjasHorario: [
+              "07:00-09:00",
+              "09:00-11:00",
+              "11:00-13:00",
+              "13:00-15:00"
+            ],
+            diasHorario: ["LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES"]
+          },
+          horaInicio: "09:00:00",
+          horaFin: "11:00:00",
+          dia: "VIERNES",
+          motivoReserva: "CLASES",
+          cantidadParticipantes: 20,
+          estado: "APROBADA",
+          ocupacionLaboral: ''
+        }
+      },
+      {
+        idHorario: 13,
+        reserva: {
+          idReserva: 13,
+          materia: "Programacion Orientada a Objetos",
+          nombreCompleto: "Hector Revelo",
+          correo: "hector.revelo@docente.com",
+          telefono: "0987654321",
+          laboratorio: {
+            idLaboratorio: 4,
+            nombreLaboratorio: "LAB-04",
+            ubicacion: "BLOQUE D",
+            capacidad: 20,
+            franjasHorario: [
+              "07:00-09:00",
+              "09:00-11:00",
+              "11:00-13:00",
+              "13:00-15:00"
+            ],
+            diasHorario: ["LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES"]
+          },
+          horaInicio: "11:00:00",
+          horaFin: "13:00:00",
+          dia: "VIERNES",
+          motivoReserva: "CLASES",
+          cantidadParticipantes: 20,
+          estado: "APROBADA",
+          ocupacionLaboral: ''
         }
       }
     ];
   }
+
 
 
   // cargarHorarios(): void {

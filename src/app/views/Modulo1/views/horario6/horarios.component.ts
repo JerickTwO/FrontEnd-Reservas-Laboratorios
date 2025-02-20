@@ -26,16 +26,276 @@ export class Horario6Component implements OnInit {
   }
 
   cargarHorarios(): void {
-    this.horarioService.obtenerHorariosConReservaAprobada().subscribe(
-      (data) => {
-        this.horarios = data.filter(horario => horario?.reserva?.laboratorio.idLaboratorio === 1);
-        console.log('Horarios con reservas aprobadas:', this.horarios);
+    this.horarios = [
+      {
+        idHorario: 1,
+        reserva: {
+          idReserva: 1,
+          materia: "Lectura de Textos Académicos",
+          nombreCompleto: "Diego Salazar",
+          correo: "diego.salazar@docente.com",
+          telefono: "0987654321",
+          ocupacionLaboral: "",
+          laboratorio: {
+            idLaboratorio: 6,
+            nombreLaboratorio: "LAB-06",
+            ubicacion: "BLOQUE F",
+            capacidad: 20,
+            franjasHorario: [
+              "07:00-09:00",
+              "09:00-11:00",
+              "11:00-13:00",
+              "13:00-15:00"
+            ],
+            diasHorario: ["LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES"]
+          },
+          horaInicio: "09:00",
+          horaFin: "11:00",
+          dia: "LUNES",
+          motivoReserva: "CLASES",
+          cantidadParticipantes: 20,
+          requerimientosTecnicos: "",
+          estado: "APROBADA"
+        }
       },
-      (error) => {
-        console.error('Error al cargar los horarios:', error);
+      // MARTES 09:00-11:00 - Administración y Mantenimientos de Sistemas
+      {
+        idHorario: 1,
+        reserva: {
+          idReserva: 1,
+          materia: "Administracion y Mantenimientos de Sistemas",
+          nombreCompleto: "Hector Revelo",
+          correo: "hector.revelo@docente.com",
+          telefono: "0987654321",
+          ocupacionLaboral: "",
+          laboratorio: {
+            idLaboratorio: 6,
+            nombreLaboratorio: "LAB-06",
+            ubicacion: "BLOQUE F",
+            capacidad: 20,
+            franjasHorario: [
+              "07:00-09:00",
+              "09:00-11:00",
+              "11:00-13:00",
+              "13:00-15:00"
+            ],
+            diasHorario: ["LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES"]
+          },
+          horaInicio: "07:00:00",
+          horaFin: "09:00:00",
+          dia: "MARTES",
+          motivoReserva: "CLASES",
+          cantidadParticipantes: 20,
+          requerimientosTecnicos: "",
+          estado: "APROBADA"
+        }
+      },
+      {
+        idHorario: 1,
+        reserva: {
+          idReserva: 1,
+          materia: "Aplicaciones de Tecnologías Web",
+          nombreCompleto: "Luis Castillo",
+          correo: "luis.castillo@docente.com",
+          telefono: "0987654321",
+          ocupacionLaboral: "",
+          laboratorio: {
+            idLaboratorio: 6,
+            nombreLaboratorio: "LAB-06",
+            ubicacion: "BLOQUE F",
+            capacidad: 20,
+            franjasHorario: [
+              "07:00-09:00",
+              "09:00-11:00",
+              "11:00-13:00",
+              "13:00-15:00"
+            ],
+            diasHorario: ["LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES"]
+          },
+          horaInicio: "09:00:00",
+          horaFin: "11:00:00",
+          dia: "MARTES",
+          motivoReserva: "CLASES",
+          cantidadParticipantes: 20,
+          requerimientosTecnicos: "",
+          estado: "APROBADA"
+        }
+      },
+      // MIÉRCOLES 09:00-11:00 - Fundamentos de Sistemas Web
+      {
+        idHorario: 2,
+        reserva: {
+          idReserva: 2,
+          materia: "Fundamentos de Sistemas Web",
+          nombreCompleto: "Edwin Camino",
+          correo: "edwin.camino@docente.com",
+          telefono: "0987654321",
+          ocupacionLaboral: "",
+          laboratorio: {
+            idLaboratorio: 6,
+            nombreLaboratorio: "LAB-06",
+            ubicacion: "BLOQUE F",
+            capacidad: 20,
+            franjasHorario: [
+              "07:00-09:00",
+              "09:00-11:00",
+              "11:00-13:00",
+              "13:00-15:00"
+            ],
+            diasHorario: ["LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES"]
+          },
+          horaInicio: "09:00:00",
+          horaFin: "11:00:00",
+          dia: "MIERCOLES",
+          motivoReserva: "CLASES",
+          cantidadParticipantes: 20,
+          requerimientosTecnicos: "",
+          estado: "APROBADA"
+        }
+      },
+      // MIÉRCOLES 13:00-15:00 - Aplicaciones de Sistemas Operativo
+      {
+        idHorario: 3,
+        reserva: {
+          idReserva: 3,
+          materia: "Aplicaciones de Sistemas Operativo",
+          nombreCompleto: "Paulo Galarza",
+          correo: "paulo.galarza@docente.com",
+          telefono: "0987654321",
+          ocupacionLaboral: "",
+          laboratorio: {
+            idLaboratorio: 6,
+            nombreLaboratorio: "LAB-06",
+            ubicacion: "BLOQUE F",
+            capacidad: 20,
+            franjasHorario: [
+              "07:00-09:00",
+              "09:00-11:00",
+              "11:00-13:00",
+              "13:00-15:00"
+            ],
+            diasHorario: ["LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES"]
+          },
+          horaInicio: "11:00:00",
+          horaFin: "13:00:00",
+          dia: "MIERCOLES",
+          motivoReserva: "CLASES",
+          cantidadParticipantes: 20,
+          requerimientosTecnicos: "",
+          estado: "APROBADA"
+        }
+      },
+      // JUEVES 07:00-09:00 - Administración y Mantenimientos de Sistemas
+      {
+        idHorario: 4,
+        reserva: {
+          idReserva: 4,
+          materia: "Administracion y Mantenimientos de Sistemas",
+          nombreCompleto: "Hector Revelo",
+          correo: "hector.revelo@docente.com",
+          telefono: "0987654321",
+          ocupacionLaboral: "",
+          laboratorio: {
+            idLaboratorio: 6,
+            nombreLaboratorio: "LAB-06",
+            ubicacion: "BLOQUE F",
+            capacidad: 20,
+            franjasHorario: [
+              "07:00-09:00",
+              "09:00-11:00",
+              "11:00-13:00",
+              "13:00-15:00"
+            ],
+            diasHorario: ["LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES"]
+          },
+          horaInicio: "07:00:00",
+          horaFin: "09:00:00",
+          dia: "JUEVES",
+          motivoReserva: "CLASES",
+          cantidadParticipantes: 20,
+          requerimientosTecnicos: "",
+          estado: "APROBADA"
+        }
+      },
+      // JUEVES 13:00-15:00 - Gestión de Base de Datos
+      {
+        idHorario: 5,
+        reserva: {
+          idReserva: 5,
+          materia: "Gestion de Base de Datos",
+          nombreCompleto: "Pablo Puente",
+          correo: "pablo.puente@docente.com",
+          telefono: "0987654321",
+          ocupacionLaboral: "",
+          laboratorio: {
+            idLaboratorio: 6,
+            nombreLaboratorio: "LAB-06",
+            ubicacion: "BLOQUE F",
+            capacidad: 20,
+            franjasHorario: [
+              "07:00-09:00",
+              "09:00-11:00",
+              "11:00-13:00",
+              "13:00-15:00"
+            ],
+            diasHorario: ["LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES"]
+          },
+          horaInicio: "11:00:00",
+          horaFin: "13:00:00",
+          dia: "JUEVES",
+          motivoReserva: "CLASES",
+          cantidadParticipantes: 20,
+          requerimientosTecnicos: "",
+          estado: "APROBADA"
+        }
+      },
+      {
+        idHorario: 5,
+        reserva: {
+          idReserva: 5,
+          materia: "Gestion de Base de Datos",
+          nombreCompleto: "Pablo Puente",
+          correo: "pablo.puente@docente.com",
+          telefono: "0987654321",
+          ocupacionLaboral: "",
+          laboratorio: {
+            idLaboratorio: 6,
+            nombreLaboratorio: "LAB-06",
+            ubicacion: "BLOQUE F",
+            capacidad: 20,
+            franjasHorario: [
+              "07:00-09:00",
+              "09:00-11:00",
+              "11:00-13:00",
+              "13:00-15:00"
+            ],
+            diasHorario: ["LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES"]
+          },
+          horaInicio: "11:00:00",
+          horaFin: "13:00:00",
+          dia: "VIERNES",
+          motivoReserva: "CLASES",
+          cantidadParticipantes: 20,
+          requerimientosTecnicos: "",
+          estado: "APROBADA"
+        }
       }
-    );
+    ];
   }
+  
+
+
+  // cargarHorarios(): void {
+  //   this.horarioService.obtenerHorariosConReservaAprobada().subscribe(
+  //     (data) => {
+  //       this.horarios = data.filter(horario => horario?.reserva?.laboratorio.idLaboratorio === 1);
+  //       console.log('Horarios con reservas aprobadas:', this.horarios);
+  //     },
+  //     (error) => {
+  //       console.error('Error al cargar los horarios:', error);
+  //     }
+  //   );
+  // }
 
   cargarLaboratorios(): void {
     this.laboratorioService.getLaboratorios().subscribe(

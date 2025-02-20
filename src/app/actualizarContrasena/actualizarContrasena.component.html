@@ -1,0 +1,40 @@
+<h2>Actualizar Contraseña</h2>
+<form
+  [formGroup]="actualizarContrasenaForm"
+  (ngSubmit)="actualizarContrasena()"
+>
+  <input
+    type="password"
+    placeholder="Contraseña Actual"
+    formControlName="currentPassword"
+    required
+  />
+  @if (campoEsValido('currentPassword')) {
+
+  <div>La contraseña actual es requerida.</div>
+  }
+
+  <input
+    type="password"
+    placeholder="Nueva Contraseña"
+    formControlName="newPassword"
+    required
+  />
+  @if(campoEsValido('newPassword')) {
+  <div>La nueva contraseña debe tener al menos 8 caracteres.</div>
+  }
+
+  <input
+    type="password"
+    placeholder="Confirmar Contraseña"
+    formControlName="confirmPassword"
+    required
+  />
+  @if(campoEsValido('confirmPassword')) {
+  <div>Debes confirmar la contraseña.</div>
+  }
+
+  <button type="submit" [disabled]="actualizarContrasenaForm.invalid">
+    Actualizar
+  </button>
+</form>

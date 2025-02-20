@@ -21,6 +21,7 @@ import { Horario3Component } from './views/horario3/horarios.component';
 import { Horario4Component } from './views/horario4/horarios.component';
 import { Horario5Component } from './views/horario5/horarios.component';
 import { Horario6Component } from './views/horario6/horarios.component';
+import { ActualizarContrasenaComponent } from '../../actualizarContrasena/actualizarContrasena.component';
 
 const home: string = 'dashboard';
 const laboratorio: string = 'laboratorio';
@@ -231,6 +232,8 @@ export const routesModulo1: Routes = [
           title: capitalizeFirstLetter(`Horario ${horario6}`),
         },
       },
+
+
       // {
       //   path: 'horario/:id',
       //   canActivate: [isAuthenticatedGuard],

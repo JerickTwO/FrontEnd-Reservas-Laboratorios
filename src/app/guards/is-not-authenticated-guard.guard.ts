@@ -12,7 +12,7 @@ export const isNotAuthenticatedGuard: CanActivateFn = (route, state) => {
   if (!token) {
     return true; // Permite el acceso si no hay un token
   } else {
-    router.navigate(['/jugador/chat/1']);
+    router.navigate(['/dashboard']);
     return false; // Redirige si el usuario ya está autenticado
   }
 };

@@ -72,23 +72,6 @@ export class AuthComponent implements OnInit {
       next: (resp) => {
         this.loading = false;
 
-        // Verificar si es un resultado de redirección
-        if (resp && resp.detalleError) {
-          console.log('Redirigiendo a:', resp.detalleError);
-          this.router.navigateByUrl(resp.detalleError).then(() => {
-            // Forzar eliminación de query params
-            window.history.replaceState({}, '', resp.detalleError);
-          });
-        }
-        // Si es un login normal
-        else if (resp && resp.respuesta) {
-          console.log('Login exitoso:', resp);
-          this.router.navigateByUrl('/dashboard');
-        }
-        // Si hubo un problema con el login
-        else {
-          this.errorMenssage = 'Error desconocido. Inténtalo nuevamente.';
-        }
       },
       error: (err) => {
         this.loading = false;

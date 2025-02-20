@@ -26,7 +26,7 @@ export const routes: Routes = [
   },
   {
     path: actualizarPassw,
-    canActivate: [isNotAuthenticatedGuard],
+    canActivate: [],
     component: ActualizarContrasenaComponent,
     data: {
       title: capitalizeFirstLetter(actualizarPassw),

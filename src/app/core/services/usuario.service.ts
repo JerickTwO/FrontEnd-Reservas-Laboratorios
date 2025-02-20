@@ -23,11 +23,11 @@ export class UsuarioService {
   get token(): string {
     const token = localStorage.getItem('token');
     if (!token || token.trim().length === 0) {
-        console.error('El token no está presente en localStorage o está vacío.');
-        return '';
+      console.error('El token no está presente en localStorage o está vacío.');
+      return '';
     }
     return token;
-}
+  }
 
 
   get usuario(): Usuario | null {
@@ -50,11 +50,11 @@ export class UsuarioService {
     const token = this.token;
     console.log('Authorization Header:', `Bearer ${token}`);
     return {
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
     };
-}
+  }
 
 
   // Guardar el token y los datos relacionados en localStorage
@@ -119,21 +119,20 @@ export class UsuarioService {
     return this.http.post<any>(`${environment.urlBase}/auth/login`, formData, { observe: 'response' })
       .pipe(
         tap((resp) => {
-          if (resp.status === 200 && resp.body.resultado) {
-            const token = resp.body.resultado;
-            this.guardarLocalStorage(token);
-            console.log('Token guardado:', token);
-            this.router.navigateByUrl("/dashboard");
-
-          } else if (resp.status === 302 && resp.body.deatalleError) {
-            const token = resp.body.resultado;
-            this.guardarLocalStorage(token);
-            console.log('Token guardado:', token);
-            this.router.navigateByUrl(resp.body.deatalleError);
+          if (resp.body.detalleError) {
+            // Es primer login
+            console.log('Redirigiendo a:', resp.body.detalleError);
+            this.guardarLocalStorage(resp.body.resultado);
+            this.router.navigateByUrl('/actualizar-contrasena');
+          } else {
+            // Login normal
+            this.guardarLocalStorage(resp.body.resultado);
+            this.router.navigateByUrl('/dashboard');
           }
+          
         }),
         catchError((error) => {
-          if (error.status === 302) {
+          if (error.status === 200) {
             console.warn('Redirección detectada:', error);
             return of(error.error);
           }
@@ -142,7 +141,7 @@ export class UsuarioService {
         })
       );
   }
-  
+
 
   // Obtener más datos de usuario desde el servidor
   obtenerDatosUsuario() {
@@ -164,7 +163,7 @@ export class UsuarioService {
     const headers = {
       'Authorization': `Bearer ${this.token}`
     };
-  
+
     return this.http.put<any>(`${environment.urlBase}/auth/update-password`, passwordData, { headers })
       .pipe(
         catchError((error) => {
@@ -173,7 +172,7 @@ export class UsuarioService {
         })
       );
   }
-  
+
 
 
 }

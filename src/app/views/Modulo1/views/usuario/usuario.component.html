@@ -22,6 +22,7 @@
       <th>ID Institucional</th>
       <th>Departamento</th>
       <th>Rol / Tipo Usuario</th>
+      <th>Acciones</th>
     </tr>
   </thead>
   <tbody>
@@ -29,9 +30,7 @@
       <td>{{ usuario.nombreCompleto }}</td>
       <td>{{ usuario.correo }}</td>
       <td>{{ usuario.idInstitucional }}</td>
-      <td>
-        {{ usuario.departamento || "---" }}
-      </td>
+      <td class="text-center">{{ usuario.departamento || 'N/A'}}</td>
       <td>
         {{ usuario.tipoUsuario }}
       </td>
@@ -111,11 +110,12 @@
           </div>
 
           <!-- Solo muestra el departamento si es DOCENTE -->
+          <!-- Modal para agregar usuario -->
           <div class="mb-3" *ngIf="nuevoUsuario.tipoUsuario === 'DOCENTE'">
             <label for="departamentoId" class="form-label">Departamento</label>
             <select
               id="departamentoId"
-              [(ngModel)]="nuevoUsuario.departamento"
+              [(ngModel)]="nuevoUsuario.departamentoId"
               name="departamentoId"
               class="form-select"
               required
@@ -124,10 +124,10 @@
                 Selecciona un departamento
               </option>
               <option
-                *ngFor="let departamento of departamentos"
-                [value]="departamento.idDepartamento"
+                *ngFor="let dpto of departamentos"
+                [value]="dpto.idDepartamento"
               >
-                {{ departamento.nombreDepartamento }}
+                {{ dpto.nombreDepartamento }}
               </option>
             </select>
           </div>
@@ -216,14 +216,15 @@
             />
           </div>
           <!-- Modal Editar Usuario -->
+          <!-- Modal para editar usuario -->
           <div *ngIf="usuarioAEditar?.tipoUsuario === 'DOCENTE'">
-            <label for="departamentoId" class="form-label"
+            <label for="departamentoIdEdit" class="form-label"
               >Departamento</label
             >
             <select
-              id="departamentoId"
-              [(ngModel)]="usuarioAEditar.departamento"
-              name="departamentoId"
+              id="departamentoIdEdit"
+              [(ngModel)]="usuarioAEditar.departamentoId"
+              name="departamentoIdEdit"
               class="form-select"
             >
               <option [value]="null" disabled>

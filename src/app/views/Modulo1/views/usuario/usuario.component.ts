@@ -34,7 +34,7 @@ export class UsuarioComponent {
   currentPage = 1;
   itemsPerPage = 5;
   totalPages = 1;
-  usuariosUnificados: Usuario[] = [];
+  usuariosUnificados: any[] = [];
   usuarios: Usuario[] = [];
   selectedUsuario: Usuario | null = null;
   nuevoUsuario: Usuario = {
@@ -46,11 +46,7 @@ export class UsuarioComponent {
     nombreCompleto: '',
     correo: '',
     idInstitucional: '',
-    departamento: {
-      idDepartamento: 0,
-      nombreDepartamento: '',
-      descripcion: ''
-    },
+    departamentoId: 0,
     tipoUsuario: '' as 'DOCENTE' | 'ADMINISTRADOR',
     contrasena: '',
     rol: 'DOCENTE' as unknown as Roles,
@@ -69,7 +65,11 @@ export class UsuarioComponent {
   }
   cargarDepartamentos(): void {
     this.departamentoService.getDepartamentos().subscribe(
-      (data) => (this.departamentos = data),
+      (data) => {
+        this.departamentos = data
+        console.log('Departamentos cargados:', data);
+
+      },
       (error) => console.error('Error al cargar departamentos:', error)
     );
   }
@@ -83,11 +83,7 @@ export class UsuarioComponent {
       nombreCompleto: '',
       correo: '',
       idInstitucional: '',
-      departamento: {
-        idDepartamento: 0,
-        nombreDepartamento: '',
-        descripcion: ''
-      },
+      departamentoId: 0,
       tipoUsuario: tipo,
       contrasena: '',
       rol: 'DOCENTE' as unknown as Roles,
@@ -97,6 +93,7 @@ export class UsuarioComponent {
 
     this.abrirModalCreacion();
   }
+
   cargarListaUnificada(): void {
     this.usuarioService.getUsuariosUnificados().subscribe({
       next: (usuarios) => {
@@ -108,8 +105,15 @@ export class UsuarioComponent {
     });
   }
   openEditUsuarioModal(usuario: Usuario): void {
-    // Clonar el usuario para no modificarlo directamente
+    // Clonamos
     this.usuarioAEditar = { ...usuario };
+
+    // Si el backend te trae un objeto "departamento"
+    // y no solo el ID, asignamos el ID a "departamentoId"
+    if (this.usuarioAEditar.departamentoId) {
+      this.usuarioAEditar.departamentoId = this.usuarioAEditar.departamentoId;
+    }
+
     this.abrirModalEdicion();
   }
 
@@ -142,22 +146,27 @@ export class UsuarioComponent {
       error: (err) => console.error('Error creando admin', err)
     });
   }
+  getDepartmentName(id: number | undefined): string {
+    if (!id) return '---';
+    const dpto = this.departamentos.find(dep => dep.idDepartamento === id);
+    return dpto ? dpto.nombreDepartamento : '---';
+  }
+
 
   crearDocente(): void {
     const partes = this.nuevoUsuario.nombreCompleto.split(' ');
     const nombre = partes[0];
     const apellido = partes.slice(1).join(' ');
 
-
     const payloadDocente: Docente = {
-      idDocente: 0, // or any default value
+      idDocente: 0,
       nombreDocente: nombre,
       apellidoDocente: apellido,
       correoDocente: this.nuevoUsuario.correo,
       idInstitucional: this.nuevoUsuario.idInstitucional,
       departamento: {
-        idDepartamento: Number(this.nuevoUsuario.departamento), // <-- Aquí el ID
-        nombreDepartamento: '', // Puedes dejarlo vacío, tu backend rellena si quiere
+        idDepartamento: this.nuevoUsuario.departamentoId ?? 0,
+        nombreDepartamento: '',
         descripcion: ''
       }
     };
@@ -170,19 +179,23 @@ export class UsuarioComponent {
       error: (err) => console.error('Error creando docente', err)
     });
   }
+
   actualizarUsuario(): void {
     if (!this.usuarioAEditar) return;
 
     if (this.usuarioAEditar.tipoUsuario === 'DOCENTE') {
-      // Estructura un payload de docente
+      const partes = this.usuarioAEditar.nombreCompleto.split(' ');
+      const nombre = partes[0];
+      const apellido = partes.slice(1).join(' ');
+
       const payloadDocente: Docente = {
-        idDocente: this.usuarioAEditar.id, // O la propiedad que sea
-        nombreDocente: this.usuarioAEditar.nombreCompleto.split(' ')[0] || '',
-        apellidoDocente: this.usuarioAEditar.nombreCompleto.split(' ')[1] || '',
+        idDocente: this.usuarioAEditar.id,
+        nombreDocente: nombre,
+        apellidoDocente: apellido,
         correoDocente: this.usuarioAEditar.correo,
         idInstitucional: this.usuarioAEditar.idInstitucional,
         departamento: {
-          idDepartamento: Number(this.usuarioAEditar.departamento.idDepartamento),
+          idDepartamento: this.usuarioAEditar.departamentoId ?? 0,
           nombreDepartamento: '',
           descripcion: ''
         }
@@ -192,34 +205,17 @@ export class UsuarioComponent {
         next: () => {
           console.log('Docente actualizado correctamente');
           this.cerrarModalEdicion();
-          this.cargarListaUnificada(); // recarga la tabla
+          this.cargarListaUnificada();
         },
         error: (error: any) => {
           console.error('Error actualizando docente:', error);
         }
       });
     } else {
-      // Estructura un payload de administrador
-      const payloadAdmin: Administrador = {
-        idAdministrador: this.usuarioAEditar.id, // Ajusta según tu modelo
-        nombreAdministrador: this.usuarioAEditar.nombreCompleto.split(' ')[0] || '',
-        apellidoAdministrador: this.usuarioAEditar.nombreCompleto.split(' ')[1] || '',
-        correoAdministrador: this.usuarioAEditar.correo,
-        idInstitucional: this.usuarioAEditar.idInstitucional
-      };
-
-      this.administradorService.editarAdministrador(payloadAdmin).subscribe({
-        next: () => {
-          console.log('Administrador actualizado correctamente');
-          this.cerrarModalEdicion();
-          this.cargarListaUnificada();
-        },
-        error: (error) => {
-          console.error('Error actualizando administrador:', error);
-        }
-      });
+      // ...
     }
   }
+
 
   abrirModalEdicion(): void {
 

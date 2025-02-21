@@ -10,7 +10,7 @@ export interface Usuario {
   correo: string;
   contrasena: string;
   rol: Roles;
-  departamento: Departamento;
+  departamentoId?: number; // Guardaremos aquí el ID
   primerLogin: boolean;
   estado: boolean;
   idInstitucional: string;

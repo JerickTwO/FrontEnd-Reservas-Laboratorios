@@ -97,7 +97,7 @@ export class UsuarioService {
         tipoUsuario: decoded.roles,
         nombreCompleto: '',
         idInstitucional: '',
-        departamento: (decoded.departamento),
+        departamentoId: 0,
       };
       this.setUsuario(usuario);
     } catch (error) {

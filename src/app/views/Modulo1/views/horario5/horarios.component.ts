@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HorarioService } from 'src/app/core/services/horario.service';
 import { LaboratorioService } from 'src/app/core/services/laboratorio.service';
 import { Horario } from 'src/app/models/horario.model';
-import { Laboratorio } from 'src/app/models/laboratorio.model';
+import { DiaEnum, Laboratorio } from 'src/app/models/laboratorio.model';
 
 @Component({
   selector: 'app-horarios',
@@ -16,7 +16,7 @@ import { Laboratorio } from 'src/app/models/laboratorio.model';
 export class Horario5Component implements OnInit {
   laboratorios: Laboratorio[];
   horas: string[] = [];
-  dias: string[] = [];
+  dias: DiaEnum[] = [];
   horarios: Horario[] = [];
   constructor(private horarioService: HorarioService, private laboratorioService: LaboratorioService) { }
 
@@ -48,16 +48,16 @@ export class Horario5Component implements OnInit {
               "13:30-15:30"
             ],
             diasHorario: [
-              "LUNES",
-              "MARTES",
-              "MIERCOLES",
-              "JUEVES",
-              "VIERNES"
+              DiaEnum.LUNES,
+              DiaEnum.MARTES,
+              DiaEnum.MIERCOLES,
+              DiaEnum.JUEVES,
+              DiaEnum.VIERNES
             ]
           },
           horaInicio: "07:00",
           horaFin: "09:00",
-          dia: "LUNES",
+          dia: DiaEnum.LUNES,
           motivoReserva: "CLASES",
           cantidadParticipantes: 10,
           requerimientosTecnicos: "Ninguno",
@@ -86,16 +86,16 @@ export class Horario5Component implements OnInit {
               "13:30-15:30"
             ],
             diasHorario: [
-              "LUNES",
-              "MARTES",
-              "MIERCOLES",
-              "JUEVES",
-              "VIERNES"
+              DiaEnum.LUNES,
+              DiaEnum.MARTES,
+              DiaEnum.MIERCOLES,
+              DiaEnum.JUEVES,
+              DiaEnum.VIERNES
             ]
           },
           horaInicio: "09:00",
           horaFin: "11:00",
-          dia: "LUNES",
+          dia: DiaEnum.LUNES,
           motivoReserva: "CLASES",
           cantidadParticipantes: 20,
           requerimientosTecnicos: "Ninguno",
@@ -124,16 +124,16 @@ export class Horario5Component implements OnInit {
               "13:30-15:30"
             ],
             diasHorario: [
-              "LUNES",
-              "MARTES",
-              "MIERCOLES",
-              "JUEVES",
-              "VIERNES"
+              DiaEnum.LUNES,
+              DiaEnum.MARTES,
+              DiaEnum.MIERCOLES,
+              DiaEnum.JUEVES,
+              DiaEnum.VIERNES
             ]
           },
           horaInicio: "11:00",
           horaFin: "13:00",
-          dia: "LUNES",
+          dia: DiaEnum.LUNES,
           motivoReserva: "CLASES",
           cantidadParticipantes: 20,
           requerimientosTecnicos: "Ninguno",
@@ -162,16 +162,16 @@ export class Horario5Component implements OnInit {
               "13:30-15:30"
             ],
             diasHorario: [
-              "LUNES",
-              "MARTES",
-              "MIERCOLES",
-              "JUEVES",
-              "VIERNES"
+              DiaEnum.LUNES,
+              DiaEnum.MARTES,
+              DiaEnum.MIERCOLES,
+              DiaEnum.JUEVES,
+              DiaEnum.VIERNES
             ]
           },
           horaInicio: "07:00",
           horaFin: "09:00",
-          dia: "MARTES",
+          dia: DiaEnum.MARTES,
           motivoReserva: "CLASES",
           cantidadParticipantes: 20,
           requerimientosTecnicos: "Ninguno",
@@ -200,16 +200,16 @@ export class Horario5Component implements OnInit {
               "13:30-15:30"
             ],
             diasHorario: [
-              "LUNES",
-              "MARTES",
-              "MIERCOLES",
-              "JUEVES",
-              "VIERNES"
+              DiaEnum.LUNES,
+              DiaEnum.MARTES,
+              DiaEnum.MIERCOLES,
+              DiaEnum.JUEVES,
+              DiaEnum.VIERNES
             ]
           },
           horaInicio: "09:00",
           horaFin: "11:00",
-          dia: "MARTES",
+          dia: DiaEnum.MARTES,
           motivoReserva: "CLASES",
           cantidadParticipantes: 20,
           requerimientosTecnicos: "Ninguno",
@@ -238,16 +238,16 @@ export class Horario5Component implements OnInit {
               "13:30-15:30"
             ],
             diasHorario: [
-              "LUNES",
-              "MARTES",
-              "MIERCOLES",
-              "JUEVES",
-              "VIERNES"
+              DiaEnum.LUNES,
+              DiaEnum.MARTES,
+              DiaEnum.MIERCOLES,
+              DiaEnum.JUEVES,
+              DiaEnum.VIERNES
             ]
           },
           horaInicio: "11:00",
           horaFin: "13:00",
-          dia: "MARTES",
+          dia: DiaEnum.MARTES,
           motivoReserva: "CLASES",
           cantidadParticipantes: 20,
           requerimientosTecnicos: "Ninguno",
@@ -276,16 +276,16 @@ export class Horario5Component implements OnInit {
               "13:30-15:30"
             ],
             diasHorario: [
-              "LUNES",
-              "MARTES",
-              "MIERCOLES",
-              "JUEVES",
-              "VIERNES"
+              DiaEnum.LUNES,
+              DiaEnum.MARTES,
+              DiaEnum.MIERCOLES,
+              DiaEnum.JUEVES,
+              DiaEnum.VIERNES
             ]
           },
           horaInicio: "07:00",
           horaFin: "09:00",
-          dia: "MIERCOLES",
+          dia: DiaEnum.MIERCOLES,
           motivoReserva: "CLASES",
           cantidadParticipantes: 20,
           requerimientosTecnicos: "Ninguno",
@@ -314,16 +314,16 @@ export class Horario5Component implements OnInit {
               "13:30-15:30"
             ],
             diasHorario: [
-              "LUNES",
-              "MARTES",
-              "MIERCOLES",
-              "JUEVES",
-              "VIERNES"
+              DiaEnum.LUNES,
+              DiaEnum.MARTES,
+              DiaEnum.MIERCOLES,
+              DiaEnum.JUEVES,
+              DiaEnum.VIERNES
             ]
           },
           horaInicio: "07:00",
           horaFin: "09:00",
-          dia: "JUEVES",
+          dia: DiaEnum.JUEVES,
           motivoReserva: "CLASES",
           cantidadParticipantes: 20,
           requerimientosTecnicos: "Ninguno",
@@ -352,16 +352,16 @@ export class Horario5Component implements OnInit {
               "13:30-15:30"
             ],
             diasHorario: [
-              "LUNES",
-              "MARTES",
-              "MIERCOLES",
-              "JUEVES",
-              "VIERNES"
+              DiaEnum.LUNES,
+              DiaEnum.MARTES,
+              DiaEnum.MIERCOLES,
+              DiaEnum.JUEVES,
+              DiaEnum.VIERNES
             ]
           },
           horaInicio: "09:00",
           horaFin: "11:00",
-          dia: "JUEVES",
+          dia: DiaEnum.JUEVES,
           motivoReserva: "CLASES",
           cantidadParticipantes: 20,
           requerimientosTecnicos: "Ninguno",
@@ -390,16 +390,16 @@ export class Horario5Component implements OnInit {
               "13:30-15:30"
             ],
             diasHorario: [
-              "LUNES",
-              "MARTES",
-              "MIERCOLES",
-              "JUEVES",
-              "VIERNES"
+              DiaEnum.LUNES,
+              DiaEnum.MARTES,
+              DiaEnum.MIERCOLES,
+              DiaEnum.JUEVES,
+              DiaEnum.VIERNES
             ]
           },
           horaInicio: "09:00",
           horaFin: "11:00",
-          dia: "MIERCOLES",
+          dia: DiaEnum.MIERCOLES,
           motivoReserva: "CLASES",
           cantidadParticipantes: 20,
           requerimientosTecnicos: "Ninguno",
@@ -428,16 +428,16 @@ export class Horario5Component implements OnInit {
               "13:30-15:30"
             ],
             diasHorario: [
-              "LUNES",
-              "MARTES",
-              "MIERCOLES",
-              "JUEVES",
-              "VIERNES"
+              DiaEnum.LUNES,
+              DiaEnum.MARTES,
+              DiaEnum.MIERCOLES,
+              DiaEnum.JUEVES,
+              DiaEnum.VIERNES
             ]
           },
           horaInicio: "09:00",
           horaFin: "11:00",
-          dia: "VIERNES",
+          dia: DiaEnum.VIERNES,
           motivoReserva: "CLASES",
           cantidadParticipantes: 20,
           requerimientosTecnicos: "Ninguno",
@@ -465,16 +465,16 @@ export class Horario5Component implements OnInit {
               "13:30-15:30"
             ],
             diasHorario: [
-              "LUNES",
-              "MARTES",
-              "MIERCOLES",
-              "JUEVES",
-              "VIERNES"
+              DiaEnum.LUNES,
+              DiaEnum.MARTES,
+              DiaEnum.MIERCOLES,
+              DiaEnum.JUEVES,
+              DiaEnum.VIERNES
             ]
           },
           horaInicio: "07:00",
           horaFin: "09:00",
-          dia: "VIERNES",
+          dia: DiaEnum.VIERNES,
           motivoReserva: "CLASES",
           cantidadParticipantes: 10,
           requerimientosTecnicos: "Ninguno",
@@ -502,7 +502,8 @@ export class Horario5Component implements OnInit {
       (data) => {
         this.laboratorios = data;
         this.horas = this.laboratorios[0].franjasHorario;
-        this.dias = this.laboratorios[0].diasHorario;
+        this.dias = Object.keys(DiaEnum).filter(key => isNaN(Number(key))).map(key => DiaEnum[key as keyof typeof DiaEnum]);
+
       },
       (error) => {
         console.error('Error al cargar los laboratorios:', error);

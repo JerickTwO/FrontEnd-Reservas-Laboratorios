@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ReservaService } from 'src/app/core/services/reserva.service';
 import { Reserva } from 'src/app/models/reserva.model';
-import { Laboratorio } from 'src/app/models/laboratorio.model';
+import { DiaEnum, Laboratorio } from 'src/app/models/laboratorio.model';
 import { Horario } from 'src/app/models/horario.model';
 import { LaboratorioService } from 'src/app/core/services/laboratorio.service';
 import { PaginationService } from 'src/app/core/services/pagination.service';
@@ -44,7 +44,7 @@ export class ReservaComponent implements OnInit {
     { horaInicio: "11:00", horaFin: "13:00" },
     { horaInicio: "13:30", horaFin: "15:30" },
   ];
-  dias: string[] = ['LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES'];
+  dias: DiaEnum[] = [DiaEnum.LUNES, DiaEnum.MARTES, DiaEnum.MIERCOLES, DiaEnum.JUEVES, DiaEnum.VIERNES];
   eventos: any[] = [];
   clases: any[] = [];
 
@@ -229,7 +229,7 @@ export class ReservaComponent implements OnInit {
       idReserva: 0,
       nombreCompleto: '',
       correo: '',
-      dia: 'LUNES',
+      dia: DiaEnum.LUNES,
       telefono: '',
       ocupacionLaboral: '',
       laboratorio: {

@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ClasesService } from 'src/app/core/services/clases.service';
 import { PeriodoService } from 'src/app/core/services/periodo.service';
+import { DiaEnum } from 'src/app/models/laboratorio.model';
 
 @Component({
   selector: 'app-materia',
@@ -162,6 +163,11 @@ export class ClaseComponent implements OnInit {
       materia: new Materia(),
       docente: new Docente(),
       periodo: new Periodo(),
+      horaInicio: '',
+      horaFin: '',
+      dia: DiaEnum.LUNES, // or any default value from DiaEnum
+      fechaCreacion: new Date(),
+      fechaActualizacion: new Date(),
     };
   }
 

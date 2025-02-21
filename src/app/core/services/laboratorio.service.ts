@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { Laboratorio } from 'src/app/models/laboratorio.model';
+import { DiaEnum, Laboratorio } from 'src/app/models/laboratorio.model';
 import { environment } from 'src/environments/environment.development';
 
 @Injectable({

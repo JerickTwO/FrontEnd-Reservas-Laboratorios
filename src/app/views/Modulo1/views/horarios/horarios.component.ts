@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HorarioService } from 'src/app/core/services/horario.service';
 import { LaboratorioService } from 'src/app/core/services/laboratorio.service';
 import { Horario } from 'src/app/models/horario.model';
-import { Laboratorio } from 'src/app/models/laboratorio.model';
+import { DiaEnum, Laboratorio } from 'src/app/models/laboratorio.model';
 
 @Component({
   selector: 'app-horarios',
@@ -16,7 +16,7 @@ import { Laboratorio } from 'src/app/models/laboratorio.model';
 export class HorariosComponent implements OnInit {
   laboratorios: Laboratorio[];
   horas: string[] = [];
-  dias: string[] = [];
+  dias: DiaEnum[] = [];
   horarios: Horario[] = [];
   constructor(private horarioService: HorarioService, private laboratorioService: LaboratorioService) { }
 
@@ -42,7 +42,8 @@ export class HorariosComponent implements OnInit {
       (data) => {
         this.laboratorios = data;
         this.horas = this.laboratorios[0].franjasHorario;
-        this.dias = this.laboratorios[0].diasHorario;
+        this.dias = Object.keys(DiaEnum).filter(key => isNaN(Number(key))).map(key => DiaEnum[key as keyof typeof DiaEnum]);
+
       },
       (error) => {
         console.error('Error al cargar los laboratorios:', error);

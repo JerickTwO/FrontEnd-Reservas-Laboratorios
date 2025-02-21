@@ -1,4 +1,4 @@
-import { Laboratorio } from "./laboratorio.model";
+import { DiaEnum, Laboratorio } from "./laboratorio.model";
 export class Reserva {
   idReserva: number; // Opcional en caso de creación
   nombreCompleto: string;
@@ -7,7 +7,7 @@ export class Reserva {
   materia?: string;
   ocupacionLaboral: string;
   laboratorio: Laboratorio;
-  dia: 'LUNES' | 'MARTES' | 'MIERCOLES' | 'JUEVES' | 'VIERNES';
+  dia: DiaEnum;
   horaInicio: string;
   horaFin: string;
   motivoReserva: string;

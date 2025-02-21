@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { LaboratorioService } from 'src/app/core/services/laboratorio.service';
-import { Laboratorio } from 'src/app/models/laboratorio.model';
+import { DiaEnum, Laboratorio } from 'src/app/models/laboratorio.model';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { Modal } from 'bootstrap';
@@ -26,7 +26,7 @@ export class LaboratorioComponent implements OnInit {
     capacidad: 0,
     ubicacion: '',
     franjasHorario: [],
-    diasHorario: [],
+    diasHorario: [] as DiaEnum[],
   };
   error: string | null = null;
   currentPage = 1;

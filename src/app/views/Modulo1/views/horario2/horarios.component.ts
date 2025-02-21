@@ -43,10 +43,14 @@ export class Horario2Component implements OnInit {
             ubicacion: "BLOQUE B",
             capacidad: 20,
             franjasHorario: [
-              "07:00-09:00",
-              "09:00-11:00",
-              "11:00-13:00",
-              "13:00-15:00"
+              "07:00-08:00",
+              "08:00-09:00",
+              "09:00-10:00",
+              "10:00-11:00",
+              "11:00-12:00",
+              "12:00-13:00",
+              "13:00-14:00",
+              "14:00-15:00"
             ],
             diasHorario: [
               "LUNES",
@@ -57,7 +61,7 @@ export class Horario2Component implements OnInit {
             ]
           },
           horaInicio: "07:00:00",
-          horaFin: "09:00:00",
+          horaFin: "08:00:00",
           dia: "LUNES" as "LUNES",
           motivoReserva: "CLASES",
           cantidadParticipantes: 20,

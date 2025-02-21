@@ -182,13 +182,24 @@ export class UsuarioComponent {
       }
     });
   }
-
   guardarNuevo(): void {
-    if (this.nuevoUsuario.tipoUsuario === 'ADMINISTRADOR') {
-      this.crearAdministrador();
-    } else {
-      this.crearDocente();
-    }
+    Swal.fire({
+      title: '¿Deseas crear este usuario?',
+      text: `Se creará un usuario de tipo ${this.nuevoUsuario.tipoUsuario}`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, crear',
+      cancelButtonText: 'Cancelar',
+      allowOutsideClick: false
+    }).then((result) => {
+      if (result.isConfirmed) {
+        if (this.nuevoUsuario.tipoUsuario === 'ADMINISTRADOR') {
+          this.crearAdministrador();
+        } else {
+          this.crearDocente();
+        }
+      }
+    });
   }
 
   crearAdministrador(): void {
@@ -249,38 +260,52 @@ export class UsuarioComponent {
   actualizarUsuario(): void {
     if (!this.usuarioAEditar) return;
 
-    if (this.usuarioAEditar.tipoUsuario === 'DOCENTE') {
-      const partes = this.usuarioAEditar.nombreCompleto.split(' ');
-      const nombre = partes[0];
-      const apellido = partes.slice(1).join(' ');
+    Swal.fire({
+      title: '¿Deseas guardar los cambios?',
+      text: `Se actualizará al usuario ${this.usuarioAEditar.nombreCompleto}`,
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, actualizar',
+      cancelButtonText: 'Cancelar',
+      allowOutsideClick: false
+    }).then((result) => {
+      if (result.isConfirmed) {
+        if (this.usuarioAEditar?.tipoUsuario === 'DOCENTE') {
+          const partes = this.usuarioAEditar.nombreCompleto.split(' ');
+          const nombre = partes[0];
+          const apellido = partes.slice(1).join(' ');
 
-      const payloadDocente: Docente = {
-        idDocente: this.usuarioAEditar.id,
-        nombreDocente: nombre,
-        apellidoDocente: apellido,
-        correoDocente: this.usuarioAEditar.correo,
-        idInstitucional: this.usuarioAEditar.idInstitucional,
-        departamento: {
-          idDepartamento: this.usuarioAEditar.departamentoId ?? 0,
-          nombreDepartamento: '',
-          descripcion: ''
-        }
-      };
+          const payloadDocente: Docente = {
+            idDocente: this.usuarioAEditar.id,
+            nombreDocente: nombre,
+            apellidoDocente: apellido,
+            correoDocente: this.usuarioAEditar.correo,
+            idInstitucional: this.usuarioAEditar.idInstitucional,
+            departamento: {
+              idDepartamento: this.usuarioAEditar.departamentoId ?? 0,
+              nombreDepartamento: '',
+              descripcion: ''
+            }
+          };
 
-      this.docenteService.editarDocente(payloadDocente).subscribe({
-        next: () => {
-          console.log('Docente actualizado correctamente');
-          this.cerrarModalEdicion();
-          this.cargarListaUnificada();
-        },
-        error: (error: any) => {
-          console.error('Error actualizando docente:', error);
+          this.docenteService.editarDocente(payloadDocente).subscribe({
+            next: () => {
+              Swal.fire('Actualizado', 'Docente actualizado correctamente', 'success');
+              this.cerrarModalEdicion();
+              this.cargarListaUnificada();
+            },
+            error: (error: any) => {
+              console.error('Error actualizando docente:', error);
+              Swal.fire('Error', 'No se pudo actualizar el docente', 'error');
+            }
+          });
+        } else {
+          // Lógica para otros tipos de usuario si aplica
         }
-      });
-    } else {
-      // ...
-    }
+      }
+    });
   }
+
 
 
   abrirModalEdicion(): void {

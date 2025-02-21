@@ -15,7 +15,7 @@
       </button>
     </div>
 
-    <div>
+    <div class="flex gap-2">
       <label>
         <input
           type="checkbox"
@@ -24,7 +24,7 @@
         />
         Administradores
       </label>
-      <label class="ms-3">
+      <label class="form-label" class="ms-3">
         <input
           type="checkbox"
           [(ngModel)]="mostrarDocentes"
@@ -84,7 +84,7 @@
       </table>
     </div>
   </div>
-  <p class="text-muted mb-0">
+  <p class="text-muted mt-2">
     Total: {{ usuariosUnificados.length }} usuarios registrados.
   </p>
   <div
@@ -96,7 +96,7 @@
   >
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header bg-info text-white">
+        <div class="modal-header bg-gray-800 text-white">
           <h5 class="modal-title" id="addUsuarioModalLabel">Agregar Usuario</h5>
           <button
             type="button"
@@ -107,83 +107,85 @@
         </div>
         <div class="modal-body">
           <form>
-            <div class="mb-3">
-              <label for="nombreCompleto" class="form-label"
-                >Nombre Completo</label
-              >
-              <input
-                type="text"
-                id="nombreCompleto"
-                [(ngModel)]="nuevoUsuario.nombreCompleto"
-                name="nombreCompleto"
-                class="form-control"
-              />
-            </div>
-
-            <div class="mb-3">
-              <label for="correo" class="form-label">Correo</label>
-              <input
-                type="email"
-                id="correo"
-                [(ngModel)]="nuevoUsuario.correo"
-                name="correo"
-                class="form-control"
-              />
-            </div>
-
-            <div class="mb-3">
-              <label for="idInstitucional" class="form-label"
-                >ID Institucional</label
-              >
-              <input
-                type="text"
-                id="idInstitucional"
-                [(ngModel)]="nuevoUsuario.idInstitucional"
-                name="idInstitucional"
-                class="form-control"
-              />
-            </div>
-            <div class="mb-3" *ngIf="nuevoUsuario.tipoUsuario === 'DOCENTE'">
-              <label for="departamentoId" class="form-label"
-                >Departamento</label
-              >
-              <select
-                id="departamentoId"
-                [(ngModel)]="nuevoUsuario.departamentoId"
-                name="departamentoId"
-                class="form-select"
-                required
-              >
-                <option [value]="null" disabled>
-                  Selecciona un departamento
-                </option>
-                <option
-                  *ngFor="let dpto of departamentos"
-                  [value]="dpto.idDepartamento"
+            <div class="grid grid-cols-2 gap-4">
+              <div class="mb-1">
+                <label class="form-label" for="nombreCompleto">
+                  Nombre Completo</label
                 >
-                  {{ dpto.nombreDepartamento }}
-                </option>
-              </select>
-            </div>
+                <input
+                  type="text"
+                  id="nombreCompleto"
+                  [(ngModel)]="nuevoUsuario.nombreCompleto"
+                  name="nombreCompleto"
+                  class="form-control"
+                />
+              </div>
 
-            <div class="mb-3">
-              <label class="form-label">Tipo de Usuario</label>
-              <input
-                type="text"
-                class="form-control"
-                [value]="nuevoUsuario.tipoUsuario"
-                disabled
-              />
+              <div class="mb-1">
+                <label class="form-label" for="correo">Correo</label>
+                <input
+                  type="email"
+                  id="correo"
+                  [(ngModel)]="nuevoUsuario.correo"
+                  name="correo"
+                  class="form-control"
+                />
+              </div>
+
+              <div class="mb-1">
+                <label class="form-label" for="idInstitucional"
+                  >ID Institucional</label
+                >
+                <input
+                  type="text"
+                  id="idInstitucional"
+                  [(ngModel)]="nuevoUsuario.idInstitucional"
+                  name="idInstitucional"
+                  class="form-control"
+                />
+              </div>
+              <div class="mb-1" *ngIf="nuevoUsuario.tipoUsuario === 'DOCENTE'">
+                <label class="form-label" for="departamentoId" 
+                  >Departamento</label
+                >
+                <select
+                  id="departamentoId"
+                  [(ngModel)]="nuevoUsuario.departamentoId"
+                  name="departamentoId"
+                  class="form-select"
+                  required
+                >
+                  <option [value]="null" disabled>
+                    Selecciona un departamento
+                  </option>
+                  <option
+                    *ngFor="let dpto of departamentos"
+                    [value]="dpto.idDepartamento"
+                  >
+                    {{ dpto.nombreDepartamento }}
+                  </option>
+                </select>
+              </div>
+
+              <div class="mb-1 col-span-2">
+                <label class="form-label">Tipo de Usuario</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [value]="nuevoUsuario.tipoUsuario"
+                  disabled
+                />
+              </div>
             </div>
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-info" (click)="guardarNuevo()">
+          <button type="button" class="btn btn-dark mr-2" (click)="guardarNuevo()">
             Guardar
           </button>
           <button
             type="button"
-            class="btn btn-secondary"
+            class="btn btn-warning"
             data-bs-dismiss="modal"
           >
             Cancelar
@@ -212,8 +214,8 @@
         </div>
         <div class="modal-body" *ngIf="usuarioAEditar">
           <form>
-            <div class="mb-3">
-              <label for="nombreCompletoEdit" class="form-label"
+            <div class="mb-1">
+              <label class="form-label" for="nombreCompletoEdit" 
                 >Nombre Completo</label
               >
               <input
@@ -225,8 +227,10 @@
               />
             </div>
 
-            <div class="mb-3">
-              <label for="correoEdit" class="form-label">Correo</label>
+            <div class="mb-1">
+              <label class="form-label" for="correoEdit"
+                >Correo</label
+              >
               <input
                 type="email"
                 id="correoEdit"
@@ -236,8 +240,8 @@
               />
             </div>
 
-            <div class="mb-3">
-              <label for="idInstitucionalEdit" class="form-label"
+            <div class="mb-1">
+              <label class="form-label" for="idInstitucionalEdit"
                 >ID Institucional</label
               >
               <input
@@ -249,7 +253,7 @@
               />
             </div>
             <div *ngIf="usuarioAEditar?.tipoUsuario === 'DOCENTE'">
-              <label for="departamentoIdEdit" class="form-label"
+              <label class="form-label" for="departamentoIdEdit"
                 >Departamento:</label
               >
               <select
@@ -270,7 +274,7 @@
               </select>
             </div>
 
-            <div class="mb-3">
+            <div class="mb-1">
               <label class="form-label">Tipo de Usuario</label>
               <input
                 type="text"
@@ -284,14 +288,14 @@
         <div class="modal-footer">
           <button
             type="button"
-            class="btn btn-warning"
+            class="btn btn-dark mr-2"
             (click)="actualizarUsuario()"
           >
             Guardar Cambios
           </button>
           <button
             type="button"
-            class="btn btn-secondary"
+            class="btn btn-warning"
             data-bs-dismiss="modal"
             (click)="cerrarModalEdicion()"
           >

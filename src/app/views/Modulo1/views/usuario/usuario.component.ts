@@ -11,6 +11,7 @@ import { Administrador } from 'src/app/models/administrador.model';
 import { UsuarioService } from 'src/app/core/services/usuario.service';
 import { Usuario, Roles } from 'src/app/models/usuario.model';
 import * as bootstrap from 'bootstrap';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-usuario',
@@ -125,30 +126,63 @@ export class UsuarioComponent {
     this.abrirModalEdicion();
   }
   eliminarUsuario(usuario: Usuario): void {
-    if (confirm(`¿Está seguro de que desea eliminar al usuario ${usuario.nombreCompleto}?`)) {
-      if (usuario.tipoUsuario === 'ADMINISTRADOR') {
-        this.administradorService.eliminarAdministrador(usuario.id).subscribe({
-          next: () => {
-            console.log('Administrador eliminado correctamente');
-            this.cargarListaUnificada();
-          },
-          error: (error: any) => {
-            console.error('Error eliminando administrador:', error);
-          }
-        });
-      } else if (usuario.tipoUsuario === 'DOCENTE') {
-        this.docenteService.eliminarDocente(usuario.id).subscribe({
-          next: () => {
-            console.log('Docente eliminado correctamente');
-            this.cargarListaUnificada();
-          },
-          error: (error: any) => {
-            console.error('Error eliminando docente:', error);
-          }
-        });
+    Swal.fire({
+      title: '¿Está seguro?',
+      text: `¿Deseas eliminar al usuario ${usuario.nombreCompleto}?`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Si el usuario confirma:
+        if (usuario.tipoUsuario === 'ADMINISTRADOR') {
+          this.administradorService.eliminarAdministrador(usuario.id).subscribe({
+            next: () => {
+              // Al eliminar correctamente, puedes mostrar otro SweetAlert
+              Swal.fire(
+                'Eliminado',
+                'Administrador eliminado correctamente',
+                'success'
+              );
+              this.cargarListaUnificada();
+            },
+            error: (error: any) => {
+              console.error('Error eliminando administrador:', error);
+              // Opcionalmente, muestra alerta de error
+              Swal.fire(
+                'Error',
+                'No se pudo eliminar el administrador',
+                'error'
+              );
+            }
+          });
+        } else if (usuario.tipoUsuario === 'DOCENTE') {
+          this.docenteService.eliminarDocente(usuario.id).subscribe({
+            next: () => {
+              Swal.fire(
+                'Eliminado',
+                'Docente eliminado correctamente',
+                'success'
+              );
+              this.cargarListaUnificada();
+            },
+            error: (error: any) => {
+              console.error('Error eliminando docente:', error);
+              Swal.fire(
+                'Error',
+                'No se pudo eliminar el docente',
+                'error'
+              );
+            }
+          });
+        }
       }
-    }
+    });
   }
+
   guardarNuevo(): void {
     if (this.nuevoUsuario.tipoUsuario === 'ADMINISTRADOR') {
       this.crearAdministrador();

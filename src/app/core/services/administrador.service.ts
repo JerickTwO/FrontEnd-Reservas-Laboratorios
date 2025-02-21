@@ -12,13 +12,17 @@ export class AdministradorService {
 
   constructor(private http: HttpClient) { }
 
-  // Manejar errores de las peticiones HTTP
   private manejarError(error: HttpErrorResponse): Observable<never> {
-    console.error('Error:', error.message);
-    return throwError('Error al realizar la solicitud. Intente más tarde.');
+    let errorMessage = 'Error desconocido.';
+    if (error.error instanceof ErrorEvent) {
+      errorMessage = `Error del cliente: ${error.error.message}`;
+    } else {
+      errorMessage = `Error del servidor: Código ${error.status}, mensaje: ${error.message}`;
+    }
+    console.error(errorMessage);
+    return throwError(() => new Error(errorMessage));
   }
 
-  // Obtener todos los Administradors
   getAdministradores(): Observable<Administrador[]> {
     return this.http.get<Administrador[]>(`${this.apiUrl}`).pipe(catchError(this.manejarError));
   }

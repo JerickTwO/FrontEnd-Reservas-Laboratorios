@@ -34,15 +34,15 @@
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-200">
-          <tr *ngIf="reservas.length === 0">
-            <td colspan="8" class="text-center py-4 text-gray-500">
-              No hay reservas disponibles.
+          @if (reservas.length === 0) {
+          <tr>
+            <td>
+              colspan="8" class="text-center py-4 text-gray-500" No hay reservas
+              disponibles.
             </td>
           </tr>
-          <tr
-            *ngFor="let reserva of reservasPaginadas"
-            class="hover:bg-gray-100 transition"
-          >
+          } @for (reserva of reservas; track $index) {
+          <tr class="hover:bg-gray-100 transition">
             <td class="px-2 py-4 font-medium">{{ reserva.nombreCompleto }}</td>
             <td class="px-2 py-4">{{ reserva.correo }}</td>
             <td class="px-2 py-4">{{ reserva.telefono }}</td>
@@ -84,6 +84,7 @@
               </button>
             </td>
           </tr>
+          }
         </tbody>
       </table>
     </div>

@@ -7,7 +7,7 @@ import { ReservaComponent } from './views/reserva/reserva.component';
 import { MateriaComponent } from './views/materia/materia.component';
 import { AdminComponent } from './views/admin/admin.component';
 import { DocenteComponent } from './views/docente/docente.component';
-import { EstudianteComponent } from './views/estudiante/estudiante.component';
+import { UsuarioComponent } from './views/usuario/usuario.component';
 import { isAuthenticatedGuard } from 'src/app/guards/is-authenticated.guard';
 import { DepartamentosComponent } from './views/departamentos/departamentos.component';
 import { CarrerasComponent } from './views/carreras/carreras.component';
@@ -30,7 +30,7 @@ const materia: string = 'materia';
 const profile: string = 'perfil';
 const admin: string = 'admin'
 const docente: string = 'docentes';
-const estudiante: string = 'estudiantes';
+const usuario: string = 'usuarios';
 const carreras: string = 'carreras';
 const departamentos: string = 'departamentos';
 const clases: string = 'clases'
@@ -50,7 +50,7 @@ export const routesArrayModulo1: string[] = [
   '/' + profile,
   '/' + admin,
   '/' + docente,
-  '/' + estudiante,
+  '/' + usuario,
   '/' + carreras,
   '/' + departamentos,
   '/' + clases,
@@ -142,11 +142,11 @@ export const routesModulo1: Routes = [
         },
       },
       {
-        path: estudiante,
+        path: usuario,
         canActivate: [isAuthenticatedGuard],
-        component: EstudianteComponent,
+        component: UsuarioComponent,
         data: {
-          title: capitalizeFirstLetter(estudiante),
+          title: capitalizeFirstLetter(usuario),
         },
       },
       {

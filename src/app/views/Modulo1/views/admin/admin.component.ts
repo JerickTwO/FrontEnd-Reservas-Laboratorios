@@ -70,9 +70,16 @@ export class AdminComponent {
   }
 
   agregarAdministrador(): void {
-    this.administradorService.agregarAdministrador(this.newAdministrador).subscribe(() => {
-      this.cargarAdministradores();
-      this.closeModal('addAdministradorModal');
+    this.administradorService.agregarAdministrador(this.newAdministrador).subscribe({
+      next: () => {
+        this.cargarAdministradores();
+        this.closeModal('addAdministradorModal');
+        this.newAdministrador = new Administrador();
+      },
+      error: (err) => {
+        console.error('Error al agregar administrador:', err);
+        alert('Ocurrió un error al agregar el administrador. Por favor, revisa los datos e intenta nuevamente.');
+      },
     });
   }
 

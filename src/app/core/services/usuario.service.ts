@@ -16,8 +16,11 @@ export class UsuarioService {
   public usuario$ = this.usuarioSubject.asObservable();
 
   constructor(private http: HttpClient, private router: Router, private ngZone: NgZone) {
-    // Cargar el usuario desde localStorage al iniciar la aplicación
     this.cargarUsuarioDesdeStorage();
+  }
+
+  getUsuariosUnificados(): Observable<Usuario[]> {
+    return this.http.get<Usuario[]>(`${environment.urlBase}/auth/listado`);
   }
 
   get token(): string {
@@ -28,7 +31,6 @@ export class UsuarioService {
     }
     return token;
   }
-
 
   get usuario(): Usuario | null {
     return this.usuarioSubject.value;
@@ -56,60 +58,55 @@ export class UsuarioService {
     };
   }
 
-
-  // Guardar el token y los datos relacionados en localStorage
   guardarLocalStorage(token: string) {
     localStorage.setItem('token', token);
     console.log('Token guardado en localStorage:', token);
-    // Decodificar el token y guardar el rol en localStorage
     const decoded: any = jwtDecode(token);
     if (decoded && decoded.roles) {
-      localStorage.setItem('userRole', decoded.roles[0]); // Guardamos el primer rol en localStorage
+      localStorage.setItem('userRole', decoded.roles[0]);
     }
-
-    this.setUsuarioFromToken(token);  // Actualiza el usuario desde el token
+    this.setUsuarioFromToken(token);
   }
 
-  // Cargar usuario desde el token almacenado en localStorage
   private cargarUsuarioDesdeStorage() {
     const token = localStorage.getItem('token');
     const storedRole = localStorage.getItem('userRole');
-
     if (token && storedRole) {
       this.setUsuarioFromToken(token);
     }
   }
 
-  // Decodificar el token y establecer el usuario
   private setUsuarioFromToken(token: string) {
     try {
       const decoded: any = jwtDecode(token);
       const usuario: Usuario = {
-        id: decoded.sub || 0, // El 'sub' es generalmente el id del usuario
-        idUser: decoded.id || 0, // Si hay un 'id', lo asignamos también
-        usuario: decoded.sub || '', // El 'sub' es generalmente el nombre de usuario
-        nombre: decoded.nombre || '', // Nombre no está presente en el payload, lo dejamos vacío o agregamos lógica
-        apellido: decoded.apellido || '', // Lo mismo para el apellido
-        correo: decoded.correo || '', // Lo mismo para el correo
-        contrasena: '', // Deberías asignar la contraseña de manera segura, pero no suele ser parte del token
+        id: decoded.sub || 0,
+        idUser: decoded.id || 0,
+        usuario: decoded.sub || '',
+        nombre: decoded.nombre || '',
+        apellido: decoded.apellido || '',
+        correo: decoded.correo || '',
+        contrasena: '',
         rol: {
-          id: 0, // No se encuentra un id de rol en el payload, podrías agregarlo si es necesario
-          nombre: decoded.roles && decoded.roles.length > 0 ? decoded.roles[0] : '', // Tomamos el primer rol
-          descripcion: '', // Si tienes más información sobre el rol, puedes agregarla aquí
+          id: 0,
+          nombre: decoded.roles && decoded.roles.length > 0 ? decoded.roles[0] : '',
+          descripcion: '',
         },
-        primerLogin: true, // Suponemos que es el primer login
-        estado: true, // Suponemos que el usuario está activo
+        primerLogin: true,
+        estado: true,
+        tipoUsuario: 'ADMINISTRADOR',
+        nombreCompleto: '',
+        idInstitucional: ''
       };
-      this.setUsuario(usuario); // Establecer el usuario actualizado
+      this.setUsuario(usuario);
     } catch (error) {
       console.error('Error al decodificar el token:', error);
     }
   }
 
-  // Cerrar sesión y limpiar localStorage
   logout() {
     localStorage.removeItem('token');
-    localStorage.removeItem('userRole'); // Limpiar el rol de localStorage también
+    localStorage.removeItem('userRole');
     this.ngZone.run(() => {
       this.router.navigateByUrl('/login');
     });
@@ -120,16 +117,12 @@ export class UsuarioService {
       .pipe(
         tap((resp) => {
           if (resp.body.detalleError) {
-            // Es primer login
-            console.log('Redirigiendo a:', resp.body.detalleError);
             this.guardarLocalStorage(resp.body.resultado);
             this.router.navigateByUrl('/actualizar-contrasena');
           } else {
-            // Login normal
             this.guardarLocalStorage(resp.body.resultado);
             this.router.navigateByUrl('/dashboard');
           }
-          
         }),
         catchError((error) => {
           if (error.status === 200) {
@@ -142,8 +135,6 @@ export class UsuarioService {
       );
   }
 
-
-  // Obtener más datos de usuario desde el servidor
   obtenerDatosUsuario() {
     return this.http.get<Usuario>(`${environment.urlBase}/usuario/datos`, this.headers).pipe(
       tap((usuario) => {
@@ -159,6 +150,7 @@ export class UsuarioService {
       })
     );
   }
+
   updatePassword(passwordData: any) {
     const headers = {
       'Authorization': `Bearer ${this.token}`
@@ -172,7 +164,4 @@ export class UsuarioService {
         })
       );
   }
-
-
-
 }

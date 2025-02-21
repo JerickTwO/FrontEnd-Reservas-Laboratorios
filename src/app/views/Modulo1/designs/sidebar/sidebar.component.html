@@ -68,7 +68,18 @@
             </a>
 
             <li class="dividers">Usuarios</li>
-
+            <a
+              [routerLink]="routes[7]"
+              routerLinkActive="active-section"
+              [class.active-section]="activeLink.includes(routes[7])"
+            >
+              <div class="icon-sidebar-item">
+                <i class="bx bxs-user"></i>
+              </div>
+              <div class="name-sidebar-item">
+                <li>Usuarios</li>
+              </div>
+            </a>
             <a
               [routerLink]="routes[5]"
               routerLinkActive="active-section"
@@ -282,7 +293,7 @@
                 <i class="bx bxs-time"></i>
               </div>
               <div class="name-sidebar-item">
-                <li>Horario 2</li>
+                <li>Laboratorio 2</li>
               </div>
             </a>
             <a
@@ -294,7 +305,7 @@
                 <i class="bx bxs-time"></i>
               </div>
               <div class="name-sidebar-item">
-                <li>Horario 3</li>
+                <li>Laboratorio 3</li>
               </div>
             </a>
             <a
@@ -306,7 +317,7 @@
                 <i class="bx bxs-time"></i>
               </div>
               <div class="name-sidebar-item">
-                <li>Horario 4</li>
+                <li>Laboratorio 4</li>
               </div>
             </a>
             <a
@@ -318,7 +329,7 @@
                 <i class="bx bxs-time"></i>
               </div>
               <div class="name-sidebar-item">
-                <li>Horario 5</li>
+                <li>Laboratorio 5</li>
               </div>
             </a>
             <a
@@ -330,7 +341,7 @@
                 <i class="bx bxs-time"></i>
               </div>
               <div class="name-sidebar-item">
-                <li>Horario 6</li>
+                <li>Laboratorio 6</li>
               </div>
             </a>
           </ul>

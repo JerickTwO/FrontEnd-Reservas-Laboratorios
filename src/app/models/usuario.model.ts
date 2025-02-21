@@ -11,6 +11,7 @@ export interface Usuario {
   contrasena: string;
   rol: Roles;
   departamentoId?: number; // Guardaremos aquí el ID
+  departamento?: string;
   primerLogin: boolean;
   estado: boolean;
   idInstitucional: string;

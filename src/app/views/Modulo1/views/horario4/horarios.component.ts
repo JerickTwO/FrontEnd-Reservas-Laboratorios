@@ -26,7 +26,7 @@ export class Horario4Component implements OnInit {
   }
 
   cargarHorarios(): void {
-    this.horarios = [
+    const horarioEstatico = [
       // LUNES
       {
         idHorario: 1,
@@ -407,21 +407,16 @@ export class Horario4Component implements OnInit {
         }
       }
     ];
+    this.horarioService.obtenerHorariosConReservaAprobada().subscribe(
+      (data) => {
+        this.horarios = data.filter(horario => horario?.reserva?.laboratorio.idLaboratorio === 1);
+        console.log('Horarios con reservas aprobadas:', this.horarios);
+      },
+      (error) => {
+        console.error('Error al cargar los horarios:', error);
+      }
+    );
   }
-
-
-
-  // cargarHorarios(): void {
-  //   this.horarioService.obtenerHorariosConReservaAprobada().subscribe(
-  //     (data) => {
-  //       this.horarios = data.filter(horario => horario?.reserva?.laboratorio.idLaboratorio === 1);
-  //       console.log('Horarios con reservas aprobadas:', this.horarios);
-  //     },
-  //     (error) => {
-  //       console.error('Error al cargar los horarios:', error);
-  //     }
-  //   );
-  // }
 
   cargarLaboratorios(): void {
     this.laboratorioService.getLaboratorios().subscribe(

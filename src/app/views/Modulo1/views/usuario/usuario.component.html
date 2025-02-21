@@ -1,272 +1,303 @@
-<div class="mb-3">
-  <!-- Botón para agregar docente -->
-  <button class="btn btn-primary me-2" (click)="openAddUsuarioModal('DOCENTE')">
-    Agregar Docente
-  </button>
+<div>
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div class="flex btn-container gap-2">
+      <button
+        class="rounded-lg text-white text-sm py-2 px-3 bg-gray-800 hover:bg-gray-900"
+        (click)="openAddUsuarioModal('DOCENTE')"
+      >
+        Agregar Docente
+      </button>
+      <button
+        class="rounded-lg text-white text-sm py-2 px-3 bg-gray-800 hover:bg-gray-900"
+        (click)="openAddUsuarioModal('ADMINISTRADOR')"
+      >
+        Agregar Administrador
+      </button>
+    </div>
 
-  <!-- Botón para agregar administrador -->
-  <button
-    class="btn btn-success"
-    (click)="openAddUsuarioModal('ADMINISTRADOR')"
-  >
-    Agregar Administrador
-  </button>
-</div>
-
-<!-- Tabla unificada de usuarios -->
-<table class="table table-bordered">
-  <thead>
-    <tr>
-      <th>Nombre Completo</th>
-      <th>Correo</th>
-      <th>ID Institucional</th>
-      <th>Departamento</th>
-      <th>Rol / Tipo Usuario</th>
-      <th>Acciones</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let usuario of usuariosUnificados">
-      <td>{{ usuario.nombreCompleto }}</td>
-      <td>{{ usuario.correo }}</td>
-      <td>{{ usuario.idInstitucional }}</td>
-      <td class="text-center">{{ usuario.departamento || 'N/A'}}</td>
-      <td>
-        {{ usuario.tipoUsuario }}
-      </td>
-      <td>
-        <button
-          class="btn btn-primary btn-sm"
-          (click)="openEditUsuarioModal(usuario)"
-        >
-          Editar
-        </button>
-      </td>
-    </tr>
-    <tr *ngIf="usuariosUnificados.length === 0">
-      <td colspan="5" class="text-center">No hay usuarios</td>
-    </tr>
-  </tbody>
-</table>
-
-<!-- Modal para agregar usuario -->
-<div
-  class="modal fade"
-  id="addUsuarioModal"
-  tabindex="-1"
-  aria-labelledby="addUsuarioModalLabel"
-  aria-hidden="true"
->
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <!-- Encabezado modal -->
-      <div class="modal-header bg-info text-white">
-        <h5 class="modal-title" id="addUsuarioModalLabel">Agregar Usuario</h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
-      <!-- Cuerpo modal -->
-      <div class="modal-body">
-        <form>
-          <div class="mb-3">
-            <label for="nombreCompleto" class="form-label"
-              >Nombre Completo</label
-            >
-            <input
-              type="text"
-              id="nombreCompleto"
-              [(ngModel)]="nuevoUsuario.nombreCompleto"
-              name="nombreCompleto"
-              class="form-control"
-            />
-          </div>
-
-          <div class="mb-3">
-            <label for="correo" class="form-label">Correo</label>
-            <input
-              type="email"
-              id="correo"
-              [(ngModel)]="nuevoUsuario.correo"
-              name="correo"
-              class="form-control"
-            />
-          </div>
-
-          <div class="mb-3">
-            <label for="idInstitucional" class="form-label"
-              >ID Institucional</label
-            >
-            <input
-              type="text"
-              id="idInstitucional"
-              [(ngModel)]="nuevoUsuario.idInstitucional"
-              name="idInstitucional"
-              class="form-control"
-            />
-          </div>
-
-          <!-- Solo muestra el departamento si es DOCENTE -->
-          <!-- Modal para agregar usuario -->
-          <div class="mb-3" *ngIf="nuevoUsuario.tipoUsuario === 'DOCENTE'">
-            <label for="departamentoId" class="form-label">Departamento</label>
-            <select
-              id="departamentoId"
-              [(ngModel)]="nuevoUsuario.departamentoId"
-              name="departamentoId"
-              class="form-select"
-              required
-            >
-              <option [value]="null" disabled>
-                Selecciona un departamento
-              </option>
-              <option
-                *ngFor="let dpto of departamentos"
-                [value]="dpto.idDepartamento"
+    <div>
+      <label>
+        <input
+          type="checkbox"
+          [(ngModel)]="mostrarAdministradores"
+          (change)="filtrarUsuarios()"
+        />
+        Administradores
+      </label>
+      <label class="ms-3">
+        <input
+          type="checkbox"
+          [(ngModel)]="mostrarDocentes"
+          (change)="filtrarUsuarios()"
+        />
+        Docentes
+      </label>
+    </div>
+  </div>
+  <div class="w-full overflow-hidden rounded-lg shadow-lg bg-white">
+    <div class="w-full">
+      <table class="w-full text-sm text-gray-700">
+        <thead class="bg-gray-800 text-white uppercase text-xs font-semibold">
+          <tr>
+            <th class="px-6 py-3 text-left">Nombre Completo</th>
+            <th class="px-6 py-3 text-left">Correo</th>
+            <th class="px-6 py-3 text-left">ID Institucional</th>
+            <th class="px-6 py-3 text-left">Departamento</th>
+            <th class="px-6 py-3 text-left">Rol / Tipo Usuario</th>
+            <th class="px-6 py-3 text-left">Acciones</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+          @if (usuariosFiltrados.length === 0) {
+          <tr class="hover:bg-gray-100 transition">
+            <td colspan="8" class="text-center py-4 text-gray-500">
+              No hay usuarios disponibles.
+            </td>
+          </tr>
+          } @for (usuario of usuariosFiltrados; track $index) {
+          <tr class="hover:bg-gray-100 transition">
+            <td class="pl-6 py-2 font-medium">{{ usuario.nombreCompleto }}</td>
+            <td class="pl-6 py-2">{{ usuario.correo }}</td>
+            <td class="pl-6 py-2">{{ usuario.idInstitucional }}</td>
+            <td class="pl-6 py-2">{{ usuario.departamento || "N/A" }}</td>
+            <td class="pl-6 py-2">
+              {{ usuario.tipoUsuario }}
+            </td>
+            <td class="pl-6 py-2">
+              <button
+                class="btn btn-outline-dark btn-sm me-1"
+                (click)="openEditUsuarioModal(usuario)"
               >
-                {{ dpto.nombreDepartamento }}
-              </option>
-            </select>
-          </div>
+                <i class="bx bxs-edit-alt"></i> Editar
+              </button>
+              <button
+                class="btn btn-outline-danger btn-sm"
+                (click)="eliminarUsuario(usuario)"
+              >
+                <i class="bx bxs-trash-alt"></i> Eliminar
+              </button>
+            </td>
+          </tr>
 
-          <div class="mb-3">
-            <label class="form-label">Tipo de Usuario</label>
-            <input
-              type="text"
-              class="form-control"
-              [value]="nuevoUsuario.tipoUsuario"
-              disabled
-            />
-          </div>
-        </form>
-      </div>
-      <!-- Footer modal -->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-info" (click)="guardarNuevo()">
-          Guardar
-        </button>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-          Cancelar
-        </button>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <p class="text-muted mb-0">
+    Total: {{ usuariosUnificados.length }} usuarios registrados.
+  </p>
+  <div
+    class="modal fade"
+    id="addUsuarioModal"
+    tabindex="-1"
+    aria-labelledby="addUsuarioModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-info text-white">
+          <h5 class="modal-title" id="addUsuarioModalLabel">Agregar Usuario</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label for="nombreCompleto" class="form-label"
+                >Nombre Completo</label
+              >
+              <input
+                type="text"
+                id="nombreCompleto"
+                [(ngModel)]="nuevoUsuario.nombreCompleto"
+                name="nombreCompleto"
+                class="form-control"
+              />
+            </div>
+
+            <div class="mb-3">
+              <label for="correo" class="form-label">Correo</label>
+              <input
+                type="email"
+                id="correo"
+                [(ngModel)]="nuevoUsuario.correo"
+                name="correo"
+                class="form-control"
+              />
+            </div>
+
+            <div class="mb-3">
+              <label for="idInstitucional" class="form-label"
+                >ID Institucional</label
+              >
+              <input
+                type="text"
+                id="idInstitucional"
+                [(ngModel)]="nuevoUsuario.idInstitucional"
+                name="idInstitucional"
+                class="form-control"
+              />
+            </div>
+            <div class="mb-3" *ngIf="nuevoUsuario.tipoUsuario === 'DOCENTE'">
+              <label for="departamentoId" class="form-label"
+                >Departamento</label
+              >
+              <select
+                id="departamentoId"
+                [(ngModel)]="nuevoUsuario.departamentoId"
+                name="departamentoId"
+                class="form-select"
+                required
+              >
+                <option [value]="null" disabled>
+                  Selecciona un departamento
+                </option>
+                <option
+                  *ngFor="let dpto of departamentos"
+                  [value]="dpto.idDepartamento"
+                >
+                  {{ dpto.nombreDepartamento }}
+                </option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Tipo de Usuario</label>
+              <input
+                type="text"
+                class="form-control"
+                [value]="nuevoUsuario.tipoUsuario"
+                disabled
+              />
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-info" (click)="guardarNuevo()">
+            Guardar
+          </button>
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Cancelar
+          </button>
+        </div>
       </div>
     </div>
   </div>
-</div>
-
-<!-- Modal para editar usuario (debe estar al mismo nivel que el modal de creación) -->
-<div
-  class="modal fade"
-  id="editUsuarioModal"
-  tabindex="-1"
-  aria-labelledby="editUsuarioModalLabel"
-  aria-hidden="true"
->
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <!-- Encabezado modal -->
-      <div class="modal-header bg-warning">
-        <h5 class="modal-title" id="editUsuarioModalLabel">Editar Usuario</h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
-      <!-- Cuerpo modal -->
-      <div class="modal-body" *ngIf="usuarioAEditar">
-        <form>
-          <div class="mb-3">
-            <label for="nombreCompletoEdit" class="form-label"
-              >Nombre Completo</label
-            >
-            <input
-              type="text"
-              id="nombreCompletoEdit"
-              [(ngModel)]="usuarioAEditar.nombreCompleto"
-              name="nombreCompletoEdit"
-              class="form-control"
-            />
-          </div>
-
-          <div class="mb-3">
-            <label for="correoEdit" class="form-label">Correo</label>
-            <input
-              type="email"
-              id="correoEdit"
-              [(ngModel)]="usuarioAEditar.correo"
-              name="correoEdit"
-              class="form-control"
-            />
-          </div>
-
-          <div class="mb-3">
-            <label for="idInstitucionalEdit" class="form-label"
-              >ID Institucional</label
-            >
-            <input
-              type="text"
-              id="idInstitucionalEdit"
-              [(ngModel)]="usuarioAEditar.idInstitucional"
-              name="idInstitucionalEdit"
-              class="form-control"
-            />
-          </div>
-          <!-- Modal Editar Usuario -->
-          <!-- Modal para editar usuario -->
-          <div *ngIf="usuarioAEditar?.tipoUsuario === 'DOCENTE'">
-            <label for="departamentoIdEdit" class="form-label"
-              >Departamento</label
-            >
-            <select
-              id="departamentoIdEdit"
-              [(ngModel)]="usuarioAEditar.departamentoId"
-              name="departamentoIdEdit"
-              class="form-select"
-            >
-              <option [value]="null" disabled>
-                Selecciona un departamento
-              </option>
-              <option
-                *ngFor="let dpto of departamentos"
-                [value]="dpto.idDepartamento"
+  <div
+    class="modal fade"
+    id="editUsuarioModal"
+    tabindex="-1"
+    aria-labelledby="editUsuarioModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-warning">
+          <h5 class="modal-title" id="editUsuarioModalLabel">Editar Usuario</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body" *ngIf="usuarioAEditar">
+          <form>
+            <div class="mb-3">
+              <label for="nombreCompletoEdit" class="form-label"
+                >Nombre Completo</label
               >
-                {{ dpto.nombreDepartamento }}
-              </option>
-            </select>
-          </div>
+              <input
+                type="text"
+                id="nombreCompletoEdit"
+                [(ngModel)]="usuarioAEditar.nombreCompleto"
+                name="nombreCompletoEdit"
+                class="form-control"
+              />
+            </div>
 
-          <div class="mb-3">
-            <label class="form-label">Tipo de Usuario</label>
-            <input
-              type="text"
-              class="form-control"
-              [value]="usuarioAEditar.tipoUsuario"
-              disabled
-            />
-          </div>
-        </form>
-      </div>
-      <!-- Footer modal -->
-      <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-warning"
-          (click)="actualizarUsuario()"
-        >
-          Guardar Cambios
-        </button>
-        <button
-          type="button"
-          class="btn btn-secondary"
-          data-bs-dismiss="modal"
-          (click)="cerrarModalEdicion()"
-        >
-          Cancelar
-        </button>
+            <div class="mb-3">
+              <label for="correoEdit" class="form-label">Correo</label>
+              <input
+                type="email"
+                id="correoEdit"
+                [(ngModel)]="usuarioAEditar.correo"
+                name="correoEdit"
+                class="form-control"
+              />
+            </div>
+
+            <div class="mb-3">
+              <label for="idInstitucionalEdit" class="form-label"
+                >ID Institucional</label
+              >
+              <input
+                type="text"
+                id="idInstitucionalEdit"
+                [(ngModel)]="usuarioAEditar.idInstitucional"
+                name="idInstitucionalEdit"
+                class="form-control"
+              />
+            </div>
+            <div *ngIf="usuarioAEditar?.tipoUsuario === 'DOCENTE'">
+              <label for="departamentoIdEdit" class="form-label"
+                >Departamento:</label
+              >
+              <select
+                id="departamentoIdEdit"
+                [(ngModel)]="usuarioAEditar.departamentoId"
+                name="departamentoIdEdit"
+                class="form-select"
+              >
+                <option [value]="null" disabled>
+                  Selecciona un departamento
+                </option>
+                <option
+                  *ngFor="let dpto of departamentos"
+                  [value]="dpto.idDepartamento"
+                >
+                  {{ dpto.nombreDepartamento }}
+                </option>
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Tipo de Usuario</label>
+              <input
+                type="text"
+                class="form-control"
+                [value]="usuarioAEditar.tipoUsuario"
+                disabled
+              />
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-warning"
+            (click)="actualizarUsuario()"
+          >
+            Guardar Cambios
+          </button>
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+            (click)="cerrarModalEdicion()"
+          >
+            Cancelar
+          </button>
+        </div>
       </div>
     </div>
   </div>

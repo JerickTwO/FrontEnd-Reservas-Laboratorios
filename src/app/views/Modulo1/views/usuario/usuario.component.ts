@@ -21,7 +21,9 @@ import * as bootstrap from 'bootstrap';
 })
 export class UsuarioComponent {
   usuarioAEditar: Usuario | null = null;
-
+  mostrarAdministradores: boolean = true;
+  mostrarDocentes: boolean = true;
+  usuariosFiltrados: any[] = [];
   docentes: Usuario[] = [];
   departamentos: Departamento[] = [];
   newDocente: Docente = new Docente();
@@ -93,13 +95,19 @@ export class UsuarioComponent {
 
     this.abrirModalCreacion();
   }
-
+  filtrarUsuarios(): void {
+    this.usuariosFiltrados = this.usuariosUnificados.filter(usuario => {
+      return (this.mostrarAdministradores && usuario.tipoUsuario === 'ADMINISTRADOR') ||
+        (this.mostrarDocentes && usuario.tipoUsuario === 'DOCENTE');
+    });
+  }
   cargarListaUnificada(): void {
     this.usuarioService.getUsuariosUnificados().subscribe({
       next: (usuarios) => {
         this.usuariosUnificados = usuarios;
         this.docentes = usuarios.filter(u => u.tipoUsuario === 'DOCENTE');
         this.administradores = usuarios.filter(u => u.tipoUsuario === 'ADMINISTRADOR');
+        this.filtrarUsuarios();
       },
       error: (err) => console.error('Error cargando usuarios', err)
     });
@@ -107,16 +115,40 @@ export class UsuarioComponent {
   openEditUsuarioModal(usuario: Usuario): void {
     // Clonamos
     this.usuarioAEditar = { ...usuario };
-
+    console.log('Usuario a editar:', this.usuarioAEditar.departamentoId);
     // Si el backend te trae un objeto "departamento"
     // y no solo el ID, asignamos el ID a "departamentoId"
     if (this.usuarioAEditar.departamentoId) {
-      this.usuarioAEditar.departamentoId = this.usuarioAEditar.departamentoId;
+      this.usuarioAEditar.departamentoId = usuario.departamentoId;
     }
-
+    console.log('Usuario a editar:', usuario);
     this.abrirModalEdicion();
   }
-
+  eliminarUsuario(usuario: Usuario): void {
+    if (confirm(`¿Está seguro de que desea eliminar al usuario ${usuario.nombreCompleto}?`)) {
+      if (usuario.tipoUsuario === 'ADMINISTRADOR') {
+        this.administradorService.eliminarAdministrador(usuario.id).subscribe({
+          next: () => {
+            console.log('Administrador eliminado correctamente');
+            this.cargarListaUnificada();
+          },
+          error: (error: any) => {
+            console.error('Error eliminando administrador:', error);
+          }
+        });
+      } else if (usuario.tipoUsuario === 'DOCENTE') {
+        this.docenteService.eliminarDocente(usuario.id).subscribe({
+          next: () => {
+            console.log('Docente eliminado correctamente');
+            this.cargarListaUnificada();
+          },
+          error: (error: any) => {
+            console.error('Error eliminando docente:', error);
+          }
+        });
+      }
+    }
+  }
   guardarNuevo(): void {
     if (this.nuevoUsuario.tipoUsuario === 'ADMINISTRADOR') {
       this.crearAdministrador();

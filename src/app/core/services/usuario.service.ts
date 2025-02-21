@@ -6,7 +6,7 @@ import { LoginForm } from 'src/app/interfaces/login-form.interface';
 import { Usuario } from 'src/app/models/usuario.model';
 import { environment } from 'src/environments/environment.development';
 import { jwtDecode } from 'jwt-decode';
-
+// Remove the import statement for Roles as it is not available
 @Injectable({
   providedIn: 'root',
 })
@@ -94,9 +94,10 @@ export class UsuarioService {
         },
         primerLogin: true,
         estado: true,
-        tipoUsuario: 'ADMINISTRADOR',
+        tipoUsuario: decoded.roles,
         nombreCompleto: '',
-        idInstitucional: ''
+        idInstitucional: '',
+        departamento: (decoded.departamento),
       };
       this.setUsuario(usuario);
     } catch (error) {

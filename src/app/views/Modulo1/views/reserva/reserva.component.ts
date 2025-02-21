@@ -16,11 +16,10 @@ import Swal from 'sweetalert2';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
-
 @Component({
   selector: 'app-reserva',
   standalone: true,
-  imports: [PaginationComponent, CommonModule, FormsModule, HttpClientModule,ReactiveFormsModule],
+  imports: [PaginationComponent, CommonModule, FormsModule, HttpClientModule, ReactiveFormsModule],
   styleUrls: ['./reserva.component.scss'],
   templateUrl: './reserva.component.html',
 })
@@ -34,17 +33,17 @@ export class ReservaComponent implements OnInit {
   currentPage = 1;
   itemsPerPage = 5;
   totalPages = 1;
-  modalReserva: any; usuario!: Usuario;
+  modalReserva: any; 
+  usuario!: Usuario;
   userRole: string | undefined;
   franjasHorario: any;
 
-  franjasPermitidas:
-    { horaInicio: string, horaFin: string }[] = [
-      { horaInicio: "07:00", horaFin: "09:00" },
-      { horaInicio: "09:00", horaFin: "11:00" },
-      { horaInicio: "11:00", horaFin: "13:00" },
-      { horaInicio: "13:30", horaFin: "15:30" },
-    ];
+  franjasPermitidas = [
+    { horaInicio: "07:00", horaFin: "09:00" },
+    { horaInicio: "09:00", horaFin: "11:00" },
+    { horaInicio: "11:00", horaFin: "13:00" },
+    { horaInicio: "13:30", horaFin: "15:30" },
+  ];
   dias: string[] = ['LUNES', 'MARTES', 'MIERCOLES', 'JUEVES', 'VIERNES'];
   eventos: any[] = [];
   clases: any[] = [];
@@ -54,31 +53,50 @@ export class ReservaComponent implements OnInit {
     private laboratorioService: LaboratorioService,
     private paginationService: PaginationService,
     private usuarioService: UsuarioService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.getReservas();
     this.modalReserva = new Modal(document.getElementById('modalReserva')!, { backdrop: 'static' });
     this.getLaboratorios();
+    
     document.getElementById('modalReserva')?.addEventListener('hidden.bs.modal', () => {
       this.cerrarModal();
     });
+    
     this.usuarioService.usuario$.subscribe((usuario) => {
       if (usuario) {
         this.userRole = usuario.rol.nombre;
         console.log('Rol del usuario:', this.userRole);
       }
     });
+    
     this.getReservas();
   }
 
   getReservas(): void {
     this.reservaService.listarReservas().subscribe({
       next: (data) => {
+        // Convertir fechaActualizacion a Date si viene en string
+        data.forEach((reserva) => {
+          if (
+            reserva.fechaActualizacion &&
+            typeof reserva.fechaActualizacion === 'string'
+          ) {
+            // Ejemplo de conversión directa con "new Date()"
+            // Si tu backend envía algo como "2025-02-21 06:43:59.000000"
+            // es posible que necesites una pequeña limpieza:
+            // const cleanString = reserva.fechaActualizacion.replace(' ', 'T').split('.')[0] + 'Z';
+            // reserva.fechaActualizacion = new Date(cleanString);
+
+            // Si new Date(...) funciona con tu formato, basta con:
+            reserva.fechaActualizacion = new Date(reserva.fechaActualizacion);
+          }
+        });
+
         this.reservas = data;
         this.totalPages = Math.ceil(this.reservas.length / this.itemsPerPage);
         this.actualizarPaginacion();
-        
       },
       error: (err) => console.error('Error al cargar las reservas:', err),
     });
@@ -94,8 +112,6 @@ export class ReservaComponent implements OnInit {
   guardarReserva(): void {
     this.nuevaReserva.horaInicio = this.formatTime(this.nuevaReserva.horaInicio);
     this.nuevaReserva.horaFin = this.formatTime(this.nuevaReserva.horaFin);
-    console.log(this.franjasPermitidas);
-
 
     if (this.isEditing) {
       if (!this.nuevaReserva.idReserva) {
@@ -112,9 +128,7 @@ export class ReservaComponent implements OnInit {
       });
     } else {
       this.reservaService.crearReserva(this.nuevaReserva).subscribe({
-
         next: (reservaCreada) => {
-
           console.log('Reserva creada:', reservaCreada);
           this.getReservas();
           this.cerrarModal();
@@ -123,6 +137,7 @@ export class ReservaComponent implements OnInit {
       });
     }
   }
+
   cambiarEstadoPendiente(reserva: Reserva): void {
     if (reserva.idReserva === undefined || reserva.idReserva === null) {
       console.error('ID de reserva no definido.');
@@ -130,13 +145,11 @@ export class ReservaComponent implements OnInit {
       return;
     }
 
-    // Verificar si el estado actual es "PENDIENTE"
     if (reserva.estado !== 'PENDIENTE') {
       console.error('La reserva no está en estado "PENDIENTE".');
       return;
     }
 
-    // Mostrar SweetAlert2 para confirmar la acción
     Swal.fire({
       title: '¿Qué deseas hacer con esta reserva?',
       text: 'Puedes aprobar o rechazar esta reserva.',
@@ -144,11 +157,11 @@ export class ReservaComponent implements OnInit {
       showCancelButton: true,
       confirmButtonText: 'Aprobar',
       cancelButtonText: 'Rechazar',
-      showLoaderOnConfirm: true,  // Muestra un cargador cuando se confirme
+      showLoaderOnConfirm: true,
     }).then((result) => {
       if (result.isConfirmed) {
         reserva.estado = 'APROBADA';
-        this.reservaService.actualizarReserva(reserva.idReserva, reserva).subscribe({
+        this.reservaService.actualizarReserva(reserva.idReserva!, reserva).subscribe({
           next: () => {
             Swal.fire('Estado actualizado', 'La reserva ha sido aprobada.', 'success');
             this.getReservas();
@@ -159,14 +172,11 @@ export class ReservaComponent implements OnInit {
           },
         });
       } else if (result.dismiss === Swal.DismissReason.cancel) {
-        // Si el usuario cancela, cambiar el estado a "RECHAZADA"
         reserva.estado = 'RECHAZADA';
-
-        // Llamar al servicio para actualizar la reserva en el backend
-        this.reservaService.actualizarReserva(reserva.idReserva, reserva).subscribe({
+        this.reservaService.actualizarReserva(reserva.idReserva!, reserva).subscribe({
           next: () => {
             Swal.fire('Estado actualizado', 'La reserva ha sido rechazada.', 'error');
-            this.getReservas(); // Recargar las reservas
+            this.getReservas();
           },
           error: (err) => {
             Swal.fire('Error', 'No se pudo actualizar el estado.', 'error');
@@ -176,25 +186,19 @@ export class ReservaComponent implements OnInit {
       }
     });
   }
+
   abrirModal(): void {
     this.isEditing = false;
     this.nuevaReserva = this.resetNuevaReservaData();
     this.getReservas();
-    console.log('Franjas permitidas al abrir modal:', this.franjasPermitidas);
-
     this.modalReserva.show();
   }
 
   abrirModalEditar(reserva: Reserva): void {
-
     this.isEditing = true;
     this.nuevaReserva = { ...reserva };
     this.nuevaReserva.horaInicio = reserva.horaInicio;
     this.nuevaReserva.horaFin = reserva.horaFin;
-    console.log(reserva)
-    console.log(this.nuevaReserva.horaInicio)
-    console.log(this.nuevaReserva.horaFin)
-    console.log('Franjas permitidas al abrir modal:', this.franjasPermitidas);
     this.modalReserva.show();
   }
 
@@ -228,13 +232,21 @@ export class ReservaComponent implements OnInit {
       dia: 'LUNES',
       telefono: '',
       ocupacionLaboral: '',
-      laboratorio: { idLaboratorio: 0, nombreLaboratorio: '', ubicacion: '', capacidad: 0, franjasHorario: [], diasHorario: [] },
+      laboratorio: {
+        idLaboratorio: 0,
+        nombreLaboratorio: '',
+        ubicacion: '',
+        capacidad: 0,
+        franjasHorario: [],
+        diasHorario: []
+      },
       horaInicio: '',
       horaFin: '',
       motivoReserva: '',
       cantidadParticipantes: 0,
       requerimientosTecnicos: '',
       estado: 'PENDIENTE',
+      // fechaActualizacion: new Date() // <-- Si quieres darle un valor inicial
     };
   }
 
@@ -246,68 +258,57 @@ export class ReservaComponent implements OnInit {
   }
 
   actualizarPaginacion(): void {
-    this.reservasPaginadas = this.paginationService.paginate(this.reservas, this.currentPage, this.itemsPerPage);
+    this.reservasPaginadas = this.paginationService.paginate(
+      this.reservas,
+      this.currentPage,
+      this.itemsPerPage
+    );
   }
 
   onPageChange(page: number): void {
     this.currentPage = page;
     this.actualizarPaginacion();
   }
-  // exportarExcel(): void {
-  //   const datosExportacion = this.reservas.map(reserva => ({
-  //     Nombre: reserva.nombreCompleto,
-  //     Fecha: reserva.dia,
-  //     "Hora Inicio": reserva.horaInicio,
-  //     "Hora Fin": reserva.horaFin,
-  //     Motivo: reserva.motivoReserva
-  //   }));
-  
-  //   const hojaDeTrabajo = XLSX.utils.json_to_sheet(datosExportacion);
-  
-  //   const libroDeTrabajo: XLSX.WorkBook = {
-  //     Sheets: { 'Reservas': hojaDeTrabajo },
-  //     SheetNames: ['Reservas']
-  //   };
-  
-  //   const excelBuffer = XLSX.write(libroDeTrabajo, { bookType: 'xlsx', type: 'array' });
-  
-  //   const blob = new Blob([excelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-  //   saveAs(blob, 'Reservas.xlsx');
-  // }
 
   exportarPDF(): void {
     const doc = new jsPDF();
-  
+
     // Agregar logos
     const itinLogo = 'assets/img/logos/itin.png';
     const espeLogo = 'assets/img/logos/espe.png';
 
-    doc.addImage(espeLogo, 'PNG', 15, 1, 70, 30); // Logo ESPE
-    doc.addImage(itinLogo, 'PNG', 130, 8, 55, 20); // Logo ITIN
-  
+    doc.addImage(espeLogo, 'PNG', 15, 1, 70, 30);
+    doc.addImage(itinLogo, 'PNG', 130, 8, 55, 20);
+
     // Título
     doc.setFontSize(14);
     doc.text('REPORTE DE RESERVA DE LABORATORIOS', 50, 40);
-  
-    // Datos de la tabla
+
+    // Preparar datos de la tabla
     const datosExportacion = this.reservas.map(reserva => [
       reserva.nombreCompleto,
-      reserva.dia,
-      `${reserva.horaInicio} - ${reserva.horaFin}`,
+      reserva.fechaActualizacion
+        ? `${reserva.fechaActualizacion.getDate()}/${reserva.fechaActualizacion.getMonth() + 1}/${reserva.fechaActualizacion.getFullYear()}`
+        : '',
+      `${reserva.horaInicio}-${reserva.horaFin}`,
+
       reserva.motivoReserva
     ]);
-  
+
     // Crear tabla
     autoTable(doc, {
       head: [['NOMBRE', 'FECHA', 'HORA', 'MOTIVO']],
       body: datosExportacion,
       startY: 45,
       theme: 'grid',
-      headStyles: { fillColor: [0, 0, 0], textColor: [255, 255, 255]}, // Cabecera negra con letras blancas
+      headStyles: {
+        fillColor: [0, 0, 0],
+        textColor: [255, 255, 255]
+      },
     });
-  
+
     // Descargar PDF
     doc.save('Reservas.pdf');
   }
-  
+
 }

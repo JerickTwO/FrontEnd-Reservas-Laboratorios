@@ -10,11 +10,11 @@ export interface Usuario {
   correo: string;
   contrasena: string;
   rol: Roles;
-  departamento?: Departamento | null;
+  departamento: Departamento;
   primerLogin: boolean;
   estado: boolean;
   idInstitucional: string;
-  tipoUsuario: 'ADMINISTRADOR' | 'DOCENTE'; 
+  tipoUsuario: 'DOCENTE' | 'ADMINISTRADOR'; 
 }
 export interface Roles {
   id: number;

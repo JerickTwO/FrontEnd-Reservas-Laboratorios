@@ -6,8 +6,8 @@ export class Docente {
   apellidoDocente: string;
   correoDocente: string;
   idInstitucional: string;
-  departamento: Departamento; // Relación con el modelo Departamento
-
+  departamento: Departamento; 
+  
   constructor() {
     this.idDocente = 0;
     this.nombreDocente = '';

@@ -26,7 +26,7 @@ const: any;
     this.cargarLaboratorios();
   }
   cargarHorarios(): void {
-    this.horarios = [
+    const horarioEstatico = [
       // LUNES 07:00-09:00 - Aplicaciones Distribuidas
       {
         idHorario: 1,
@@ -435,6 +435,17 @@ const: any;
         }
       }
     ];
+    this.horarioService.obtenerHorariosConReservaAprobada().subscribe(
+      (data) => {
+        const horariosBackend = data.filter(horario => horario?.reserva?.laboratorio.idLaboratorio === 3);
+        this.horarios = [...horarioEstatico as Horario[], ...horariosBackend];
+        console.log('Horarios combinados:', horariosBackend);
+        console.log('Horarios combinados:', this.horarios);
+      },
+      (error) => {
+        console.error('Error al cargar los horarios:', error);
+      }
+    );
   }
 
   // cargarHorarios(): void {

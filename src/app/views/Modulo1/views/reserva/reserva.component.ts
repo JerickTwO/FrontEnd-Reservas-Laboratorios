@@ -71,7 +71,6 @@ export class ReservaComponent implements OnInit {
   getReservas(): void {
     this.reservaService.listarReservas().subscribe({
       next: (data) => {
-        // Convertir fechaActualizacion a Date si viene en string
         data.forEach((reserva) => {
           if (
             reserva.fechaActualizacion &&

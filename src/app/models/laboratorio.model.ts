@@ -17,7 +17,7 @@ export class Laboratorio {
         nombreLaboratorio: string,
         capacidad: number,
         ubicacion: string,
-        franjasHorario: string[],
+        franjasHorario: [],
     ) {
         this.idLaboratorio = idLaboratorio;
         this.nombreLaboratorio = nombreLaboratorio;

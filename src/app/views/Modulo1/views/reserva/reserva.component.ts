@@ -32,7 +32,7 @@ export class ReservaComponent implements OnInit {
   currentPage = 1;
   itemsPerPage = 5;
   totalPages = 1;
-  modalReserva: any; 
+  modalReserva: any;
   usuario!: Usuario;
   userRole: string | undefined;
   franjasHorario: any;
@@ -46,30 +46,29 @@ export class ReservaComponent implements OnInit {
   dias: DiaEnum[] = [DiaEnum.LUNES, DiaEnum.MARTES, DiaEnum.MIERCOLES, DiaEnum.JUEVES, DiaEnum.VIERNES];
   eventos: any[] = [];
   clases: any[] = [];
-  
+
   constructor(
     private reservaService: ReservaService,
     private laboratorioService: LaboratorioService,
     private paginationService: PaginationService,
     private usuarioService: UsuarioService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.getReservas();
     this.modalReserva = new Modal(document.getElementById('modalReserva')!, { backdrop: 'static' });
     this.getLaboratorios();
-    
+
     document.getElementById('modalReserva')?.addEventListener('hidden.bs.modal', () => {
       this.cerrarModal();
     });
-    
     this.usuarioService.usuario$.subscribe((usuario) => {
       if (usuario) {
         this.userRole = usuario.rol.nombre;
         console.log('Rol del usuario:', this.userRole);
       }
     });
-    
+
     this.getReservas();
   }
 
@@ -96,7 +95,10 @@ export class ReservaComponent implements OnInit {
 
   getLaboratorios(): void {
     this.laboratorioService.getLaboratorios().subscribe({
-      next: (data) => (this.laboratorios = data),
+      next: (data) => {
+        this.laboratorios = data
+        console.log('Franjas Laboratorio:', this.laboratorios[0].franjasHorario);
+      },
       error: (err) => console.error('Error al cargar los laboratorios:', err),
     });
   }

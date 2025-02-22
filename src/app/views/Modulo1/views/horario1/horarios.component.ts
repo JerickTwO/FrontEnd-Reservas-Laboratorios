@@ -21,8 +21,7 @@ export class Horario1Component implements OnInit {
   dias: DiaEnum[] = [];
   numeroHorario: number;
   horariosReservas: HorarioReservas[] = [];
-  numero2 = 2;
-  constructor(private horarioService: HorarioService, private laboratorioService: LaboratorioService, private claseService: ClasesService) { }
+  constructor(private horarioService: HorarioService, private laboratorioService: LaboratorioService) { }
 
   ngOnInit(): void {
     this.cargarLaboratorios();

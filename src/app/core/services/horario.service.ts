@@ -4,6 +4,7 @@ import { catchError, Observable, throwError } from 'rxjs';
 import { Horario } from 'src/app/models/horario.model';
 import { Laboratorio } from 'src/app/models/laboratorio.model'; // Importar el modelo de laboratorio
 import { environment } from 'src/environments/environment.development';
+import { HorarioReservas } from 'src/app/models/horarioReservas.model';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +16,14 @@ export class HorarioService {
 
   constructor(private http: HttpClient) { }
 
+
+  // Obtener todas las reservas de clases
+  obtenerClasesReservas(): Observable<HorarioReservas[]> {
+    return this.http.get<HorarioReservas[]>(`${this.apiUrl}/clases-reservas`).pipe(
+      catchError(this.handleError)
+    );
+  }
+     
   // Obtener todos los horarios
   obtenerHorarios(): Observable<Horario[]> {
     return this.http.get<Horario[]>(this.apiUrl);

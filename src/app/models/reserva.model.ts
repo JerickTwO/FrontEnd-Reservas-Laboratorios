@@ -13,6 +13,6 @@ export class Reserva {
   motivoReserva: string;
   cantidadParticipantes: number;
   requerimientosTecnicos?: string;
-  estado: 'PENDIENTE' | 'APROBADA' | 'RECHAZADA'; // Estado tipado con valores permitidos
-  fechaActualizacion?: Date; // Fecha de última actualización
+  estado: 'PENDIENTE' | 'APROBADA' | 'RECHAZADA';
+  fechaActualizacion?: Date;
 }

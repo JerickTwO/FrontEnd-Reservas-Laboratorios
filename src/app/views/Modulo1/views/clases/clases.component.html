@@ -28,6 +28,8 @@
               <th class="px-6 py-3 text-left">Materia</th>
               <th class="px-6 py-3 text-left">Docente</th>
               <th class="px-6 py-3 text-left">Periodo</th>
+              <th class="px-6 py-3 text-left">Hora Inicio</th>
+              <th class="px-6 py-3 text-left">Hora Fin</th>
               <th class="px-6 py-3 text-left">Acciones</th>
             </tr>
           </thead>
@@ -40,9 +42,12 @@
                 {{ clase.materia.nombreMateria }}
               </td>
               <td class="px-6 py-4">
-                {{ clase.docente.nombreDocente }} {{ clase.docente.apellidoDocente }}
+                {{ clase.docente.nombreDocente }}
+                {{ clase.docente.apellidoDocente }}
               </td>
               <td class="px-6 py-4">{{ clase.periodo.nombrePeriodo }}</td>
+              <td class="px-6 py-4">{{ clase.horaInicio }}</td>
+              <td class="px-6 py-4">{{ clase.horaFin }}</td>
               <td class="text-center">
                 <button
                   class="btn btn-sm btn-outline-dark mr-2"
@@ -76,7 +81,7 @@
       <div class="modal-content">
         <div class="modal-header bg-primary text-white">
           <h5 class="modal-title" id="claseModalLabel">
-            {{ isEditing ? 'Editar Clase' : 'Agregar Clase' }}
+            {{ isEditing ? "Editar Clase" : "Agregar Clase" }}
           </h5>
           <button
             type="button"
@@ -155,15 +160,76 @@
                 Selecciona un periodo válido.
               </div>
             </div>
+            <div class="mb-1">
+              <label for="dia" class="form-label">Día</label>
+              <select
+                [(ngModel)]="newClase.dia"
+                name="dia"
+                id="dia"
+                class="form-select"
+                required
+              >
+                <option value="" disabled selected>Seleccione el día</option>
+                <option *ngFor="let dia of dias" [ngValue]="dia">
+                  {{ dia }}
+                </option>
+              </select>
+            </div>
+
+            <!-- Selector de Hora de Inicio -->
+            <div class="mb-3">
+              <label for="horaInicio" class="form-label">Hora de Inicio</label>
+              <select
+                [(ngModel)]="newClase.horaInicio"
+                name="newClase.horaInicio"
+                id="horaInicio"
+                class="form-select"
+                required
+              >
+                <option value="" disabled selected>
+                  Seleccione la hora de inicio
+                </option>
+                <option
+                  *ngFor="let franja of franjasPermitidas"
+                  [value]="franja.horaInicio"
+                >
+                  {{ franja.horaInicio }}
+                </option>
+              </select>
+            </div>
+            <div>
+              <label for="horaFin" class="form-label">Hora de Fin</label>
+              <select
+                [(ngModel)]="newClase.horaFin"
+                name="horaFin"
+                id="horaFin"
+                class="form-select"
+                required
+              >
+                <option value="" disabled selected>
+                  Seleccione la hora de fin
+                </option>
+                <option
+                  *ngFor="let franja of franjasPermitidas"
+                  [value]="franja.horaFin"
+                >
+                  {{ franja.horaFin }}
+                </option>
+              </select>
+            </div>
 
             <!-- Botón de guardar -->
             <button
               type="submit"
               class="btn btn-primary w-100"
-              [disabled]="!newClase.materia.idMateria || !newClase.docente.idDocente || !newClase.periodo.idPeriodo"
+              [disabled]="
+                !newClase.materia.idMateria ||
+                !newClase.docente.idDocente ||
+                !newClase.periodo.idPeriodo
+              "
             >
               <i class="bi bi-save"></i>
-              {{ isEditing ? 'Guardar Cambios' : 'Agregar Clase' }}
+              {{ isEditing ? "Guardar Cambios" : "Agregar Clase" }}
             </button>
             <button
               type="button"

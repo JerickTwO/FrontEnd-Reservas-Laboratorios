@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ReservaService } from 'src/app/core/services/reserva.service';
 import { Reserva } from 'src/app/models/reserva.model';
 import { DiaEnum, Laboratorio } from 'src/app/models/laboratorio.model';
-import { Horario } from 'src/app/models/horario.model';
 import { LaboratorioService } from 'src/app/core/services/laboratorio.service';
 import { PaginationService } from 'src/app/core/services/pagination.service';
 import { PaginationComponent } from '../pagination/pagination.component';
@@ -47,7 +46,7 @@ export class ReservaComponent implements OnInit {
   dias: DiaEnum[] = [DiaEnum.LUNES, DiaEnum.MARTES, DiaEnum.MIERCOLES, DiaEnum.JUEVES, DiaEnum.VIERNES];
   eventos: any[] = [];
   clases: any[] = [];
-
+  
   constructor(
     private reservaService: ReservaService,
     private laboratorioService: LaboratorioService,
@@ -83,13 +82,6 @@ export class ReservaComponent implements OnInit {
             reserva.fechaActualizacion &&
             typeof reserva.fechaActualizacion === 'string'
           ) {
-            // Ejemplo de conversión directa con "new Date()"
-            // Si tu backend envía algo como "2025-02-21 06:43:59.000000"
-            // es posible que necesites una pequeña limpieza:
-            // const cleanString = reserva.fechaActualizacion.replace(' ', 'T').split('.')[0] + 'Z';
-            // reserva.fechaActualizacion = new Date(cleanString);
-
-            // Si new Date(...) funciona con tu formato, basta con:
             reserva.fechaActualizacion = new Date(reserva.fechaActualizacion);
           }
         });

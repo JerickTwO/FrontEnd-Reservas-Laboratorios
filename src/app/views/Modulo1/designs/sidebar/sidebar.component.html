@@ -29,12 +29,26 @@
                 <li>Dashboard</li>
               </div>
             </a>
+            <li class="dividers">Parámetros</li>
+            <a
+              [routerLink]="routes[7]"
+              routerLinkActive="active-section"
+              [class.active-section]="activeLink.includes(routes[7])"
+            >
+              <div class="icon-sidebar-item">
+                <i class="bx bxs-user"></i>
+              </div>
+              <div class="name-sidebar-item">
+                <li>Usuarios</li>
+              </div>
+            </a>
 
             <a
               [routerLink]="routes[1]"
               routerLinkActive="active-section"
               [class.active-section]="activeLink.includes(routes[1])"
             >
+
               <div class="icon-sidebar-item">
                 <i class="bx bxs-flask"></i>
               </div>
@@ -43,15 +57,15 @@
               </div>
             </a>
             <a
-              [routerLink]="routes[2]"
+              [routerLink]="routes[11]"
               routerLinkActive="active-section"
-              [class.active-section]="activeLink.includes(routes[2])"
+              [class.active-section]="activeLink.includes(routes[11])"
             >
               <div class="icon-sidebar-item">
-                <i class="bx bxs-calendar-check"></i>
+                <i class="bx bxs-book"></i>
               </div>
               <div class="name-sidebar-item">
-                <li>Reservas</li>
+                <li>Periodo</li>
               </div>
             </a>
             <a
@@ -66,57 +80,6 @@
                 <li>Materias</li>
               </div>
             </a>
-
-            <li class="dividers">Usuarios</li>
-            <a
-              [routerLink]="routes[7]"
-              routerLinkActive="active-section"
-              [class.active-section]="activeLink.includes(routes[7])"
-            >
-              <div class="icon-sidebar-item">
-                <i class="bx bxs-user"></i>
-              </div>
-              <div class="name-sidebar-item">
-                <li>Usuarios</li>
-              </div>
-            </a>
-            <a
-              [routerLink]="routes[5]"
-              routerLinkActive="active-section"
-              [class.active-section]="activeLink.includes(routes[4])"
-            >
-              <div class="icon-sidebar-item">
-                <i class="bx bxs-user-badge"></i>
-              </div>
-              <div class="name-sidebar-item">
-                <li>Administradores</li>
-              </div>
-            </a>
-            <a
-              [routerLink]="routes[6]"
-              routerLinkActive="active-section"
-              [class.active-section]="activeLink.includes(routes[4])"
-            >
-              <div class="icon-sidebar-item">
-                <i class="bx bxs-chalkboard"></i>
-              </div>
-              <div class="name-sidebar-item">
-                <li>Docentes</li>
-              </div>
-            </a>
-            <li class="dividers">Áreas</li>
-            <a
-              [routerLink]="routes[8]"
-              routerLinkActive="active-section"
-              [class.active-section]="activeLink.includes(routes[8])"
-            >
-              <div class="icon-sidebar-item">
-                <i class="bx bxs-graduation"></i>
-              </div>
-              <div class="name-sidebar-item">
-                <li>Carreras</li>
-              </div>
-            </a>
             <a
               [routerLink]="routes[9]"
               routerLinkActive="active-section"
@@ -129,7 +92,19 @@
                 <li>Departamentos</li>
               </div>
             </a>
-
+            <a
+              [routerLink]="routes[8]"
+              routerLinkActive="active-section"
+              [class.active-section]="activeLink.includes(routes[8])"
+            >
+              <div class="icon-sidebar-item">
+                <i class="bx bxs-graduation"></i>
+              </div>
+              <div class="name-sidebar-item">
+                <li>Carreras</li>
+              </div>
+            </a>
+            <li class="dividers">Administracion</li>
             <a
               [routerLink]="routes[10]"
               routerLinkActive="active-section"
@@ -143,15 +118,15 @@
               </div>
             </a>
             <a
-              [routerLink]="routes[11]"
+              [routerLink]="routes[2]"
               routerLinkActive="active-section"
-              [class.active-section]="activeLink.includes(routes[11])"
+              [class.active-section]="activeLink.includes(routes[2])"
             >
               <div class="icon-sidebar-item">
-                <i class="bx bxs-book"></i>
+                <i class="bx bxs-calendar-check"></i>
               </div>
               <div class="name-sidebar-item">
-                <li>Periodo</li>
+                <li>Reservas</li>
               </div>
             </a>
             <li class="dividers">Horarios</li>

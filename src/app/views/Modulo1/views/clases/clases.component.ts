@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { ClasesService } from 'src/app/core/services/clases.service';
 import { PeriodoService } from 'src/app/core/services/periodo.service';
 import { DiaEnum } from 'src/app/models/laboratorio.model';
+import { LaboratorioService } from 'src/app/core/services/laboratorio.service';
 
 @Component({
   selector: 'app-materia',
@@ -27,12 +28,24 @@ export class ClaseComponent implements OnInit {
   isEditing: boolean = false;
   modalClase: Modal | null = null;
   isLoading: boolean = false;
+  franjasPermitidas = [
+    { horaInicio: "07:00:00", horaFin: "08:00:00" },
+    { horaInicio: "08:00:00", horaFin: "09:00:00" },
+    { horaInicio: "09:00:00", horaFin: "10:00:00" },
+    { horaInicio: "10:00:00", horaFin: "11:00:00" },
+    { horaInicio: "11:00:00", horaFin: "12:00:00" },
+    { horaInicio: "12:00:00", horaFin: "13:00:00" },
+    { horaInicio: "13:00:00", horaFin: "14:00:00" },
+    { horaInicio: "14:00:00", horaFin: "15:00:00" },
+  ];
+  dias: DiaEnum[] = [DiaEnum.LUNES, DiaEnum.MARTES, DiaEnum.MIERCOLES, DiaEnum.JUEVES, DiaEnum.VIERNES];
 
   constructor(
     private clasesService: ClasesService,
     private materiaService: MateriaService,
     private docenteService: DocenteService,
-    private periodoService: PeriodoService
+    private periodoService: PeriodoService,
+    private laboratorioService: LaboratorioService,
   ) {}
 
   ngOnInit(): void {
@@ -50,8 +63,17 @@ export class ClaseComponent implements OnInit {
     this.cargarMaterias();
     this.cargarDocentes();
     this.cargarPeriodos();
+    this.cargarLaboratorios();
   }
 
+  cargarLaboratorios(): void {
+    this.laboratorioService.getLaboratorios().subscribe({
+      next: (data) => {
+        console.log('Laboratorios:', data);
+      },
+      error: (err) => console.error('Error al cargar laboratorios:', err),
+    });
+  }
   cargarClases(): void {
     this.clasesService.getClases().subscribe({
       next: (data) => {

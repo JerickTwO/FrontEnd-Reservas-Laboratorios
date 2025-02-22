@@ -114,11 +114,8 @@ export class UsuarioComponent {
     });
   }
   openEditUsuarioModal(usuario: Usuario): void {
-    // Clonamos
     this.usuarioAEditar = { ...usuario };
     console.log('Usuario a editar:', this.usuarioAEditar.departamentoId);
-    // Si el backend te trae un objeto "departamento"
-    // y no solo el ID, asignamos el ID a "departamentoId"
     if (this.usuarioAEditar.departamentoId) {
       this.usuarioAEditar.departamentoId = usuario.departamentoId;
     }
@@ -299,8 +296,30 @@ export class UsuarioComponent {
               Swal.fire('Error', 'No se pudo actualizar el docente', 'error');
             }
           });
-        } else {
-          // Lógica para otros tipos de usuario si aplica
+        } else if (this.usuarioAEditar?.tipoUsuario === 'ADMINISTRADOR') {
+          const partes = this.usuarioAEditar.nombreCompleto.split(' ');
+          const nombre = partes[0];
+          const apellido = partes.slice(1).join(' ');
+
+          const payloadAdmin: Administrador = {
+            idAdministrador: this.usuarioAEditar.id,
+            nombreAdministrador: nombre,
+            apellidoAdministrador: apellido,
+            correoAdministrador: this.usuarioAEditar.correo,
+            idInstitucional: this.usuarioAEditar.idInstitucional
+          };
+
+          this.administradorService.editarAdministrador(payloadAdmin).subscribe({
+            next: () => {
+              Swal.fire('Actualizado', 'Administrador actualizado correctamente', 'success');
+              this.cerrarModalEdicion();
+              this.cargarListaUnificada();
+            },
+            error: (error: any) => {
+              console.error('Error actualizando administrador:', error);
+              Swal.fire('Error', 'No se pudo actualizar el administrador', 'error');
+            }
+          });
         }
       }
     });

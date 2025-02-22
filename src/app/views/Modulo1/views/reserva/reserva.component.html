@@ -130,6 +130,7 @@
                   id="laboratorio"
                   [(ngModel)]="nuevaReserva.laboratorio.idLaboratorio"
                   name="laboratorio"
+                  onchange="console.log('Laboratorio seleccionado:', this.value)"
                   class="form-select"
                   required
                 >
@@ -168,6 +169,8 @@
                   </option>
                 </select>
               </div>
+
+              <!-- Selector de Hora de Fin -->
               <div class="mb-3">
                 <label for="horaFin" class="form-label">Hora de Fin</label>
                 <select
@@ -180,13 +183,15 @@
                   <option value="" disabled selected>
                     Seleccione la hora de fin
                   </option>
-                  @for (franja of franjasPermitidas; track $index) {
-                  <option>
+                  <option
+                    *ngFor="let franja of franjasPermitidas"
+                    [value]="franja.horaFin"
+                  >
                     {{ franja.horaFin }}
                   </option>
-                  }
                 </select>
               </div>
+
               <div class="mb-1">
                 <label for="cantidadParticipantes" class="form-label"
                   >Cantidad de Participantes</label

@@ -37,12 +37,8 @@ export class ReservaComponent implements OnInit {
   userRole: string | undefined;
   franjasHorario: any;
 
-  franjasPermitidas = [
-    { horaInicio: "07:00", horaFin: "09:00" },
-    { horaInicio: "09:00", horaFin: "11:00" },
-    { horaInicio: "11:00", horaFin: "13:00" },
-    { horaInicio: "13:30", horaFin: "15:30" },
-  ];
+  public franjasPermitidas: { horaInicio: string; horaFin: string }[] = [];
+
   dias: DiaEnum[] = [DiaEnum.LUNES, DiaEnum.MARTES, DiaEnum.MIERCOLES, DiaEnum.JUEVES, DiaEnum.VIERNES];
   eventos: any[] = [];
   clases: any[] = [];
@@ -55,9 +51,9 @@ export class ReservaComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.getLaboratorios();
     this.getReservas();
     this.modalReserva = new Modal(document.getElementById('modalReserva')!, { backdrop: 'static' });
-    this.getLaboratorios();
 
     document.getElementById('modalReserva')?.addEventListener('hidden.bs.modal', () => {
       this.cerrarModal();
@@ -96,14 +92,53 @@ export class ReservaComponent implements OnInit {
   getLaboratorios(): void {
     this.laboratorioService.getLaboratorios().subscribe({
       next: (data) => {
-        this.laboratorios = data
+        this.laboratorios = data;
         console.log('Franjas Laboratorio:', this.laboratorios[0].franjasHorario);
+
+        // Conviertes cada string en un objeto con horaInicio/horaFin
+        if (this.laboratorios.length > 0) {
+          this.franjasPermitidas = this.laboratorios[0].franjasHorario.map(
+            (franja: string) => {
+              const [horaInicio, horaFin] = franja.split('-');
+              return { horaInicio, horaFin };
+            }
+          );
+        }
       },
       error: (err) => console.error('Error al cargar los laboratorios:', err),
     });
   }
 
+
   guardarReserva(): void {
+    const selectedLab = this.laboratorios.find(
+      (lab) => lab.idLaboratorio == this.nuevaReserva.laboratorio.idLaboratorio
+    );
+    if (selectedLab == null) {
+      Swal.fire('Error', 'Laboratorio no encontrado.', 'error');
+      return;
+    }
+
+    if (this.nuevaReserva.cantidadParticipantes > selectedLab.capacidad) {
+      Swal.fire('Error', 'La cantidad de participantes excede la capacidad del laboratorio.', 'error');
+      return;
+    }
+    const [startHourStr, startMinStr] = this.nuevaReserva.horaInicio.split(':');
+    const [endHourStr, endMinStr] = this.nuevaReserva.horaFin.split(':');
+
+    const startHour = parseInt(startHourStr, 10);
+    const startMin = parseInt(startMinStr || '0', 10);
+    const endHour = parseInt(endHourStr, 10);
+    const endMin = parseInt(endMinStr || '0', 10);
+
+    const diffHours = endHour - startHour;
+    const diffMinutes = endMin - startMin;
+
+    if (diffHours !== 1 || diffMinutes !== 0) {
+      Swal.fire('Error', 'La reserva debe tener exactamente 1 hora de diferencia (p.ej. 07:00-08:00).', 'error');
+      return;
+    }
+
     this.nuevaReserva.horaInicio = this.formatTime(this.nuevaReserva.horaInicio);
     this.nuevaReserva.horaFin = this.formatTime(this.nuevaReserva.horaFin);
 

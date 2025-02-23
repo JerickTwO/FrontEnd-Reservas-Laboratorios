@@ -1,5 +1,7 @@
-<div class=" mx-auto py-3 px-4">
-  <h2 class="text-center mb-3 text-blue-600 font-extrabold text-xl tracking-wide">
+<div class="mx-auto py-3 px-4">
+  <h2
+    class="text-center mb-3 text-blue-600 font-extrabold text-xl tracking-wide"
+  >
     LABORATORIO 1 - Horario de Clases
   </h2>
 
@@ -7,16 +9,21 @@
     <table class="min-w-full bg-white divide-y divide-gray-200">
       <thead>
         <tr class="bg-blue-600">
-          <th class="px-6 py-3 text-center text-white text-lg font-semibold uppercase">
+          <th
+            class="px-6 py-3 text-center text-white text-lg font-semibold uppercase"
+          >
             HORAS
           </th>
-          <th *ngFor="let dia of dias" class="px-2 py-1 text-center text-white text-md font-semibold uppercase">
+          <th
+            *ngFor="let dia of dias"
+            class="px-2 py-1 text-center text-white text-md font-semibold uppercase"
+          >
             {{ dia }}
           </th>
         </tr>
       </thead>
       <tbody class="divide-y divide-gray-200">
-        <tr *ngFor="let hora of horas" >
+        <tr *ngFor="let hora of horas">
           <!-- Columna de las horas -->
           <td class="px-2 py-1 text-center font-medium">
             {{ hora }}
@@ -26,22 +33,43 @@
           <ng-container *ngFor="let dia of dias">
             <!-- Si es el inicio de la reserva -->
             <ng-container *ngIf="obtenerReservaInicio(dia, hora) as reserva">
-              <td [attr.rowspan]="getReservaRowspan(reserva)" class="px-6 py-4 text-center align-middle border border-gray-200 hover:bg-blue-50 ">
+              <td
+                [attr.rowspan]="getReservaRowspan(reserva)"
+                onclick="console.log(saludo)"
+                class="px-6 py-4 text-center align-middle border border-gray-200 hover:bg-blue-50"
+              >
                 <ng-container *ngIf="reserva.tipo === 'CLASE'; else otroTipo">
-                  <strong class="block text-blue-600 mb-1">{{ reserva.nombreMateria }}</strong>
-                  <span class="block text-sm text-gray-700">{{ reserva.nombreDocente }}</span>
+                  <strong class="block text-blue-600 mb-1">{{
+                    reserva.nombreMateria
+                  }}</strong>
+                  <span class="block text-sm text-gray-700">{{
+                    reserva.nombreDocente
+                  }}</span>
                 </ng-container>
                 <ng-template #otroTipo>
-                  <strong class="block text-blue-600 mb-1">Reserva Confirmada:</strong>
-                  <span class="block text-sm text-gray-700">Nombre: {{ reserva.nombreDocente }}</span>
-                  <span class="block text-sm text-gray-700">Correo: {{ reserva.correoDocente }}</span>
-                  <span class="block text-sm text-gray-700">Motivo: {{ reserva.motivo }}</span>
+                  <strong class="block text-blue-600 mb-1"
+                    >Reserva Confirmada:</strong
+                  >
+                  <span class="block text-sm text-gray-700"
+                    >Nombre: {{ reserva.nombreDocente }}</span
+                  >
+                  <span class="block text-sm text-gray-700"
+                    >Correo: {{ reserva.correoDocente }}</span
+                  >
+                  <span class="block text-sm text-gray-700"
+                    >Motivo: {{ reserva.motivo }}</span
+                  >
                 </ng-template>
               </td>
             </ng-container>
 
             <!-- Si no es el inicio ni continuación de una reserva, se muestra "Disponible" -->
-            <ng-container *ngIf="!obtenerReservaInicio(dia, hora) && !isReservaContinuacion(dia, hora)">
+            <ng-container
+              *ngIf="
+                !obtenerReservaInicio(dia, hora) &&
+                !isReservaContinuacion(dia, hora)
+              "
+            >
               <td class="px-6 py-4 text-center border border-gray-200">
                 Disponible
               </td>

@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ClasesService } from 'src/app/core/services/clases.service';
 import { PeriodoService } from 'src/app/core/services/periodo.service';
-import { DiaEnum } from 'src/app/models/laboratorio.model';
+import { DiaEnum, Laboratorio } from 'src/app/models/laboratorio.model';
 import { LaboratorioService } from 'src/app/core/services/laboratorio.service';
 
 @Component({
@@ -24,28 +24,34 @@ export class ClaseComponent implements OnInit {
   materias: Materia[] = [];
   docentes: Docente[] = [];
   periodos: Periodo[] = [];
+  laboratorios: Laboratorio[] = [];
   newClase: Clase = this.resetNuevaClaseData();
   isEditing: boolean = false;
   modalClase: Modal | null = null;
   isLoading: boolean = false;
   franjasPermitidas = [
-    { horaInicio: "07:00:00", horaFin: "08:00:00" },
-    { horaInicio: "08:00:00", horaFin: "09:00:00" },
-    { horaInicio: "09:00:00", horaFin: "10:00:00" },
-    { horaInicio: "10:00:00", horaFin: "11:00:00" },
-    { horaInicio: "11:00:00", horaFin: "12:00:00" },
-    { horaInicio: "12:00:00", horaFin: "13:00:00" },
-    { horaInicio: "13:00:00", horaFin: "14:00:00" },
-    { horaInicio: "14:00:00", horaFin: "15:00:00" },
+    { horaInicio: '07:00:00', horaFin: '08:00:00' },
+    { horaInicio: '08:00:00', horaFin: '09:00:00' },
+    { horaInicio: '09:00:00', horaFin: '10:00:00' },
+    { horaInicio: '10:00:00', horaFin: '11:00:00' },
+    { horaInicio: '11:00:00', horaFin: '12:00:00' },
+    { horaInicio: '12:00:00', horaFin: '13:00:00' },
+    { horaInicio: '13:00:00', horaFin: '14:00:00' },
+    { horaInicio: '14:00:00', horaFin: '15:00:00' },
   ];
-  dias: DiaEnum[] = [DiaEnum.LUNES, DiaEnum.MARTES, DiaEnum.MIERCOLES, DiaEnum.JUEVES, DiaEnum.VIERNES];
+  dias: DiaEnum[] = [
+    DiaEnum.LUNES,
+    DiaEnum.MARTES,
+    DiaEnum.MIERCOLES,
+    DiaEnum.JUEVES,
+    DiaEnum.VIERNES,
+  ];
 
   constructor(
     private clasesService: ClasesService,
     private materiaService: MateriaService,
     private docenteService: DocenteService,
-    private periodoService: PeriodoService,
-    private laboratorioService: LaboratorioService,
+    private laboratorioService: LaboratorioService
   ) {}
 
   ngOnInit(): void {
@@ -62,29 +68,30 @@ export class ClaseComponent implements OnInit {
     this.cargarClases();
     this.cargarMaterias();
     this.cargarDocentes();
-    this.cargarPeriodos();
     this.cargarLaboratorios();
   }
 
   cargarLaboratorios(): void {
     this.laboratorioService.getLaboratorios().subscribe({
       next: (data) => {
+        this.laboratorios = data;
         console.log('Laboratorios:', data);
       },
       error: (err) => console.error('Error al cargar laboratorios:', err),
     });
   }
-  cargarClases(): void {
-    this.clasesService.getClases().subscribe({
-      next: (data) => {
+  cargarClases() {
+    this.isLoading = true;
+    this.clasesService.getClases().subscribe(
+      (data) => {
         this.clases = data;
         this.isLoading = false;
       },
-      error: (err) => {
-        console.error('Error al cargar clases:', err);
+      (error) => {
+        console.error('Error cargando clases', error);
         this.isLoading = false;
-      },
-    });
+      }
+    );
   }
 
   cargarMaterias(): void {
@@ -101,33 +108,31 @@ export class ClaseComponent implements OnInit {
     });
   }
 
-  cargarPeriodos(): void {
-    this.periodoService.getPeriodos().subscribe({
-      next: (data) => (this.periodos = data),
-      error: (err) => console.error('Error al cargar periodos:', err),
-    });
-  }
-
-  openAddClaseModal(): void {
-    this.newClase = this.resetNuevaClaseData();
+  openAddClaseModal() {
     this.isEditing = false;
-    if (this.modalClase) this.modalClase.show();
+    this.newClase = new Clase();
   }
 
-  guardarClase(): void {
-    if (!this.validarClase(this.newClase)) {
-      console.warn('Datos inválidos para guardar la clase.');
-      return;
-    }
+  openEditClaseModal(clase: Clase) {
+    this.isEditing = true;
+    this.newClase = { ...clase }; // Hacemos una copia del objeto para editarlo
+  }
 
-    this.newClase.materia.idMateria = Number(this.newClase.materia.idMateria);
-    this.newClase.docente.idDocente = Number(this.newClase.docente.idDocente);
-    this.newClase.periodo.idPeriodo = Number(this.newClase.periodo.idPeriodo);
+  guardarClase() {
+    this.newClase.periodo = new Periodo(); // Dejar vacío para que el backend asigne el periodo activo
 
     if (this.isEditing) {
-      this.editarClase();
+      this.clasesService
+        .editarClase(this.newClase.idClase, this.newClase)
+        .subscribe(
+          () => this.cargarClases(), // Recargar las clases después de editar
+          (error) => console.error('Error editando clase', error)
+        );
     } else {
-      this.agregarClase();
+      this.clasesService.agregarClase(this.newClase).subscribe(
+        () => this.cargarClases(), // Recargar las clases después de agregar
+        (error) => console.error('Error agregando clase', error)
+      );
     }
   }
 
@@ -142,28 +147,26 @@ export class ClaseComponent implements OnInit {
   }
 
   editarClase(): void {
-    this.clasesService.editarClase(this.newClase.idClase, this.newClase).subscribe({
-      next: () => {
-        this.cerrarModal();
-        this.recargarPagina(); // <-- Recarga la página después de editar
-      },
-      error: (err) => console.error('Error al editar clase:', err),
-    });
-  }
-
-  eliminarClase(id: number): void {
-    if (confirm('¿Estás seguro de eliminar esta clase?')) {
-      this.clasesService.eliminarClase(id).subscribe({
-        next: () => this.recargarPagina(),
-        error: (err) => console.error('Error al eliminar clase:', err),
+    this.clasesService
+      .editarClase(this.newClase.idClase, this.newClase)
+      .subscribe({
+        next: () => {
+          this.cerrarModal();
+          this.recargarPagina(); // <-- Recarga la página después de editar
+        },
+        error: (err) => console.error('Error al editar clase:', err),
       });
-    }
   }
 
-  openEditClaseModal(clase: Clase): void {
-    this.newClase = { ...clase };
-    this.isEditing = true;
-    if (this.modalClase) this.modalClase.show();
+  eliminarClase(id: number) {
+    this.clasesService.eliminarClase(id).subscribe(
+      () => {
+        this.cargarClases(); // Recargamos las clases
+      },
+      (error) => {
+        console.error('Error eliminando clase', error);
+      }
+    );
   }
 
   cerrarModal(): void {
@@ -184,21 +187,19 @@ export class ClaseComponent implements OnInit {
       idClase: 0,
       materia: new Materia(),
       docente: new Docente(),
-      periodo: new Periodo(),
+      laboratorio: new Laboratorio(), // Inicializa laboratorio aquí
+      periodo: new Periodo(), // Se deja vacío para que el backend asigne el periodo activo
       horaInicio: '',
       horaFin: '',
-      dia: DiaEnum.LUNES, // or any default value from DiaEnum
+      dia: DiaEnum.LUNES, // o cualquier valor por defecto
       fechaCreacion: new Date(),
       fechaActualizacion: new Date(),
     };
   }
+  
 
   private validarClase(clase: Clase): boolean {
-    return (
-      clase.materia.idMateria > 0 &&
-      clase.docente.idDocente > 0 &&
-      clase.periodo.idPeriodo > 0
-    );
+    return clase.materia.idMateria > 0 && clase.docente.idDocente > 0;
   }
 
   private recargarPagina(): void {

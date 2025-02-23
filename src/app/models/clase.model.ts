@@ -1,13 +1,14 @@
 import { Materia } from './materia.model';
 import { Docente } from './docente.model';
-import { Periodo } from './periodo.model';
-import { DiaEnum } from './laboratorio.model';
+import type { Periodo } from './periodo.model';
+import { DiaEnum, Laboratorio } from './laboratorio.model';
 
 export class Clase {
   idClase: number;
   materia: Materia;
   docente: Docente;
-  periodo: Periodo;
+  laboratorio: Laboratorio;
+  periodo?: Periodo;
   horaInicio: string;
   horaFin: string;
   dia: DiaEnum;
@@ -18,7 +19,7 @@ export class Clase {
     this.idClase = 0;
     this.materia = new Materia();
     this.docente = new Docente();
-    this.periodo = new Periodo();
+    this.laboratorio = new Laboratorio();
     this.horaInicio = '';
     this.horaFin = '';
     this.dia = DiaEnum.LUNES;

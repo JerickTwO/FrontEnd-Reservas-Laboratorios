@@ -45,7 +45,7 @@
                 {{ clase.docente.nombreDocente }}
                 {{ clase.docente.apellidoDocente }}
               </td>
-              <td class="px-6 py-4">{{ clase.periodo.nombrePeriodo }}</td>
+              <td class="px-6 py-4">{{ clase.periodo?.nombrePeriodo }}</td>
               <td class="px-6 py-4">{{ clase.horaInicio }}</td>
               <td class="px-6 py-4">{{ clase.horaFin }}</td>
               <td class="text-center">
@@ -137,29 +137,6 @@
                 Selecciona un docente válido.
               </div>
             </div>
-
-            <!-- Selector de Periodo -->
-            <div class="mb-3">
-              <label for="periodo" class="form-label">Periodo:</label>
-              <select
-                id="periodo"
-                [(ngModel)]="newClase.periodo.idPeriodo"
-                name="periodo"
-                class="form-select"
-                required
-              >
-                <option [value]="null" disabled>Selecciona un periodo</option>
-                <option
-                  *ngFor="let periodo of periodos"
-                  [value]="periodo.idPeriodo"
-                >
-                  {{ periodo.nombrePeriodo }}
-                </option>
-              </select>
-              <div *ngIf="!newClase.periodo.idPeriodo" class="text-danger">
-                Selecciona un periodo válido.
-              </div>
-            </div>
             <div class="mb-1">
               <label for="dia" class="form-label">Día</label>
               <select
@@ -175,7 +152,32 @@
                 </option>
               </select>
             </div>
-
+            <div class="mb-3">
+              <label for="laboratorio" class="form-label">laboratorio:</label>
+              <select
+                id="laboratorio"
+                [(ngModel)]="newClase.laboratorio.idLaboratorio"
+                name="laboratorio"
+                class="form-select"
+                required
+              >
+                <option [value]="null" disabled>
+                  Selecciona un laboratorio
+                </option>
+                <option
+                  *ngFor="let laboratorio of laboratorios"
+                  [value]="laboratorio.idLaboratorio"
+                >
+                  {{ laboratorio.nombreLaboratorio }}
+                </option>
+              </select>
+              <div
+                *ngIf="!newClase.laboratorio.idLaboratorio"
+                class="text-danger"
+              >
+                Selecciona un laboratorio válido.
+              </div>
+            </div>
             <!-- Selector de Hora de Inicio -->
             <div class="mb-3">
               <label for="horaInicio" class="form-label">Hora de Inicio</label>
@@ -223,9 +225,7 @@
               type="submit"
               class="btn btn-primary w-100"
               [disabled]="
-                !newClase.materia.idMateria ||
-                !newClase.docente.idDocente ||
-                !newClase.periodo.idPeriodo
+                !newClase.materia.idMateria || !newClase.docente.idDocente
               "
             >
               <i class="bi bi-save"></i>

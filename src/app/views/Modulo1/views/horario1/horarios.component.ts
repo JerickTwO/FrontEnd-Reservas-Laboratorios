@@ -13,15 +13,19 @@ import { Laboratorio, DiaEnum } from 'src/app/models/laboratorio.model';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './horarios.component.html',
-  styleUrl: './horarios.component.scss'
+  styleUrl: './horarios.component.scss',
 })
 export class Horario1Component implements OnInit {
   laboratorios: Laboratorio[];
   horas: string[] = [];
+  saludo = "Hola Mundo";
   dias: DiaEnum[] = [];
   numeroHorario: number;
   horariosReservas: HorarioReservas[] = [];
-  constructor(private horarioService: HorarioService, private laboratorioService: LaboratorioService) { }
+  constructor(
+    private horarioService: HorarioService,
+    private laboratorioService: LaboratorioService
+  ) {}
 
   ngOnInit(): void {
     this.cargarLaboratorios();
@@ -44,15 +48,21 @@ export class Horario1Component implements OnInit {
       (data) => {
         this.laboratorios = data;
         this.horas = this.laboratorios[0].franjasHorario;
-        this.dias = Object.keys(DiaEnum).filter(key => isNaN(Number(key))).map(key => DiaEnum[key as keyof typeof DiaEnum]);
+        this.dias = Object.keys(DiaEnum)
+          .filter((key) => isNaN(Number(key)))
+          .map((key) => DiaEnum[key as keyof typeof DiaEnum]);
       },
       (error) => {
         console.error('Error al cargar los laboratorios:', error);
       }
     );
-  }// Método para obtener la reserva que inicia en el horario dado
+  }
+  obtenerDia(dia: string): void {
+    console.log('Horarios con reservas:', dia);
+  }
+  // Método para obtener la reserva que inicia en el horario dado
   obtenerReservaInicio(dia: string, hora: string): any {
-    return this.horariosReservas.find(reserva => {
+    return this.horariosReservas.find((reserva) => {
       const inicioBackend = reserva.horaInicio.substring(0, 5); // "07:00"
       const diaBackend = (reserva.dia || '').toUpperCase();
       // Comparamos el inicio de la reserva con el inicio del intervalo (por ejemplo, "07:00" de "07:00-08:00")
@@ -62,7 +72,7 @@ export class Horario1Component implements OnInit {
 
   // Método para verificar si el slot actual es parte de una reserva ya iniciada en un horario anterior
   isReservaContinuacion(dia: string, hora: string): boolean {
-    return this.horariosReservas.some(reserva => {
+    return this.horariosReservas.some((reserva) => {
       const diaBackend = (reserva.dia || '').toUpperCase();
       if (diaBackend !== dia) return false;
       const inicio = reserva.horaInicio.substring(0, 5);
@@ -85,8 +95,8 @@ export class Horario1Component implements OnInit {
     const [horaInicioTabla, horaFinTabla] = hora.split('-');
     return this.horariosReservas.find((reserva) => {
       const inicioBackend = reserva?.horaInicio?.substring(0, 5); // "07:00"
-      const finBackend = reserva?.horaFin?.substring(0, 5);       // "09:00"
-      const diaBackend = (reserva?.dia || '').toUpperCase();      // "LUNES", "MARTES", etc.
+      const finBackend = reserva?.horaFin?.substring(0, 5); // "09:00"
+      const diaBackend = (reserva?.dia || '').toUpperCase(); // "LUNES", "MARTES", etc.
 
       return (
         diaBackend === dia &&

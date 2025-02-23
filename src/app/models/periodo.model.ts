@@ -1,14 +1,16 @@
-import { Carrera } from './carrera.model';
-
 export class Periodo {
   idPeriodo: number;
   nombrePeriodo: string;
+  fechaInicio: string;
+  fechaFin: string;
+  estado: boolean;
   descripcion: string;
-  carrera: Carrera; // Relación con Carrera
 
   constructor() {
     this.nombrePeriodo = '';
+    this.fechaInicio = '';
+    this.fechaFin = '';
+    this.estado = false;
     this.descripcion = '';
-    this.carrera = new Carrera(); // Inicializa el objeto de Carrera
   }
 }

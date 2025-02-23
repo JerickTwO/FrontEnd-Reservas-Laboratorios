@@ -12,18 +12,14 @@ export class Laboratorio {
     ubicacion: string;
     franjasHorario: string[];
     diasHorario: DiaEnum[];
-    constructor(
-        idLaboratorio: number,
-        nombreLaboratorio: string,
-        capacidad: number,
-        ubicacion: string,
-        franjasHorario: [],
-    ) {
-        this.idLaboratorio = idLaboratorio;
-        this.nombreLaboratorio = nombreLaboratorio;
-        this.capacidad = capacidad;
-        this.ubicacion = ubicacion;
-        this.franjasHorario = franjasHorario;
-        this.diasHorario = [DiaEnum.LUNES, DiaEnum.MARTES, DiaEnum.MIERCOLES, DiaEnum.JUEVES, DiaEnum.VIERNES];
+
+    constructor() {
+        this.idLaboratorio = 0;
+        this.nombreLaboratorio = '';
+        this.capacidad = 0;
+        this.ubicacion = '';
+        this.franjasHorario = [];
+        this.diasHorario = [];
     }
 }
+

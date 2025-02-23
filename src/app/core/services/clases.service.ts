@@ -10,7 +10,7 @@ import { environment } from 'src/environments/environment';
 export class ClasesService {
   private apiUrl = `${environment.urlBase}/clases`;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getClases(): Observable<Clase[]> {
     return this.http.get<Clase[]>(this.apiUrl);
@@ -20,11 +20,12 @@ export class ClasesService {
     const payload = {
       materia: { idMateria: Number(clase.materia.idMateria) },
       docente: { idDocente: Number(clase.docente.idDocente) },
-      periodo: { idPeriodo: Number(clase.periodo.idPeriodo) },
+      laboratorio: { idLaboratorio: Number(clase.laboratorio.idLaboratorio) },
       horaInicio: clase.horaInicio,
       horaFin: clase.horaFin,
-      dia: clase.dia
+      dia: clase.dia,
     };
+
     return this.http.post<Clase>(this.apiUrl, payload);
   }
 
@@ -33,14 +34,13 @@ export class ClasesService {
       idClase: clase.idClase,
       materia: { idMateria: Number(clase.materia.idMateria) },
       docente: { idDocente: Number(clase.docente.idDocente) },
-      periodo: { idPeriodo: Number(clase.periodo.idPeriodo) },
+      laboratorio: { idLaboratorio: Number(clase.laboratorio.idLaboratorio) },
       horaInicio: clase.horaInicio,
       horaFin: clase.horaFin,
-      dia: clase.dia
+      dia: clase.dia,
     };
     return this.http.put<Clase>(`${this.apiUrl}/${id}`, payload);
   }
-
 
   eliminarClase(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);

@@ -18,7 +18,13 @@ import autoTable from 'jspdf-autotable';
 @Component({
   selector: 'app-reserva',
   standalone: true,
-  imports: [PaginationComponent, CommonModule, FormsModule, HttpClientModule, ReactiveFormsModule],
+  imports: [
+    PaginationComponent,
+    CommonModule,
+    FormsModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+  ],
   styleUrls: ['./reserva.component.scss'],
   templateUrl: './reserva.component.html',
 })
@@ -39,7 +45,13 @@ export class ReservaComponent implements OnInit {
 
   public franjasPermitidas: { horaInicio: string; horaFin: string }[] = [];
 
-  dias: DiaEnum[] = [DiaEnum.LUNES, DiaEnum.MARTES, DiaEnum.MIERCOLES, DiaEnum.JUEVES, DiaEnum.VIERNES];
+  dias: DiaEnum[] = [
+    DiaEnum.LUNES,
+    DiaEnum.MARTES,
+    DiaEnum.MIERCOLES,
+    DiaEnum.JUEVES,
+    DiaEnum.VIERNES,
+  ];
   eventos: any[] = [];
   clases: any[] = [];
 
@@ -48,16 +60,20 @@ export class ReservaComponent implements OnInit {
     private laboratorioService: LaboratorioService,
     private paginationService: PaginationService,
     private usuarioService: UsuarioService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.getLaboratorios();
     this.getReservas();
-    this.modalReserva = new Modal(document.getElementById('modalReserva')!, { backdrop: 'static' });
-
-    document.getElementById('modalReserva')?.addEventListener('hidden.bs.modal', () => {
-      this.cerrarModal();
+    this.modalReserva = new Modal(document.getElementById('modalReserva')!, {
+      backdrop: 'static',
     });
+
+    document
+      .getElementById('modalReserva')
+      ?.addEventListener('hidden.bs.modal', () => {
+        this.cerrarModal();
+      });
     this.usuarioService.usuario$.subscribe((usuario) => {
       if (usuario) {
         this.userRole = usuario.rol.nombre;
@@ -92,7 +108,10 @@ export class ReservaComponent implements OnInit {
     this.laboratorioService.getLaboratorios().subscribe({
       next: (data) => {
         this.laboratorios = data;
-        console.log('Franjas Laboratorio:', this.laboratorios[0].franjasHorario);
+        console.log(
+          'Franjas Laboratorio:',
+          this.laboratorios[0].franjasHorario
+        );
 
         // Conviertes cada string en un objeto con horaInicio/horaFin
         if (this.laboratorios.length > 0) {
@@ -108,7 +127,6 @@ export class ReservaComponent implements OnInit {
     });
   }
 
-
   guardarReserva(): void {
     const selectedLab = this.laboratorios.find(
       (lab) => lab.idLaboratorio == this.nuevaReserva.laboratorio.idLaboratorio
@@ -119,7 +137,11 @@ export class ReservaComponent implements OnInit {
     }
 
     if (this.nuevaReserva.cantidadParticipantes > selectedLab.capacidad) {
-      Swal.fire('Error', 'La cantidad de participantes excede la capacidad del laboratorio.', 'error');
+      Swal.fire(
+        'Error',
+        'La cantidad de participantes excede la capacidad del laboratorio.',
+        'error'
+      );
       return;
     }
     const [startHourStr, startMinStr] = this.nuevaReserva.horaInicio.split(':');
@@ -134,11 +156,17 @@ export class ReservaComponent implements OnInit {
     const diffMinutes = endMin - startMin;
 
     if (diffHours !== 1 || diffMinutes !== 0) {
-      Swal.fire('Error', 'La reserva debe tener exactamente 1 hora de diferencia (p.ej. 07:00-08:00).', 'error');
+      Swal.fire(
+        'Error',
+        'La reserva debe tener exactamente 1 hora de diferencia (p.ej. 07:00-08:00).',
+        'error'
+      );
       return;
     }
 
-    this.nuevaReserva.horaInicio = this.formatTime(this.nuevaReserva.horaInicio);
+    this.nuevaReserva.horaInicio = this.formatTime(
+      this.nuevaReserva.horaInicio
+    );
     this.nuevaReserva.horaFin = this.formatTime(this.nuevaReserva.horaFin);
 
     if (this.isEditing) {
@@ -146,14 +174,16 @@ export class ReservaComponent implements OnInit {
         console.error('ID inválido para actualizar la reserva.');
         return;
       }
-      this.reservaService.actualizarReserva(this.nuevaReserva.idReserva, this.nuevaReserva).subscribe({
-        next: (reservaActualizada) => {
-          console.log('Reserva actualizada:', reservaActualizada);
-          this.getReservas();
-          this.cerrarModal();
-        },
-        error: (err) => console.error('Error al actualizar la reserva:', err),
-      });
+      this.reservaService
+        .actualizarReserva(this.nuevaReserva.idReserva, this.nuevaReserva)
+        .subscribe({
+          next: (reservaActualizada) => {
+            console.log('Reserva actualizada:', reservaActualizada);
+            this.getReservas();
+            this.cerrarModal();
+          },
+          error: (err) => console.error('Error al actualizar la reserva:', err),
+        });
     } else {
       this.reservaService.crearReserva(this.nuevaReserva).subscribe({
         next: (reservaCreada) => {
@@ -169,7 +199,11 @@ export class ReservaComponent implements OnInit {
   cambiarEstadoPendiente(reserva: Reserva): void {
     if (reserva.idReserva === undefined || reserva.idReserva === null) {
       console.error('ID de reserva no definido.');
-      Swal.fire('Error', 'No se ha encontrado un ID de reserva válido.', 'error');
+      Swal.fire(
+        'Error',
+        'No se ha encontrado un ID de reserva válido.',
+        'error'
+      );
       return;
     }
 
@@ -189,28 +223,40 @@ export class ReservaComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         reserva.estado = 'APROBADA';
-        this.reservaService.actualizarReserva(reserva.idReserva!, reserva).subscribe({
-          next: () => {
-            Swal.fire('Estado actualizado', 'La reserva ha sido aprobada.', 'success');
-            this.getReservas();
-          },
-          error: (err) => {
-            Swal.fire('Error', 'No se pudo actualizar el estado.', 'error');
-            console.error('Error al cambiar el estado de la reserva:', err);
-          },
-        });
+        this.reservaService
+          .actualizarReserva(reserva.idReserva!, reserva)
+          .subscribe({
+            next: () => {
+              Swal.fire(
+                'Estado actualizado',
+                'La reserva ha sido aprobada.',
+                'success'
+              );
+              this.getReservas();
+            },
+            error: (err) => {
+              Swal.fire('Error', 'No se pudo actualizar el estado.', 'error');
+              console.error('Error al cambiar el estado de la reserva:', err);
+            },
+          });
       } else if (result.dismiss === Swal.DismissReason.cancel) {
         reserva.estado = 'RECHAZADA';
-        this.reservaService.actualizarReserva(reserva.idReserva!, reserva).subscribe({
-          next: () => {
-            Swal.fire('Estado actualizado', 'La reserva ha sido rechazada.', 'error');
-            this.getReservas();
-          },
-          error: (err) => {
-            Swal.fire('Error', 'No se pudo actualizar el estado.', 'error');
-            console.error('Error al cambiar el estado de la reserva:', err);
-          },
-        });
+        this.reservaService
+          .actualizarReserva(reserva.idReserva!, reserva)
+          .subscribe({
+            next: () => {
+              Swal.fire(
+                'Estado actualizado',
+                'La reserva ha sido rechazada.',
+                'error'
+              );
+              this.getReservas();
+            },
+            error: (err) => {
+              Swal.fire('Error', 'No se pudo actualizar el estado.', 'error');
+              console.error('Error al cambiar el estado de la reserva:', err);
+            },
+          });
       }
     });
   }
@@ -266,7 +312,7 @@ export class ReservaComponent implements OnInit {
         ubicacion: '',
         capacidad: 0,
         franjasHorario: [],
-        diasHorario: []
+        diasHorario: [],
       },
       horaInicio: '',
       horaFin: '',
@@ -313,14 +359,16 @@ export class ReservaComponent implements OnInit {
     doc.text('REPORTE DE RESERVA DE LABORATORIOS', 50, 40);
 
     // Preparar datos de la tabla
-    const datosExportacion = this.reservas.map(reserva => [
+    const datosExportacion = this.reservas.map((reserva) => [
       reserva.nombreCompleto,
       reserva.fechaActualizacion
-        ? `${reserva.fechaActualizacion.getDate()}/${reserva.fechaActualizacion.getMonth() + 1}/${reserva.fechaActualizacion.getFullYear()}`
+        ? `${reserva.fechaActualizacion.getDate()}/${
+            reserva.fechaActualizacion.getMonth() + 1
+          }/${reserva.fechaActualizacion.getFullYear()}`
         : '',
       `${reserva.horaInicio}-${reserva.horaFin}`,
 
-      reserva.motivoReserva
+      reserva.motivoReserva,
     ]);
 
     // Crear tabla
@@ -331,12 +379,11 @@ export class ReservaComponent implements OnInit {
       theme: 'grid',
       headStyles: {
         fillColor: [0, 0, 0],
-        textColor: [255, 255, 255]
+        textColor: [255, 255, 255],
       },
     });
 
     // Descargar PDF
     doc.save('Reservas.pdf');
   }
-
 }

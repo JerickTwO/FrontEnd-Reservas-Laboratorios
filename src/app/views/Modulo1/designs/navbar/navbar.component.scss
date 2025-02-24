@@ -15,7 +15,7 @@ $fondo-active-hover: darken(colors.$primary, 5);
 // ==============================
 // NAVBAR
 // ==============================
-.content-navbar {
+.content-navbar { 
   display: flex;
   position: sticky;
   top: 0;
@@ -28,27 +28,12 @@ $fondo-active-hover: darken(colors.$primary, 5);
   transition: all 0.3s ease;
 }
 
-.content_balance {
-  display: grid;
-  padding-left: 10px;
-  gap: 5px;
-
-  .title {
-    font-size: 12px;
-    font-weight: bold;
-  }
-
-  .number {
-    font-size: 20px;
-  }
-}
-
 .navbar {
   display: flex;
   width: 100%;
-  min-height: 50px;
+  min-height: 10px;
   align-items: center;
-  justify-content: right;
+  justify-content: space-between;
   gap: 10px;
 
   // TODO: responsive 300px

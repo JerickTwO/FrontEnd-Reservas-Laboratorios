@@ -43,8 +43,10 @@ export class PeriodoComponent {
       });
   }
 
-  guardar(): void {
+  async guardar(): Promise<void> {
     this.validarNombre();
+    console.log(this.nombreDuplicado);
+    
     if (this.nombreDuplicado) {
       Swal.fire({
         icon: 'error',
@@ -54,34 +56,48 @@ export class PeriodoComponent {
       });
       return;
     }
-
-    if (this.isEditing) {
-      this.periodoService
-        .editarPeriodo(this.currentId!, this.periodo)
-        .subscribe(() => {
-          Swal.fire({
-            icon: 'success',
-            title: 'Actualizado',
-            text: 'El periodo ha sido actualizado correctamente.',
-            confirmButtonColor: '#3085d6',
-          });
-          this.obtenerPeriodos();
-          this.resetForm();
+  
+    if (this.periodo.fechaFin < this.periodo.fechaInicio) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Fechas Incorrectas',
+        text: 'La fecha de fin no puede ser anterior a la fecha de inicio.',
+        confirmButtonColor: '#d33',
+      });
+      return;
+    }
+    try {
+      if (this.isEditing) {
+        await this.periodoService
+          .editarPeriodo(this.currentId!, this.periodo)
+          .toPromise();
+        Swal.fire({
+          icon: 'success',
+          title: 'Actualizado',
+          text: 'El periodo ha sido actualizado correctamente.',
+          confirmButtonColor: '#3085d6',
         });
-    } else {
-      this.periodoService.agregarPeriodo(this.periodo).subscribe(() => {
+      } else {
+        await this.periodoService.agregarPeriodo(this.periodo).toPromise();
         Swal.fire({
           icon: 'success',
           title: 'Guardado',
           text: 'El periodo ha sido guardado correctamente.',
           confirmButtonColor: '#3085d6',
         });
-        this.obtenerPeriodos();
-        this.resetForm();
+      }
+      this.obtenerPeriodos();
+      this.resetForm();
+    } catch (error) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Nombre ya existente. Inténtelo nuevamente.',
+        confirmButtonColor: '#d33',
       });
     }
   }
-
+  
   editar(id: number): void {
     this.periodoService.getPeriodoById(id).subscribe((data) => {
       this.periodo = data;
@@ -114,16 +130,16 @@ export class PeriodoComponent {
       }
     });
   }
-
   cambiarEstado(id: number, estado: boolean): void {
     this.periodoService.cambiarEstadoPeriodo(id, estado).subscribe(() => {
       Swal.fire({
         icon: 'success',
         title: 'Estado Cambiado',
         text: `El periodo ha sido ${estado ? 'activado' : 'desactivado'}.`,
-        confirmButtonColor: '#3085d6',
+        confirmButtonColor: '#3085d6',  
+      }).then(() => {
+        location.reload();
       });
-      this.obtenerPeriodos();
     });
   }
 

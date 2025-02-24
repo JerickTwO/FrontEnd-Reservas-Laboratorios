@@ -5,6 +5,8 @@ import { NgClass, AsyncPipe } from '@angular/common';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { NotificationComponent } from '../../components/notification/notification.component';
 import { UsuarioService } from 'src/app/core/services/usuario.service';
+import { PeriodoService } from 'src/app/core/services/periodo.service';
+import { Periodo } from 'src/app/models/periodo.model';
 
 @Component({
   selector: 'app-navbar',
@@ -18,7 +20,7 @@ export class NavbarComponent implements OnInit {
   // DATOS DE LA SESION
   firstname_user: string | null = 'Administrador';
   lastname_user: string | null = 'Sistema';
-
+  periodoActivo: Periodo | null = null;
   // Sidebar y rutas
   @Input() routes!: string[];
 
@@ -34,11 +36,13 @@ export class NavbarComponent implements OnInit {
   constructor(
     public menuService: MenuService,
     public notificationService: NotificationService,
-    private usuarioService: UsuarioService
+    private usuarioService: UsuarioService,
+    private periodoService: PeriodoService,
   ) {
   }
 
   ngOnInit(): void {
+   this.obtenerPeriodoActivo();
     // Detectar el scroll y mostrar/ocultar el botón
     window.addEventListener('scroll', () => {
       this.showScrollButton = window.pageYOffset > 100;
@@ -46,6 +50,14 @@ export class NavbarComponent implements OnInit {
     });
   }
 
+  obtenerPeriodoActivo(): void {
+    this.periodoService.getPeriodoActivo().subscribe(
+      (data) => {
+        this.periodoActivo = data;
+        // console.log('Periododsadsa activo:', data);
+      }
+    );
+  }
   // Mostrar / Ocultar menu de perfil
   toggleMenuProfile() {
     this.menuService.toggleMenuProfile();

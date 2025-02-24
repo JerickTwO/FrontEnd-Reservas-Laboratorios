@@ -15,6 +15,11 @@ export class PeriodoService {
   getPeriodos(): Observable<Periodo[]> {
     return this.http.get<Periodo[]>(this.apiUrl);
   }
+  getPeriodoActivo(): Observable<Periodo> {
+    const url = `${this.apiUrl}/activo`;
+    return this.http.get<Periodo>(url);
+  }
+  
 
   getPeriodoById(id: number): Observable<Periodo> {
     return this.http.get<Periodo>(`${this.apiUrl}/${id}`);

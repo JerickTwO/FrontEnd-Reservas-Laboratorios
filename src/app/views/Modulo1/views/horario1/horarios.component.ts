@@ -4,9 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { ClasesService } from 'src/app/core/services/clases.service';
 import { HorarioService } from 'src/app/core/services/horario.service';
 import { LaboratorioService } from 'src/app/core/services/laboratorio.service';
+import { PeriodoService } from 'src/app/core/services/periodo.service';
 import { Clase } from 'src/app/models/clase.model';
 import { HorarioReservas } from 'src/app/models/horarioReservas.model';
 import { Laboratorio, DiaEnum } from 'src/app/models/laboratorio.model';
+import { Periodo } from 'src/app/models/periodo.model';
 
 @Component({
   selector: 'app-horarios',
@@ -18,20 +20,34 @@ import { Laboratorio, DiaEnum } from 'src/app/models/laboratorio.model';
 export class Horario1Component implements OnInit {
   laboratorios: Laboratorio[];
   horas: string[] = [];
-  saludo = "Hola Mundo";
+  saludo = 'Hola Mundo';
   dias: DiaEnum[] = [];
+  periodoActivo: Periodo | null = null;
   numeroHorario: number;
   horariosReservas: HorarioReservas[] = [];
   constructor(
     private horarioService: HorarioService,
-    private laboratorioService: LaboratorioService
+    private laboratorioService: LaboratorioService,
+    private periodoService: PeriodoService
   ) {}
 
   ngOnInit(): void {
     this.cargarLaboratorios();
     this.cargarReservasHorario();
+    this.obtenerPeriodoActivo();
   }
 
+  obtenerPeriodoActivo(): void {
+    this.periodoService.getPeriodoActivo().subscribe(
+      (data) => {
+        this.periodoActivo = data;
+        console.log('Periodo activo:', data);
+      },
+      (error) => {
+        console.error('Error al cargar el periodo activo:', error);
+      }
+    );
+  }
   cargarReservasHorario(): void {
     this.horarioService.obtenerClasesReservas().subscribe(
       (data) => {

@@ -23,7 +23,7 @@ export class SidebarComponent implements OnInit {
   userRole: string | undefined;
   submenuOpen = false;
   laboratorios: Laboratorio[];
-
+  
   constructor(private usuarioService: UsuarioService, private laboratorioService: LaboratorioService) {}
 
   ngOnInit(): void {

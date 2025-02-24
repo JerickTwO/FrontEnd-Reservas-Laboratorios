@@ -20,7 +20,6 @@ import { Periodo } from 'src/app/models/periodo.model';
 export class Horario1Component implements OnInit {
   laboratorios: Laboratorio[];
   horas: string[] = [];
-  saludo = 'Hola Mundo';
   dias: DiaEnum[] = [];
   periodoActivo: Periodo | null = null;
   numeroHorario: number;

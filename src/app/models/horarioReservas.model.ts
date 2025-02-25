@@ -1,5 +1,6 @@
 import { DiaEnum } from './laboratorio.model';
 import { Laboratorio } from './laboratorio.model';
+import { Periodo } from './periodo.model';
 import { TipoEnum } from './tipoEnum.model';
 
 export interface HorarioReservas {
@@ -7,6 +8,7 @@ export interface HorarioReservas {
     nombreDocente: string;
     correoDocente: string;
     laboratorio: Laboratorio;
+    periodo: Periodo;
     nombreMateria?: string;
     motivo?: string;
     horaInicio: string;

@@ -119,22 +119,25 @@ export class ClaseComponent implements OnInit {
   }
 
   guardarClase() {
-    this.newClase.periodo = new Periodo(); // Dejar vacío para que el backend asigne el periodo activo
-
+    if (!this.newClase.periodo || !this.newClase.periodo.idPeriodo) {
+      this.newClase.periodo = new Periodo();
+    }
+  
     if (this.isEditing) {
       this.clasesService
         .editarClase(this.newClase.idClase, this.newClase)
         .subscribe(
-          () => this.cargarClases(), // Recargar las clases después de editar
+          () => this.cargarClases(),
           (error) => console.error('Error editando clase', error)
         );
     } else {
       this.clasesService.agregarClase(this.newClase).subscribe(
-        () => this.cargarClases(), // Recargar las clases después de agregar
+        () => this.cargarClases(),
         (error) => console.error('Error agregando clase', error)
       );
     }
   }
+  
 
   agregarClase(): void {
     this.clasesService.agregarClase(this.newClase).subscribe({

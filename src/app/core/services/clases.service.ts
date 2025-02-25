@@ -21,6 +21,9 @@ export class ClasesService {
       materia: { idMateria: Number(clase.materia.idMateria) },
       docente: { idDocente: Number(clase.docente.idDocente) },
       laboratorio: { idLaboratorio: Number(clase.laboratorio.idLaboratorio) },
+      periodo: clase.periodo?.idPeriodo
+        ? { idPeriodo: clase.periodo.idPeriodo }
+        : {},
       horaInicio: clase.horaInicio,
       horaFin: clase.horaFin,
       dia: clase.dia,
@@ -35,10 +38,14 @@ export class ClasesService {
       materia: { idMateria: Number(clase.materia.idMateria) },
       docente: { idDocente: Number(clase.docente.idDocente) },
       laboratorio: { idLaboratorio: Number(clase.laboratorio.idLaboratorio) },
+      periodo: clase.periodo?.idPeriodo
+        ? { idPeriodo: clase.periodo.idPeriodo }
+        : {},
       horaInicio: clase.horaInicio,
       horaFin: clase.horaFin,
       dia: clase.dia,
     };
+
     return this.http.put<Clase>(`${this.apiUrl}/${id}`, payload);
   }
 

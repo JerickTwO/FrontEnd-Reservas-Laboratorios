@@ -136,7 +136,7 @@ export class ReservaComponent implements OnInit {
       Swal.fire('Error', 'Laboratorio no encontrado.', 'error');
       return;
     }
-
+  
     if (this.nuevaReserva.cantidadParticipantes > selectedLab.capacidad) {
       Swal.fire(
         'Error',
@@ -145,17 +145,18 @@ export class ReservaComponent implements OnInit {
       );
       return;
     }
+  
     const [startHourStr, startMinStr] = this.nuevaReserva.horaInicio.split(':');
     const [endHourStr, endMinStr] = this.nuevaReserva.horaFin.split(':');
-
+  
     const startHour = parseInt(startHourStr, 10);
     const startMin = parseInt(startMinStr || '0', 10);
     const endHour = parseInt(endHourStr, 10);
     const endMin = parseInt(endMinStr || '0', 10);
-
+  
     const diffHours = endHour - startHour;
     const diffMinutes = endMin - startMin;
-
+  
     if (diffHours !== 1 || diffMinutes !== 0) {
       Swal.fire(
         'Error',
@@ -164,12 +165,32 @@ export class ReservaComponent implements OnInit {
       );
       return;
     }
-
+  
+    // Validación de Duplicidad
+    const existeReservaDuplicada = this.reservas.some(
+      (reserva) =>
+        reserva.laboratorio.idLaboratorio ===
+          this.nuevaReserva.laboratorio.idLaboratorio &&
+        reserva.dia === this.nuevaReserva.dia &&
+        reserva.horaInicio === this.nuevaReserva.horaInicio &&
+        reserva.horaFin === this.nuevaReserva.horaFin &&
+        (!this.isEditing || reserva.idReserva !== this.nuevaReserva.idReserva)
+    );
+  
+    if (existeReservaDuplicada) {
+      Swal.fire(
+        'Error',
+        'Ya existe una reserva para el laboratorio, día y horario seleccionado.',
+        'error'
+      );
+      return;
+    }
+  
     this.nuevaReserva.horaInicio = this.formatTime(
       this.nuevaReserva.horaInicio
     );
     this.nuevaReserva.horaFin = this.formatTime(this.nuevaReserva.horaFin);
-
+  
     if (this.isEditing) {
       if (!this.nuevaReserva.idReserva) {
         console.error('ID inválido para actualizar la reserva.');
@@ -179,23 +200,38 @@ export class ReservaComponent implements OnInit {
         .actualizarReserva(this.nuevaReserva.idReserva, this.nuevaReserva)
         .subscribe({
           next: (reservaActualizada) => {
-            console.log('Reserva actualizada:', reservaActualizada);
+            Swal.fire(
+              'Reserva Actualizada',
+              'La reserva se actualizó correctamente.',
+              'success'
+            );
             this.getReservas();
             this.cerrarModal();
           },
-          error: (err) => console.error('Error al actualizar la reserva:', err),
+          error: (err) =>
+            Swal.fire(
+              'Error',
+              'No se pudo actualizar la reserva.',
+              'error'
+            ),
         });
     } else {
       this.reservaService.crearReserva(this.nuevaReserva).subscribe({
         next: (reservaCreada) => {
-          console.log('Reserva creada:', reservaCreada);
+          Swal.fire(
+            'Reserva Creada',
+            'La reserva se creó correctamente.',
+            'success'
+          );
           this.getReservas();
           this.cerrarModal();
         },
-        error: (err) => console.error('Error al crear la reserva:', err),
+        error: (err) =>
+          Swal.fire('Error', 'No se pudo crear la reserva.', 'error'),
       });
     }
   }
+  
 
   cambiarEstadoPendiente(reserva: Reserva): void {
     if (reserva.idReserva === undefined || reserva.idReserva === null) {
@@ -322,7 +358,6 @@ export class ReservaComponent implements OnInit {
       cantidadParticipantes: 0,
       requerimientosTecnicos: '',
       estado: 'PENDIENTE',
-      // fechaActualizacion: new Date() // <-- Si quieres darle un valor inicial
     };
   }
 
@@ -373,7 +408,6 @@ export class ReservaComponent implements OnInit {
       reserva.motivoReserva,
     ]);
 
-    // Crear tabla
     autoTable(doc, {
       head: [['NOMBRE', 'FECHA', 'HORA', 'MOTIVO']],
       body: datosExportacion,

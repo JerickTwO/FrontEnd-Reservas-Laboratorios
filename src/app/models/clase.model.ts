@@ -8,7 +8,7 @@ export class Clase {
   materia: Materia;
   docente: Docente;
   laboratorio: Laboratorio;
-  periodo?: Periodo;
+  periodo: Periodo;
   horaInicio: string;
   horaFin: string;
   dia: DiaEnum;

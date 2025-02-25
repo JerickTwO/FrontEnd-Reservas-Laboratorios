@@ -188,7 +188,7 @@ export class ClaseComponent implements OnInit {
       materia: new Materia(),
       docente: new Docente(),
       laboratorio: new Laboratorio(), // Inicializa laboratorio aquí
-      periodo: new Periodo(), // Se deja vacío para que el backend asigne el periodo activo
+      periodo: new Periodo(),
       horaInicio: '',
       horaFin: '',
       dia: DiaEnum.LUNES, // o cualquier valor por defecto

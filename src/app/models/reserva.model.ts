@@ -1,4 +1,5 @@
-import { DiaEnum, Laboratorio } from "./laboratorio.model";
+import { DiaEnum, Laboratorio } from './laboratorio.model';
+import { Periodo } from './periodo.model';
 export class Reserva {
   idReserva: number; // Opcional en caso de creación
   nombreCompleto: string;
@@ -10,6 +11,7 @@ export class Reserva {
   dia: DiaEnum;
   horaInicio: string;
   horaFin: string;
+  periodo?: Periodo;
   motivoReserva: string;
   cantidadParticipantes: number;
   requerimientosTecnicos?: string;

@@ -1,55 +1,80 @@
-<div class="">
-  <h2 class="text-center text-[#0066CC] font-bold mb-6 text-2xl">
-    LABORATORIO 2 - Horario de Clases
-  </h2>
-
-  <div class="rounded-xlborder shadow-sm">
-    <table class="w-full border-collapse bg-white">
+<div class="mx-auto py-3 px-4">
+  <div class="flex justify-between items-center mb-4">
+    <h2
+      class="text-center text-gray-800 font-extrabold text-xl tracking-wide"
+    >
+      ({{periodoActivo?.nombrePeriodo}}) - LABORATORIO 2 
+    </h2>
+    <button
+      class="rounded-lg text-white text-sm py-2 px-3 bg-gray-800 hover:bg-gray-900"
+    >
+      <i class="bi bi-plus-circle"></i> Nueva Reserva
+    </button>
+  </div>
+  <div class="overflow-x-auto shadow-lg rounded-lg">
+    <table class="min-w-full bg-white divide-y divide-gray-200">
       <thead>
-        <tr class="bg-[#0066CC]">
-          <th class="p-3 font-bold text-white">HORAS</th>
-          <th *ngFor="let dia of dias" class="text-center font-bold text-white">
+        <tr class="bg-gray-800">
+          <th
+            class="px-6 py-3 text-center text-white text-lg font-semibold uppercase"
+          >
+            HORAS
+          </th>
+          <th
+            *ngFor="let dia of dias"
+            class="px-2 py-1 text-center text-white text-md font-semibold uppercase"
+          >
             {{ dia }}
           </th>
         </tr>
       </thead>
-      <tbody>
-        <tr
-          *ngFor="let hora of horas; let i = index"
-          [ngClass]="{ 'bg-gray-50': i % 2 === 0, 'bg-white': i % 2 !== 0 }"
-        >
-          <td class="p-3 font-bold text-center border border-gray-200">
+      <tbody class="divide-y divide-gray-200">
+        <tr *ngFor="let hora of horas">
+          <td class="px-2 py-1 text-center font-medium">
             {{ hora }}
           </td>
-          <td
-            *ngFor="let dia of dias"
-            class="p-3 text-center border border-gray-200 hover:bg-blue-50 transition-colors cursor-pointer"
-          >
+          <ng-container *ngFor="let dia of dias">
+            <ng-container *ngIf="obtenerReservaInicio(dia, hora) as reserva">
+              <td
+                [attr.rowspan]="getReservaRowspan(reserva)"
+                onclick="console.log(saludo)"
+                class="px-6 py-4 text-center align-middle border border-gray-200 hover:bg-blue-50"
+              >
+                <ng-container *ngIf="reserva.tipo === 'CLASE'; else otroTipo">
+                  <strong class="block text-blue-900 mb-1">{{
+                    reserva.nombreMateria
+                  }}</strong>
+                  <span class="block text-sm text-gray-700">{{
+                    reserva.nombreDocente
+                  }}</span>
+                </ng-container>
+                <ng-template #otroTipo>
+                  <strong class="block text-blue-900 mb-1"
+                    >Reserva Confirmada:</strong
+                  >
+                  <span class="block text-sm text-gray-700"
+                    >Nombre: {{ reserva.nombreDocente }}</span
+                  >
+                  <span class="block text-sm text-gray-700"
+                    >Correo: {{ reserva.correoDocente }}</span
+                  >
+                  <span class="block text-sm text-gray-700"
+                    >Motivo: {{ reserva.motivo }}</span
+                  >
+                </ng-template>
+              </td>
+            </ng-container>
             <ng-container
               *ngIf="
-                obtenerReservaEnHorario(dia, hora) as horarioEncontrado;
-                else disponible
+                !obtenerReservaInicio(dia, hora) &&
+                !isReservaContinuacion(dia, hora)
               "
             >
-              <div class="p-2">
-                <strong class="block text-[#0066CC] mb-1"
-                  >{{ horarioEncontrado.reserva.materia }}</strong
-                >
-                <span class="block text-sm"
-                  > {{ horarioEncontrado.reserva.nombreCompleto }}</span
-                >
-                <!-- <span class="block text-sm"
-                  >Correo: {{ horarioEncontrado.reserva.correo }}</span
-                >
-                <span class="block text-sm"
-                  >Motivo: {{ horarioEncontrado.reserva.motivoReserva }}</span
-                > -->
-              </div>
+              <td class="px-6 py-4 text-center border border-gray-200">
+                Disponible
+              </td>
             </ng-container>
-            <ng-template #disponible>
-              <span class="text-gray-500">Disponible</span>
-            </ng-template>
-          </td>
+          </ng-container>
         </tr>
       </tbody>
     </table>

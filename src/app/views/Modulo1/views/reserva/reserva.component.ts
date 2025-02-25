@@ -14,6 +14,7 @@ import { Usuario } from 'src/app/models/usuario.model';
 import Swal from 'sweetalert2';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { Periodo } from 'src/app/models/periodo.model';
 
 @Component({
   selector: 'app-reserva',
@@ -314,6 +315,7 @@ export class ReservaComponent implements OnInit {
         franjasHorario: [],
         diasHorario: [],
       },
+      periodo: new Periodo(),
       horaInicio: '',
       horaFin: '',
       motivoReserva: '',

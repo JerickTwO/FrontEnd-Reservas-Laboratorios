@@ -11,7 +11,6 @@
       <i class="bi bi-plus-circle"></i> Nueva Reserva
     </button>
   </div>
-
   <div class="overflow-x-auto shadow-lg rounded-lg">
     <table class="min-w-full bg-white divide-y divide-gray-200">
       <thead>
@@ -31,14 +30,10 @@
       </thead>
       <tbody class="divide-y divide-gray-200">
         <tr *ngFor="let hora of horas">
-          <!-- Columna de las horas -->
           <td class="px-2 py-1 text-center font-medium">
             {{ hora }}
           </td>
-
-          <!-- Para cada día -->
           <ng-container *ngFor="let dia of dias">
-            <!-- Si es el inicio de la reserva -->
             <ng-container *ngIf="obtenerReservaInicio(dia, hora) as reserva">
               <td
                 [attr.rowspan]="getReservaRowspan(reserva)"
@@ -69,8 +64,6 @@
                 </ng-template>
               </td>
             </ng-container>
-
-            <!-- Si no es el inicio ni continuación de una reserva, se muestra "Disponible" -->
             <ng-container
               *ngIf="
                 !obtenerReservaInicio(dia, hora) &&

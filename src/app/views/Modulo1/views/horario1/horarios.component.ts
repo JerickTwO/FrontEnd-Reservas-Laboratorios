@@ -50,7 +50,7 @@ export class Horario1Component implements OnInit {
   cargarReservasHorario(): void {
     this.horarioService.obtenerClasesReservas().subscribe(
       (data) => {
-        this.horariosReservas = data;
+        this.horariosReservas = data.filter((reserva: HorarioReservas) => reserva.laboratorio.idLaboratorio === 1);
         console.log('Horarios con reservas:', data);
       },
       (error) => {
@@ -75,7 +75,6 @@ export class Horario1Component implements OnInit {
   obtenerDia(dia: string): void {
     console.log('Horarios con reservas:', dia);
   }
-  // Método para obtener la reserva que inicia en el horario dado
   obtenerReservaInicio(dia: string, hora: string): any {
     return this.horariosReservas.find((reserva) => {
       const inicioBackend = reserva.horaInicio.substring(0, 5); // "07:00"

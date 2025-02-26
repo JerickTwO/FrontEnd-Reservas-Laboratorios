@@ -1,40 +1,68 @@
-<h2>Actualizar Contraseña</h2>
-<form
-  [formGroup]="actualizarContrasenaForm"
-  (ngSubmit)="actualizarContrasena()"
->
-  <input
-    type="password"
-    placeholder="Contraseña Actual"
-    formControlName="currentPassword"
-    required
-  />
-  @if (campoEsValido('currentPassword')) {
+<section class="section">
+  <div class="left"></div>
+  <div class="right">
+    <div class="recuperar-container">
+      <form
+        [formGroup]="actualizarContrasenaForm"
+        (ngSubmit)="actualizarContrasena()"
+      >
+        <h1>
+          JEFATURA DE LABORATORIOS
+          <span>DEPARTAMENTO DE CIENCIAS DE LA COMPUTACIÓN</span>
+        </h1>
 
-  <div>La contraseña actual es requerida.</div>
-  }
+        <!-- Contraseña Actual -->
+        <div class="password-container">
+          <input
+            [type]="mostrarPassword.current ? 'text' : 'password'"
+            placeholder="Contraseña Actual"
+            formControlName="currentPassword"
+            required
+          />
+          <i
+            class="password-icon bx"
+            [class.bx-show]="!mostrarPassword.current"
+            [class.bx-hide]="mostrarPassword.current"
+            (click)="togglePassword('current')"
+          ></i>
+        </div>
 
-  <input
-    type="password"
-    placeholder="Nueva Contraseña"
-    formControlName="newPassword"
-    required
-  />
-  @if(campoEsValido('newPassword')) {
-  <div>La nueva contraseña debe tener al menos 8 caracteres.</div>
-  }
+        <!-- Nueva Contraseña -->
+        <div class="password-container">
+          <input
+            [type]="mostrarPassword.new ? 'text' : 'password'"
+            placeholder="Nueva Contraseña"
+            formControlName="newPassword"
+            required
+          />
+          <i
+            class="password-icon bx"
+            [class.bx-show]="!mostrarPassword.new"
+            [class.bx-hide]="mostrarPassword.new"
+            (click)="togglePassword('new')"
+          ></i>
+        </div>
 
-  <input
-    type="password"
-    placeholder="Confirmar Contraseña"
-    formControlName="confirmPassword"
-    required
-  />
-  @if(campoEsValido('confirmPassword')) {
-  <div>Debes confirmar la contraseña.</div>
-  }
+        <!-- Confirmar Contraseña -->
+        <div class="password-container">
+          <input
+            [type]="mostrarPassword.confirm ? 'text' : 'password'"
+            placeholder="Confirmar Contraseña"
+            formControlName="confirmPassword"
+            required
+          />
+          <i
+            class="password-icon bx"
+            [class.bx-show]="!mostrarPassword.confirm"
+            [class.bx-hide]="mostrarPassword.confirm"
+            (click)="togglePassword('confirm')"
+          ></i>
+        </div>
 
-  <button type="submit" [disabled]="actualizarContrasenaForm.invalid">
-    Actualizar
-  </button>
-</form>
+        <button type="submit" [disabled]="actualizarContrasenaForm.invalid">
+          Actualizar Contraseña
+        </button>
+      </form>
+    </div>
+  </div>
+</section>

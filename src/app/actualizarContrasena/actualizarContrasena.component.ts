@@ -8,15 +8,24 @@ import Swal from 'sweetalert2';
   selector: 'app-actualizar-contrasena',
   standalone: true,
   templateUrl: './actualizarContrasena.component.html',
+  styleUrls: ['./actualizarContrasena.component.scss'],
   imports: [
     ReactiveFormsModule
   ],
 })
 export class ActualizarContrasenaComponent implements OnInit {
-
+  title: string = 'Actualizar Contraseña';
   loading = false;
   actualizarContrasenaForm: FormGroup;
+  mostrarPassword = {
+    current: false,
+    new: false,
+    confirm: false
+  };
 
+  togglePassword(campo: 'current' | 'new' | 'confirm') {
+    this.mostrarPassword[campo] = !this.mostrarPassword[campo];
+  }
   constructor(
     private fb: FormBuilder,
     private usuarioService: UsuarioService,
@@ -36,8 +45,6 @@ export class ActualizarContrasenaComponent implements OnInit {
       Swal.fire('Error', 'Por favor completa todos los campos correctamente', 'error');
       return;
     }
-
-    // Verificar si las contraseñas coinciden
     if (this.actualizarContrasenaForm.value.newPassword !== this.actualizarContrasenaForm.value.confirmPassword) {
       Swal.fire('Error', 'Las contraseñas no coinciden', 'error');
       return;

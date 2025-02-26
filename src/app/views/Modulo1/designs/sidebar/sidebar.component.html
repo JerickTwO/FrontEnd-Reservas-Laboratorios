@@ -48,7 +48,6 @@
               routerLinkActive="active-section"
               [class.active-section]="activeLink.includes(routes[1])"
             >
-
               <div class="icon-sidebar-item">
                 <i class="bx bxs-flask"></i>
               </div>
@@ -231,22 +230,6 @@
           </ul>
           } @if (userRole === "docente") {
           <ul class="nav-list">
-            <!-- <div *ngIf="usuario.role !== 'Customer'"> -->
-            <a
-              [routerLink]="routes[2]"
-              routerLinkActive="active-section"
-              [class.active-section]="activeLink.includes(routes[2])"
-            >
-              <div class="icon-sidebar-item">
-                <i class="bx bxs-calendar-check"></i>
-              </div>
-              <div class="name-sidebar-item">
-                <li>Reservas</li>
-              </div>
-            </a>
-
-            <li class="dividers">Horarios</li>
-
             <a
               [routerLink]="routes[13]"
               routerLinkActive="active-section"

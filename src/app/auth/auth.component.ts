@@ -28,11 +28,9 @@ import { UsuarioService } from '../core/services/usuario.service';
 })
 export class AuthComponent implements OnInit {
   title: string = 'Iniciar Sesión';
-  loading: boolean = false; // Para deshabilitar el botón de "Ingresar" durante la solicitud HTTP
-  errorMenssage: string = ''; // Para mostrar mensajes de error
+  loading: boolean = false;
+  errorMenssage: string = '';
   showPassword: boolean = false;
-
-  // Formulario
   loginForm: FormGroup;
   usernameControl: AbstractControl | null = null;
   password_userControl: AbstractControl | null = null;
@@ -54,7 +52,6 @@ export class AuthComponent implements OnInit {
       this.errorMenssage = ''; // Vaciar el mensaje de error cuando se detecte un cambio en el formulario
     });
 
-    // Control de formulario
     this.usernameControl = this.loginForm.get('username');
     this.password_userControl = this.loginForm.get('password_user');
   }
@@ -80,8 +77,4 @@ export class AuthComponent implements OnInit {
       }
     });
   }
-
-
-
-
 }

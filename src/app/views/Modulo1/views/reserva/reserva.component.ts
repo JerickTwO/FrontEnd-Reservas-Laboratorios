@@ -41,8 +41,10 @@ export class ReservaComponent implements OnInit {
   totalPages = 1;
   modalReserva: any;
   usuario!: Usuario;
+  reservasPeriodoActivo: Reserva[] = [];
   userRole: string | undefined;
   franjasHorario: any;
+  isLoading: boolean = false;
 
   public franjasPermitidas: { horaInicio: string; horaFin: string }[] = [];
 
@@ -65,7 +67,7 @@ export class ReservaComponent implements OnInit {
 
   ngOnInit(): void {
     this.getLaboratorios();
-    this.getReservas();
+    this.getReservasConPeriodoActivo();
     this.modalReserva = new Modal(document.getElementById('modalReserva')!, {
       backdrop: 'static',
     });
@@ -105,6 +107,25 @@ export class ReservaComponent implements OnInit {
     });
   }
 
+  getReservasConPeriodoActivo(): void {
+    this.reservaService.obtenerReservasPeriodo().subscribe({
+      next: (data) => {
+        data.forEach((reserva) => {
+          if (
+            reserva.fechaActualizacion &&
+            typeof reserva.fechaActualizacion === 'string'
+          ) {
+            reserva.fechaActualizacion = new Date(reserva.fechaActualizacion);
+          }
+        });
+        
+        this.reservasPeriodoActivo = data;
+        this.totalPages = Math.ceil(this.reservas.length / this.itemsPerPage);
+        this.actualizarPaginacion();
+      },
+      error: (err) => console.error('Error al cargar las reservas:', err),
+    });
+  }
   getLaboratorios(): void {
     this.laboratorioService.getLaboratorios().subscribe({
       next: (data) => {
@@ -129,11 +150,18 @@ export class ReservaComponent implements OnInit {
   }
 
   guardarReserva(): void {
+    // Si ya está cargando, no permitir múltiples clics
+    if (this.isLoading) return;
+  
+    this.isLoading = true;
+  
     const selectedLab = this.laboratorios.find(
       (lab) => lab.idLaboratorio == this.nuevaReserva.laboratorio.idLaboratorio
     );
+  
     if (selectedLab == null) {
       Swal.fire('Error', 'Laboratorio no encontrado.', 'error');
+      this.isLoading = false;
       return;
     }
   
@@ -143,6 +171,7 @@ export class ReservaComponent implements OnInit {
         'La cantidad de participantes excede la capacidad del laboratorio.',
         'error'
       );
+      this.isLoading = false;
       return;
     }
   
@@ -163,10 +192,10 @@ export class ReservaComponent implements OnInit {
         'La reserva debe tener exactamente 1 hora de diferencia (p.ej. 07:00-08:00).',
         'error'
       );
+      this.isLoading = false;
       return;
     }
   
-    // Validación de Duplicidad
     const existeReservaDuplicada = this.reservas.some(
       (reserva) =>
         reserva.laboratorio.idLaboratorio ===
@@ -183,6 +212,7 @@ export class ReservaComponent implements OnInit {
         'Ya existe una reserva para el laboratorio, día y horario seleccionado.',
         'error'
       );
+      this.isLoading = false;
       return;
     }
   
@@ -194,6 +224,7 @@ export class ReservaComponent implements OnInit {
     if (this.isEditing) {
       if (!this.nuevaReserva.idReserva) {
         console.error('ID inválido para actualizar la reserva.');
+        this.isLoading = false;
         return;
       }
       this.reservaService
@@ -208,12 +239,17 @@ export class ReservaComponent implements OnInit {
             this.getReservas();
             this.cerrarModal();
           },
-          error: (err) =>
+          error: (err) => {
             Swal.fire(
               'Error',
               'No se pudo actualizar la reserva.',
               'error'
-            ),
+            );
+            console.error('Error al actualizar la reserva:', err);
+          },
+          complete: () => {
+            this.isLoading = false;
+          }
         });
     } else {
       this.reservaService.crearReserva(this.nuevaReserva).subscribe({
@@ -226,8 +262,13 @@ export class ReservaComponent implements OnInit {
           this.getReservas();
           this.cerrarModal();
         },
-        error: (err) =>
-          Swal.fire('Error', 'No se pudo crear la reserva.', 'error'),
+        error: (err) => {
+          Swal.fire('Error', 'No se pudo crear la reserva.', 'error');
+          console.error('Error al crear la reserva:', err);
+        },
+        complete: () => {
+          this.isLoading = false;
+        }
       });
     }
   }

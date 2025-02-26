@@ -7,7 +7,7 @@
       >
         <i class="bi bi-plus-circle"></i> Nueva Reserva
       </button>
-      @if (userRole === "admin" && reservas.length > 0) {
+      @if (userRole === "admin" && reservasPeriodoActivo.length > 0) {
       <button class="btn btn-outline-secondary btn-sm" (click)="exportarPDF()">
         <i class="bi bi-file-earmark-pdf"></i> Exportar a PDF
       </button>
@@ -15,7 +15,7 @@
     </div>
 
     <p class="text-muted mb-0">
-      Total: {{ reservas.length }} reservas registradas.
+      Total: {{ reservasPeriodoActivo.length }} reservas registradas.
     </p>
   </div>
   <div class="w-full overflow-hidden rounded-lg shadow-lg bg-white">
@@ -34,13 +34,13 @@
           </tr>
         </thead>
         <tbody class="divide-y divide-gray-200">
-          @if (reservas.length === 0) {
+          @if (reservasPeriodoActivo.length === 0) {
           <tr>
             <td colspan="8" class="text-center py-4 text-gray-500">
               No hay reservas disponibles.
             </td>
           </tr>
-          } @for (reserva of reservas; track $index) {
+          } @for (reserva of reservasPeriodoActivo; track $index) {
           <tr class="hover:bg-gray-100 transition">
             <td class="px-2 py-4 font-medium">{{ reserva.nombreCompleto }}</td>
             <td class="px-2 py-4">{{ reserva.correo }}</td>
@@ -264,15 +264,18 @@
               </div>
             </div>
             <div class="text-end">
-              <button type="submit" class="btn btn-dark mr-2">
-                {{ isEditing ? "Guardar Cambios" : "Crear Reserva" }}
-              </button>
               <button
-                type="button"
-                class="btn btn-warning"
-                (click)="cerrarModal()"
+                type="submit"
+                class="btn btn-dark mr-2"
+                [disabled]="isLoading"
               >
-                Cancelar
+                <span
+                  *ngIf="isLoading"
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                {{ isEditing ? "Guardar Cambios" : "Crear Reserva" }}
               </button>
             </div>
           </form>

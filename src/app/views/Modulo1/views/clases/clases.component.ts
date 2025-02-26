@@ -12,12 +12,14 @@ import { ClasesService } from 'src/app/core/services/clases.service';
 import { PeriodoService } from 'src/app/core/services/periodo.service';
 import { DiaEnum, Laboratorio } from 'src/app/models/laboratorio.model';
 import { LaboratorioService } from 'src/app/core/services/laboratorio.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-materia',
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './clases.component.html',
+  styleUrls: ['./clases.component.scss'],
 })
 export class ClaseComponent implements OnInit {
   clases: Clase[] = [];
@@ -52,16 +54,28 @@ export class ClaseComponent implements OnInit {
     private materiaService: MateriaService,
     private docenteService: DocenteService,
     private laboratorioService: LaboratorioService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
-    this.cargarDatosIniciales();
-
     const modalElement = document.getElementById('claseModal');
     if (modalElement) {
-      this.modalClase = new Modal(modalElement, { backdrop: 'static' });
+      this.modalClase = new Modal(modalElement, {
+        backdrop: true,
+        keyboard: true
+      });
+
+      // Cuando el modal se termine de cerrar (hidden.bs.modal),
+      // resetea la info.
+      modalElement.addEventListener('hidden.bs.modal', () => {
+        this.isEditing = false;
+        this.newClase = this.resetNuevaClaseData();
+      });
     }
+
+    this.cargarDatosIniciales();
   }
+
+
 
   cargarDatosIniciales(): void {
     this.isLoading = true;
@@ -75,7 +89,6 @@ export class ClaseComponent implements OnInit {
     this.laboratorioService.getLaboratorios().subscribe({
       next: (data) => {
         this.laboratorios = data;
-        console.log('Laboratorios:', data);
       },
       error: (err) => console.error('Error al cargar laboratorios:', err),
     });
@@ -109,8 +122,7 @@ export class ClaseComponent implements OnInit {
   }
 
   openAddClaseModal() {
-    this.isEditing = false;
-    this.newClase = new Clase();
+    this.modalClase?.show()
   }
 
   openEditClaseModal(clase: Clase) {
@@ -122,28 +134,43 @@ export class ClaseComponent implements OnInit {
     if (!this.newClase.periodo || !this.newClase.periodo.idPeriodo) {
       this.newClase.periodo = new Periodo();
     }
-  
+
     if (this.isEditing) {
       this.clasesService
         .editarClase(this.newClase.idClase, this.newClase)
         .subscribe(
-          () => this.cargarClases(),
+          () => {
+            Swal.fire(
+              'Clase Creada',
+              'La clase se actualizó correctamente',
+              'success'
+            )
+            this.cargarClases();
+            this.cerrarModal();
+          },
           (error) => console.error('Error editando clase', error)
         );
     } else {
       this.clasesService.agregarClase(this.newClase).subscribe(
-        () => this.cargarClases(),
+        () => {
+          Swal.fire(
+            'Clase Creada',
+            'La clase se creó correctamente',
+            'success'
+          ); this.cargarClases();
+          this.cerrarModal()
+        },
         (error) => console.error('Error agregando clase', error)
       );
     }
   }
-  
+
 
   agregarClase(): void {
     this.clasesService.agregarClase(this.newClase).subscribe({
       next: () => {
         this.cerrarModal();
-        this.recargarPagina(); // <-- Nueva función para recargar la página
+        this.recargarPagina();
       },
       error: (err) => console.error('Error al agregar clase:', err),
     });
@@ -173,12 +200,7 @@ export class ClaseComponent implements OnInit {
   }
 
   cerrarModal(): void {
-    if (this.modalClase) {
-      this.modalClase.hide();
-      this.modalClase = null;
-    }
-    this.isEditing = false;
-    this.newClase = this.resetNuevaClaseData();
+    this.modalClase?.hide();
   }
 
   trackById(index: number, item: Clase): number {
@@ -199,7 +221,7 @@ export class ClaseComponent implements OnInit {
       fechaActualizacion: new Date(),
     };
   }
-  
+
 
   private validarClase(clase: Clase): boolean {
     return clase.materia.idMateria > 0 && clase.docente.idDocente > 0;

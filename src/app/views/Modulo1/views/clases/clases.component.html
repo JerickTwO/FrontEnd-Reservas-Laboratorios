@@ -3,8 +3,6 @@
     <button
       class="rounded-lg text-white text-sm py-2 px-3 bg-gray-800 hover:bg-gray-900"
       (click)="openAddClaseModal()"
-      data-bs-toggle="modal"
-      data-bs-target="#claseModal"
     >
       <i class="bi bi-plus-circle"></i> Nueva Clase
     </button>
@@ -79,7 +77,7 @@
   >
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header bg-primary text-white">
+        <div class="modal-header bg-gray-800 text-white">
           <h5 class="modal-title" id="claseModalLabel">
             {{ isEditing ? "Editar Clase" : "Agregar Clase" }}
           </h5>
@@ -93,151 +91,157 @@
         <div class="modal-body">
           <form (ngSubmit)="guardarClase()">
             <!-- Selector de Materia -->
-            <div class="mb-3">
-              <label for="materia" class="form-label">Materia:</label>
-              <select
-                id="materia"
-                [(ngModel)]="newClase.materia.idMateria"
-                name="materia"
-                class="form-select"
-                required
-              >
-                <option [value]="null" disabled>Selecciona una materia</option>
-                <option
-                  *ngFor="let materia of materias"
-                  [value]="materia.idMateria"
+            <div class="grid grid-cols-2 gap-4">
+              <div class="mb-3">
+                <label for="materia" class="form-label">Materia:</label>
+                <select
+                  id="materia"
+                  [(ngModel)]="newClase.materia.idMateria"
+                  name="materia"
+                  class="form-select"
+                  required
                 >
-                  {{ materia.nombreMateria }}
-                </option>
-              </select>
-              <div *ngIf="!newClase.materia.idMateria" class="text-danger">
-                Selecciona una materia válida.
+                  <option [value]="null" disabled>
+                    Selecciona una materia
+                  </option>
+                  <option
+                    *ngFor="let materia of materias"
+                    [value]="materia.idMateria"
+                  >
+                    {{ materia.nombreMateria }}
+                  </option>
+                </select>
+                <div *ngIf="!newClase.materia.idMateria" class="text-danger">
+                  Selecciona una materia válida.
+                </div>
+              </div>
+
+              <!-- Selector de Docente -->
+              <div class="mb-3">
+                <label for="docente" class="form-label">Docente:</label>
+                <select
+                  id="docente"
+                  [(ngModel)]="newClase.docente.idDocente"
+                  name="docente"
+                  class="form-select"
+                  required
+                >
+                  <option [value]="null" disabled>Selecciona un docente</option>
+                  <option
+                    *ngFor="let docente of docentes"
+                    [value]="docente.idDocente"
+                  >
+                    {{ docente.nombreDocente }} {{ docente.apellidoDocente }}
+                  </option>
+                </select>
+                <div *ngIf="!newClase.docente.idDocente" class="text-danger">
+                  Selecciona un docente válido.
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="dia" class="form-label">Día</label>
+                <select
+                  [(ngModel)]="newClase.dia"
+                  name="dia"
+                  id="dia"
+                  class="form-select"
+                  required
+                >
+                  <option value="" disabled selected>Seleccione el día</option>
+                  <option *ngFor="let dia of dias" [ngValue]="dia">
+                    {{ dia }}
+                  </option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="laboratorio" class="form-label">laboratorio:</label>
+                <select
+                  id="laboratorio"
+                  [(ngModel)]="newClase.laboratorio.idLaboratorio"
+                  name="laboratorio"
+                  class="form-select"
+                  required
+                >
+                  <option [value]="null" disabled>
+                    Selecciona un laboratorio
+                  </option>
+                  <option
+                    *ngFor="let laboratorio of laboratorios"
+                    [value]="laboratorio.idLaboratorio"
+                  >
+                    {{ laboratorio.nombreLaboratorio }}
+                  </option>
+                </select>
+                <div
+                  *ngIf="!newClase.laboratorio.idLaboratorio"
+                  class="text-danger"
+                >
+                  Selecciona un laboratorio válido.
+                </div>
+              </div>
+              <!-- Selector de Hora de Inicio -->
+              <div class="mb-3">
+                <label for="horaInicio" class="form-label"
+                  >Hora de Inicio</label
+                >
+                <select
+                  [(ngModel)]="newClase.horaInicio"
+                  name="newClase.horaInicio"
+                  id="horaInicio"
+                  class="form-select"
+                  required
+                >
+                  <option value="" disabled selected>
+                    Seleccione la hora de inicio
+                  </option>
+                  <option
+                    *ngFor="let franja of franjasPermitidas"
+                    [value]="franja.horaInicio"
+                  >
+                    {{ franja.horaInicio }}
+                  </option>
+                </select>
+              </div>
+              <div>
+                <label for="horaFin" class="form-label">Hora de Fin</label>
+                <select
+                  [(ngModel)]="newClase.horaFin"
+                  name="horaFin"
+                  id="horaFin"
+                  class="form-select"
+                  required
+                >
+                  <option value="" disabled selected>
+                    Seleccione la hora de fin
+                  </option>
+                  <option
+                    *ngFor="let franja of franjasPermitidas"
+                    [value]="franja.horaFin"
+                  >
+                    {{ franja.horaFin }}
+                  </option>
+                </select>
               </div>
             </div>
 
-            <!-- Selector de Docente -->
-            <div class="mb-3">
-              <label for="docente" class="form-label">Docente:</label>
-              <select
-                id="docente"
-                [(ngModel)]="newClase.docente.idDocente"
-                name="docente"
-                class="form-select"
-                required
+            <div class="text-end">
+              <button
+                type="submit"
+                class="btn btn-dark mr-2"
+                [disabled]="
+                  !newClase.materia.idMateria || !newClase.docente.idDocente
+                "
               >
-                <option [value]="null" disabled>Selecciona un docente</option>
-                <option
-                  *ngFor="let docente of docentes"
-                  [value]="docente.idDocente"
-                >
-                  {{ docente.nombreDocente }} {{ docente.apellidoDocente }}
-                </option>
-              </select>
-              <div *ngIf="!newClase.docente.idDocente" class="text-danger">
-                Selecciona un docente válido.
-              </div>
+                {{ isEditing ? "Guardar Cambios" : "Crear Clase" }}
+              </button>
+              <button
+                type="button"
+                class="btn btn-warning"
+                data-bs-dismiss="modal"
+              >
+                Cancelar
+              </button>
             </div>
-            <div class="mb-1">
-              <label for="dia" class="form-label">Día</label>
-              <select
-                [(ngModel)]="newClase.dia"
-                name="dia"
-                id="dia"
-                class="form-select"
-                required
-              >
-                <option value="" disabled selected>Seleccione el día</option>
-                <option *ngFor="let dia of dias" [ngValue]="dia">
-                  {{ dia }}
-                </option>
-              </select>
-            </div>
-            <div class="mb-3">
-              <label for="laboratorio" class="form-label">laboratorio:</label>
-              <select
-                id="laboratorio"
-                [(ngModel)]="newClase.laboratorio.idLaboratorio"
-                name="laboratorio"
-                class="form-select"
-                required
-              >
-                <option [value]="null" disabled>
-                  Selecciona un laboratorio
-                </option>
-                <option
-                  *ngFor="let laboratorio of laboratorios"
-                  [value]="laboratorio.idLaboratorio"
-                >
-                  {{ laboratorio.nombreLaboratorio }}
-                </option>
-              </select>
-              <div
-                *ngIf="!newClase.laboratorio.idLaboratorio"
-                class="text-danger"
-              >
-                Selecciona un laboratorio válido.
-              </div>
-            </div>
-            <!-- Selector de Hora de Inicio -->
-            <div class="mb-3">
-              <label for="horaInicio" class="form-label">Hora de Inicio</label>
-              <select
-                [(ngModel)]="newClase.horaInicio"
-                name="newClase.horaInicio"
-                id="horaInicio"
-                class="form-select"
-                required
-              >
-                <option value="" disabled selected>
-                  Seleccione la hora de inicio
-                </option>
-                <option
-                  *ngFor="let franja of franjasPermitidas"
-                  [value]="franja.horaInicio"
-                >
-                  {{ franja.horaInicio }}
-                </option>
-              </select>
-            </div>
-            <div>
-              <label for="horaFin" class="form-label">Hora de Fin</label>
-              <select
-                [(ngModel)]="newClase.horaFin"
-                name="horaFin"
-                id="horaFin"
-                class="form-select"
-                required
-              >
-                <option value="" disabled selected>
-                  Seleccione la hora de fin
-                </option>
-                <option
-                  *ngFor="let franja of franjasPermitidas"
-                  [value]="franja.horaFin"
-                >
-                  {{ franja.horaFin }}
-                </option>
-              </select>
-            </div>
-
-            <!-- Botón de guardar -->
-            <button
-              type="submit"
-              class="btn btn-primary w-100"
-              [disabled]="
-                !newClase.materia.idMateria || !newClase.docente.idDocente
-              "
-            >
-              <i class="bi bi-save"></i>
-              {{ isEditing ? "Guardar Cambios" : "Agregar Clase" }}
-            </button>
-            <button
-              type="button"
-              class="btn btn-warning w-100 mt-2"
-              data-bs-dismiss="modal"
-            >
-              Cancelar
-            </button>
           </form>
         </div>
       </div>

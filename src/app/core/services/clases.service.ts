@@ -16,6 +16,9 @@ export class ClasesService {
     return this.http.get<Clase[]>(this.apiUrl);
   }
 
+  obtenerClasesPeriodo(): Observable<Clase[]> {
+    return this.http.get<Clase[]>(`${this.apiUrl}/periodo-activo`);
+  }
   agregarClase(clase: Clase): Observable<Clase> {
     const payload = {
       materia: { idMateria: Number(clase.materia.idMateria) },

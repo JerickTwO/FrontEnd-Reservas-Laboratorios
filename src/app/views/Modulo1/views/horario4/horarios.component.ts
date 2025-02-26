@@ -1,445 +1,142 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, ValueSansProvider } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HorarioService } from 'src/app/core/services/horario.service';
 import { LaboratorioService } from 'src/app/core/services/laboratorio.service';
-import { Horario } from 'src/app/models/horario.model';
-import { DiaEnum, Laboratorio } from 'src/app/models/laboratorio.model';
+import { PeriodoService } from 'src/app/core/services/periodo.service';
+import { HorarioReservas } from 'src/app/models/horarioReservas.model';
+import { Laboratorio, DiaEnum } from 'src/app/models/laboratorio.model';
+import { Periodo } from 'src/app/models/periodo.model';
+import { ReservaService } from 'src/app/core/services/reserva.service';
+import { Modal } from 'bootstrap';
+import Swal from 'sweetalert2';
+import { Reserva } from 'src/app/models/reserva.model';
+import { UsuarioService } from 'src/app/core/services/usuario.service';
 
 @Component({
   selector: 'app-horarios',
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './horarios.component.html',
-  styleUrl: './horarios.component.scss'
+  styleUrl: '../horario1/horarios.component.scss',
 })
 export class Horario4Component implements OnInit {
   laboratorios: Laboratorio[];
   horas: string[] = [];
   dias: DiaEnum[] = [];
-  horarios: Horario[] = [];
-  constructor(private horarioService: HorarioService, private laboratorioService: LaboratorioService) { }
+  periodoActivo: Periodo | null = null;
+  numeroHorario: number;
+  nuevaReserva: Reserva = this.resetNuevaReservaData();
+  isEditing: boolean = false;
+  franjasHorario: any;
+  modalReserva: any;
+  numeroLaboratorio: number = 4;
+  horariosReservas: HorarioReservas[] = [];
+  userRole: string | undefined;
+  public isSaving: boolean = false;
+
+  public franjasPermitidas: { horaInicio: string; horaFin: string }[] = [];
+  constructor(
+    private horarioService: HorarioService,
+    private periodoService: PeriodoService,
+    private reservaService: ReservaService,
+    private laboratorioService: LaboratorioService,
+    private usuarioService: UsuarioService
+  ) { }
 
   ngOnInit(): void {
-    this.cargarHorarios();
-    this.cargarLaboratorios();
+    this.cargarReservasHorario();
+    this.obtenerPeriodoActivo();
+    this.getLaboratorios();
+    this.modalReserva = new Modal(document.getElementById(`modalReserva${this.numeroLaboratorio}`)!, {
+      backdrop: 'static',
+    });
+
+    document
+      .getElementById(`modalReserva${this.numeroLaboratorio}`)
+      ?.addEventListener('hidden.bs.modal', () => {
+        this.cerrarModal();
+      });
+    this.usuarioService.usuario$.subscribe((usuario) => {
+      if (usuario) {
+        this.userRole = usuario.rol.nombre;
+      }
+    });
   }
 
-  cargarHorarios(): void {
-    const horarioEstatico = [
-      // LUNES
-      {
-        idHorario: 1,
-        reserva: {
-          idReserva: 1,
-          materia: "Sistemas de Base de Datos",
-          nombreCompleto: "Paulo Galarza",
-          correo: "paulo.galarza@docente.com",
-          telefono: "0987654321",
-          laboratorio: {
-            idLaboratorio: 4,
-            nombreLaboratorio: "LAB-04",
-            ubicacion: "BLOQUE D",
-            capacidad: 20,
-            franjasHorario: [
-              "07:00-09:00",
-              "09:00-11:00",
-              "11:00-13:00",
-              "13:00-15:00"
-            ],
-            diasHorario: ["LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES"]
-          },
-          horaInicio: "07:00:00",
-          horaFin: "09:00:00",
-          dia: DiaEnum.LUNES,
-          motivoReserva: "CLASES",
-          cantidadParticipantes: 20,
-          estado: "APROBADA",
-          ocupacionLaboral: ''
-
-        }
-      },
-      {
-        idHorario: 2,
-        reserva: {
-          idReserva: 2,
-          materia: "Programacion Orientada a Objetos",
-          nombreCompleto: "Hector Revelo",
-          correo: "hector.revelo@docente.com",
-          telefono: "0987654321",
-          laboratorio: {
-            idLaboratorio: 4,
-            nombreLaboratorio: "LAB-04",
-            ubicacion: "BLOQUE D",
-            capacidad: 20,
-            franjasHorario: [
-              "07:00-09:00",
-              "09:00-11:00",
-              "11:00-13:00",
-              "13:00-15:00"
-            ],
-            diasHorario: ["LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES"]
-          },
-          horaInicio: "09:00:00",
-          horaFin: "11:00:00",
-          dia: DiaEnum.LUNES,
-          motivoReserva: "CLASES",
-          cantidadParticipantes: 20,
-          estado: "APROBADA",
-          ocupacionLaboral: ''
-
-        }
-      },
-      {
-        idHorario: 3,
-        reserva: {
-          idReserva: 3,
-          materia: "Aplicaciones de Sistemas Operativos",
-          nombreCompleto: "Luis Castillo",
-          correo: "luis.castillo@docente.com",
-          telefono: "0987654321",
-          laboratorio: {
-            idLaboratorio: 4,
-            nombreLaboratorio: "LAB-04",
-            ubicacion: "BLOQUE D",
-            capacidad: 20,
-            franjasHorario: [
-              "07:00-09:00",
-              "09:00-11:00",
-              "11:00-13:00",
-              "13:00-15:00"
-            ],
-            diasHorario: ["LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES"]
-          },
-          horaInicio: "11:00:00",
-          horaFin: "13:00:00",
-          dia: DiaEnum.LUNES,
-          motivoReserva: "CLASES",
-          cantidadParticipantes: 20,
-          estado: "APROBADA",
-          ocupacionLaboral: ''
-
-        }
-      },
-
-      // MARTES
-      {
-        idHorario: 4,
-        reserva: {
-          idReserva: 4,
-          materia: "Interfaces y Multimedia",
-          nombreCompleto: "Luis Ortiz",
-          correo: "luis.ortiz@docente.com",
-          telefono: "0987654321",
-          laboratorio: {
-            idLaboratorio: 4,
-            nombreLaboratorio: "LAB-04",
-            ubicacion: "BLOQUE D",
-            capacidad: 20,
-            franjasHorario: [
-              "07:00-09:00",
-              "09:00-11:00",
-              "11:00-13:00",
-              "13:00-15:00"
-            ],
-            diasHorario: ["LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES"]
-          },
-          horaInicio: "09:00:00",
-          horaFin: "11:00:00",
-          dia: DiaEnum.MARTES,
-          motivoReserva: "CLASES",
-          cantidadParticipantes: 20,
-          estado: "APROBADA",
-          ocupacionLaboral: ''
-
-        }
-      },
-      {
-        idHorario: 5,
-        reserva: {
-          idReserva: 5,
-          materia: "Modelados Discretos",
-          nombreCompleto: "Pablo Puente",
-          correo: "pablo.puente@docente.com",
-          telefono: "0987654321",
-          laboratorio: {
-            idLaboratorio: 4,
-            nombreLaboratorio: "LAB-04",
-            ubicacion: "BLOQUE D",
-            capacidad: 20,
-            franjasHorario: [
-              "07:00-09:00",
-              "09:00-11:00",
-              "11:00-13:00",
-              "13:00-15:00"
-            ],
-            diasHorario: ["LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES"]
-          },
-          horaInicio: "11:00:00",
-          horaFin: "13:00:00",
-          dia: DiaEnum.MARTES,
-          motivoReserva: "CLASES",
-          cantidadParticipantes: 20,
-          estado: "APROBADA",
-          ocupacionLaboral: ''
-
-        }
-      },
-
-      // MIÉRCOLES
-      {
-        idHorario: 6,
-        reserva: {
-          idReserva: 6,
-          materia: "Sistemas de Base de Datos",
-          nombreCompleto: "Paulo Galarza",
-          correo: "paulo.galarza@docente.com",
-          telefono: "0987654321",
-          laboratorio: {
-            idLaboratorio: 4,
-            nombreLaboratorio: "LAB-04",
-            ubicacion: "BLOQUE D",
-            capacidad: 20,
-            franjasHorario: [
-              "07:00-09:00",
-              "09:00-11:00",
-              "11:00-13:00",
-              "13:00-15:00"
-            ],
-            diasHorario: ["LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES"]
-          },
-          horaInicio: "07:00:00",
-          horaFin: "09:00:00",
-          dia: DiaEnum.MIERCOLES,
-          motivoReserva: "CLASES",
-          cantidadParticipantes: 20,
-          estado: "APROBADA",
-          ocupacionLaboral: ''
-
-        }
-      },
-      {
-        idHorario: 8,
-        reserva: {
-          idReserva: 8,
-          materia: "Internetworking",
-          nombreCompleto: "Javier Cevallos",
-          correo: "javier.cevallos@docente.com",
-          telefono: "0987654321",
-          laboratorio: {
-            idLaboratorio: 4,
-            nombreLaboratorio: "LAB-04",
-            ubicacion: "BLOQUE D",
-            capacidad: 20,
-            franjasHorario: [
-              "07:00-09:00",
-              "09:00-11:00",
-              "11:00-13:00",
-              "13:00-15:00"
-            ],
-            diasHorario: ["LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES"]
-          },
-          horaInicio: "09:00:00",
-          horaFin: "11:00:00",
-          dia: DiaEnum.MIERCOLES,
-          motivoReserva: "CLASES",
-          cantidadParticipantes: 20,
-          estado: "APROBADA",
-          ocupacionLaboral: ''
-
-        }
-      },
-      {
-        idHorario: 9,
-        reserva: {
-          idReserva: 9,
-          materia: "Modelados Discretos",
-          nombreCompleto: "Pablo Puente",
-          correo: "pablo.puente@docente.com",
-          telefono: "0987654321",
-          laboratorio: {
-            idLaboratorio: 4,
-            nombreLaboratorio: "LAB-04",
-            ubicacion: "BLOQUE D",
-            capacidad: 20,
-            franjasHorario: [
-              "07:00-09:00",
-              "09:00-11:00",
-              "11:00-13:00",
-              "13:00-15:00"
-            ],
-            diasHorario: ["LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES"]
-          },
-          horaInicio: "11:00:00",
-          horaFin: "13:00:00",
-          dia: DiaEnum.MIERCOLES,
-          motivoReserva: "CLASES",
-          cantidadParticipantes: 20,
-          estado: "APROBADA",
-          ocupacionLaboral: ''
-
-        }
-      },
-
-      // JUEVES
-      {
-        idHorario: 10,
-        reserva: {
-          idReserva: 10,
-          materia: "Programacion Orientada a Objetos",
-          nombreCompleto: "Hector Revelo",
-          correo: "hector.revelo@docente.com",
-          telefono: "0987654321",
-          laboratorio: {
-            idLaboratorio: 4,
-            nombreLaboratorio: "LAB-04",
-            ubicacion: "BLOQUE D",
-            capacidad: 20,
-            franjasHorario: [
-              "07:00-09:00",
-              "09:00-11:00",
-              "11:00-13:00",
-              "13:00-15:00"
-            ],
-            diasHorario: ["LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES"]
-          },
-          horaInicio: "11:00:00",
-          horaFin: "13:00:00",
-          dia: DiaEnum.JUEVES,
-          motivoReserva: "CLASES",
-          cantidadParticipantes: 20,
-          estado: "APROBADA",
-          ocupacionLaboral: ''
-
-        }
-      },
-
-      // VIERNES
-      {
-        idHorario: 11,
-        reserva: {
-          idReserva: 11,
-          materia: "Aplicaciones de Sistemas Operativos",
-          nombreCompleto: "Luis Castillo",
-          correo: "luis.castillo@docente.com",
-          telefono: "0987654321",
-          laboratorio: {
-            idLaboratorio: 4,
-            nombreLaboratorio: "LAB-04",
-            ubicacion: "BLOQUE D",
-            capacidad: 20,
-            franjasHorario: [
-              "07:00-09:00",
-              "09:00-11:00",
-              "11:00-13:00",
-              "13:00-15:00"
-            ],
-            diasHorario: ["LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES"]
-          },
-          horaInicio: "07:00:00",
-          horaFin: "09:00:00",
-          dia: DiaEnum.VIERNES,
-          motivoReserva: "CLASES",
-          cantidadParticipantes: 20,
-          estado: "APROBADA",
-          ocupacionLaboral: ''
-
-        }
-      },
-      {
-        idHorario: 12,
-        reserva: {
-          idReserva: 12,
-          materia: "Aplicaciones Distribuidas",
-          nombreCompleto: "Veronica Martinez",
-          correo: "veronica.martinez@docente.com",
-          telefono: "0987654321",
-          laboratorio: {
-            idLaboratorio: 4,
-            nombreLaboratorio: "LAB-04",
-            ubicacion: "BLOQUE D",
-            capacidad: 20,
-            franjasHorario: [
-              "07:00-09:00",
-              "09:00-11:00",
-              "11:00-13:00",
-              "13:00-15:00"
-            ],
-            diasHorario: ["LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES"]
-          },
-          horaInicio: "09:00:00",
-          horaFin: "11:00:00",
-          dia: DiaEnum.VIERNES,
-          motivoReserva: "CLASES",
-          cantidadParticipantes: 20,
-          estado: "APROBADA",
-          ocupacionLaboral: ''
-        }
-      },
-      {
-        idHorario: 13,
-        reserva: {
-          idReserva: 13,
-          materia: "Programacion Orientada a Objetos",
-          nombreCompleto: "Hector Revelo",
-          correo: "hector.revelo@docente.com",
-          telefono: "0987654321",
-          laboratorio: {
-            idLaboratorio: 4,
-            nombreLaboratorio: "LAB-04",
-            ubicacion: "BLOQUE D",
-            capacidad: 20,
-            franjasHorario: [
-              "07:00-09:00",
-              "09:00-11:00",
-              "11:00-13:00",
-              "13:00-15:00"
-            ],
-            diasHorario: ["LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES"]
-          },
-          horaInicio: "11:00:00",
-          horaFin: "13:00:00",
-          dia: DiaEnum.VIERNES,
-          motivoReserva: "CLASES",
-          cantidadParticipantes: 20,
-          estado: "APROBADA",
-          ocupacionLaboral: ''
-        }
-      }
-    ];
-    this.horarioService.obtenerHorariosConReservaAprobada().subscribe(
-      (data) => {
-        this.horarios = data.filter(horario => horario?.reserva?.laboratorio.idLaboratorio === 1);
-        console.log('Horarios con reservas aprobadas:', this.horarios);
-      },
-      (error) => {
-        console.error('Error al cargar los horarios:', error);
-      }
-    );
-  }
-
-  cargarLaboratorios(): void {
-    this.laboratorioService.getLaboratorios().subscribe(
-      (data) => {
+  getLaboratorios(): void {
+    this.laboratorioService.getLaboratorios().subscribe({
+      next: (data) => {
         this.laboratorios = data;
-        this.horas = this.laboratorios[0].franjasHorario;
-        this.dias =        this.dias = Object.keys(DiaEnum).filter(key => isNaN(Number(key))).map(key => DiaEnum[key as keyof typeof DiaEnum]);
 
+        if (this.laboratorios.length > 0) {
+          this.franjasPermitidas = this.laboratorios[0].franjasHorario.map(
+            (franja: string) => {
+              const [horaInicio, horaFin] = franja.split('-');
+              return { horaInicio, horaFin };
+            }
+          );
+
+          this.horas = this.laboratorios[0].franjasHorario;
+          this.dias = Object.keys(DiaEnum)
+            .filter((key) => isNaN(Number(key)))
+            .map((key) => DiaEnum[key as keyof typeof DiaEnum]);
+        }
+      },
+      error: (err) => console.error('Error al cargar los laboratorios:', err),
+    });
+  }
+  obtenerPeriodoActivo(): void {
+    this.periodoService.getPeriodoActivo().subscribe(
+      (data) => {
+        this.periodoActivo = data;
       },
       (error) => {
-        console.error('Error al cargar los laboratorios:', error);
+        console.error('Error al cargar el periodo activo:', error);
+      }
+    );
+  }
+  cargarReservasHorario(): void {
+    this.horarioService.obtenerClasesReservas().subscribe(
+      (data) => {
+        this.horariosReservas = data.filter((reserva: HorarioReservas) => reserva.laboratorio.idLaboratorio === this.numeroLaboratorio);
+      },
+      (error) => {
+        console.error('Error al cargar los horarios con reservas:', error);
       }
     );
   }
 
-  obtenerReservaEnHorario(dia: string, hora: string): any {
-    // "hora" viene en formato "HH:mm-HH:mm" (p. ej. "07:00-09:00").
+  obtenerReservaInicio(dia: string, hora: string): any {
+    return this.horariosReservas.find((reserva) => {
+      const inicioBackend = reserva.horaInicio.substring(0, 5);
+      const diaBackend = (reserva.dia || '').toUpperCase();
+      return diaBackend === dia && inicioBackend === hora.substring(0, 5);
+    });
+  }
+  isReservaContinuacion(dia: string, hora: string): boolean {
+    return this.horariosReservas.some((reserva) => {
+      const diaBackend = (reserva.dia || '').toUpperCase();
+      if (diaBackend !== dia) return false;
+      const inicio = reserva.horaInicio.substring(0, 5);
+      const fin = reserva.horaFin.substring(0, 5);
+      const current = hora.substring(0, 5);
+      return current > inicio && current < fin;
+    });
+  }
+
+  getReservaRowspan(reserva: any): number {
+    const horaInicio = parseInt(reserva.horaInicio.substring(0, 2), 10);
+    const horaFin = parseInt(reserva.horaFin.substring(0, 2), 10);
+    return horaFin - horaInicio;
+  }
+
+  obtenerReservasEnHorario(dia: string, hora: string): any {
     const [horaInicioTabla, horaFinTabla] = hora.split('-');
-    return this.horarios.find((horario) => {
-      // Los horarios del backend suelen venir "07:00:00". Cortamos a los primeros 5 caracteres: "07:00"
-      const inicioBackend = horario?.reserva?.horaInicio?.substring(0, 5); // "07:00"
-      const finBackend = horario?.reserva?.horaFin?.substring(0, 5);       // "09:00"
-      const diaBackend = (horario?.reserva?.dia || '').toUpperCase();      // "LUNES", "MARTES", etc.
+    return this.horariosReservas.find((reserva) => {
+      const inicioBackend = reserva?.horaInicio?.substring(0, 5);
+      const finBackend = reserva?.horaFin?.substring(0, 5);
+      const diaBackend = (reserva?.dia || '').toUpperCase();
 
       return (
         diaBackend === dia &&
@@ -447,5 +144,154 @@ export class Horario4Component implements OnInit {
         finBackend === horaFinTabla
       );
     });
+  }
+  public resetNuevaReservaData(): Reserva {
+    return {
+      idReserva: 0,
+      nombreCompleto: '',
+      correo: '',
+      dia: DiaEnum.LUNES,
+      telefono: '',
+      ocupacionLaboral: '',
+      laboratorio: {
+        idLaboratorio: 0,
+        nombreLaboratorio: '',
+        ubicacion: '',
+        capacidad: 0,
+        franjasHorario: [],
+        diasHorario: [],
+      },
+      periodo: new Periodo(),
+      horaInicio: '',
+      horaFin: '',
+      motivoReserva: '',
+      cantidadParticipantes: 0,
+      requerimientosTecnicos: '',
+      estado: 'PENDIENTE',
+    };
+  }
+
+  guardarReserva(): void {
+    this.isSaving = true;
+
+    this.nuevaReserva.laboratorio.idLaboratorio = this.numeroLaboratorio;
+
+    const selectedLab = this.laboratorios.find(
+      (lab) => lab.idLaboratorio === this.numeroLaboratorio
+    );
+    if (!selectedLab) {
+      Swal.fire('Error', `Laboratorio ${this.numeroLaboratorio} no encontrado.`, 'error');
+      this.isSaving = false
+      return;
+    }
+
+    if (this.nuevaReserva.cantidadParticipantes > selectedLab.capacidad) {
+      Swal.fire(
+        'Error',
+        'La cantidad de participantes excede la capacidad del laboratorio.',
+        'error'
+      );
+      this.isSaving = false
+      return;
+    }
+
+    const [startHourStr, startMinStr] = this.nuevaReserva.horaInicio.split(':');
+    const [endHourStr, endMinStr] = this.nuevaReserva.horaFin.split(':');
+
+    const startHour = parseInt(startHourStr, 10);
+    const startMin = parseInt(startMinStr || '0', 10);
+    const endHour = parseInt(endHourStr, 10);
+    const endMin = parseInt(endMinStr || '0', 10);
+
+    const diffHours = endHour - startHour;
+    const diffMinutes = endMin - startMin;
+    if (diffHours !== 1 || diffMinutes !== 0) {
+      Swal.fire(
+        'Error',
+        'La reserva debe tener exactamente 1 hora de diferencia (por ej. 07:00-08:00).',
+        'error'
+      );
+      this.isSaving = false;
+      return;
+    }
+
+    const existeReservaDuplicada = this.horariosReservas.some((reserva) => {
+      return (
+        reserva.laboratorio.idLaboratorio === this.numeroLaboratorio &&
+        reserva.dia === this.nuevaReserva.dia &&
+        reserva.horaInicio === this.nuevaReserva.horaInicio &&
+        reserva.horaFin === this.nuevaReserva.horaFin &&
+        (!this.isEditing || reserva.id !== this.nuevaReserva.idReserva)
+      );
+    });
+    if (existeReservaDuplicada) {
+      Swal.fire(
+        'Error',
+        'Ya existe una reserva para este laboratorio, día y horario.',
+        'error'
+      );
+      this.isSaving = false;
+      return;
+    }
+
+    this.nuevaReserva.horaInicio = this.formatTime(this.nuevaReserva.horaInicio);
+    this.nuevaReserva.horaFin = this.formatTime(this.nuevaReserva.horaFin);
+
+    if (this.isEditing) {
+      if (!this.nuevaReserva.idReserva) {
+        console.error('ID inválido para actualizar la reserva.');
+        this.isSaving = false;
+        return;
+      }
+      this.reservaService
+        .actualizarReserva(this.nuevaReserva.idReserva, this.nuevaReserva)
+        .subscribe({
+          next: () => {
+            Swal.fire(
+              'Reserva Actualizada',
+              'La reserva se actualizó correctamente.',
+              'success'
+            );
+            this.cargarReservasHorario();
+            this.cerrarModal();
+            this.isSaving = false;
+          },
+          error: () => {
+            Swal.fire('Error', 'No se pudo actualizar la reserva.', 'error');
+            this.isSaving = false;
+          }
+        });
+    } else {
+      this.reservaService.crearReserva(this.nuevaReserva).subscribe({
+        next: () => {
+          Swal.fire('Reserva Creada', 'La reserva se creó correctamente.', 'success');
+          this.cargarReservasHorario();
+          this.cerrarModal();
+          this.isSaving = false;
+        },
+        error: () => {
+          Swal.fire('Error', 'No se pudo crear la reserva.', 'error');
+          this.isSaving = false;
+        }
+      });
+    }
+  }
+  private formatTime(hour: string): string {
+    if (hour && !hour.includes(':')) {
+      return `${hour}:00`;
+    }
+    return hour;
+  }
+  abrirModal(): void {
+    this.isEditing = false;
+    this.nuevaReserva = this.resetNuevaReservaData();
+    this.modalReserva.show();
+  }
+
+  cerrarModal(): void {
+    this.modalReserva.hide();
+    document.body.classList.remove('modal-open');
+    this.isEditing = false;
+    this.nuevaReserva = this.resetNuevaReservaData();
   }
 }

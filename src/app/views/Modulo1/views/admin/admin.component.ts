@@ -33,7 +33,7 @@ export class AdminComponent {
 
   ngOnInit(): void {
     this.cargarAdministradores();
-    this.modalReserva = new Modal(document.getElementById('modalReserva')!, { backdrop: 'static' });
+    this.modalReserva = new Modal(document.getElementById('modalAdmin')!, { backdrop: 'static' });
 
   }
 

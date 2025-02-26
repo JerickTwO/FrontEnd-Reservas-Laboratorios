@@ -1,12 +1,12 @@
 <div class="mx-auto py-3 px-4">
   <div class="flex justify-between items-center mb-4">
-    <h2
-      class="text-center text-gray-800 font-extrabold text-xl tracking-wide"
-    >
-      ({{periodoActivo?.nombrePeriodo}}) - LABORATORIO 1 
+    <h2 class="text-center text-gray-800 font-extrabold text-xl tracking-wide">
+      LABORATORIO
+      {{ numeroLaboratorio }} - PERIODO {{ periodoActivo?.nombrePeriodo }}
     </h2>
     <button
       class="rounded-lg text-white text-sm py-2 px-3 bg-gray-800 hover:bg-gray-900"
+      (click)="abrirModal()"
     >
       <i class="bi bi-plus-circle"></i> Nueva Reserva
     </button>
@@ -78,5 +78,188 @@
         </tr>
       </tbody>
     </table>
+  </div>
+  <!-- Modal para crear o editar reserva -->
+  <div
+    class="modal fade"
+    id="modalReserva1"
+    tabindex="-1"
+    aria-labelledby="modalReservaLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-gray-800 text-white">
+          <h5 class="modal-title" id="modalReservaLabel1">
+            {{
+              isEditing
+                ? "Editar Reserva"
+                : "Nueva Reserva - Laboratorio " + numeroLaboratorio
+            }}
+          </h5>
+          <button
+            type="button"
+            class="btn-close"
+            aria-label="Close"
+            (click)="cerrarModal()"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <form (ngSubmit)="guardarReserva()" novalidate>
+            <div class="grid grid-cols-2 gap-4">
+              <div class="mb-1">
+                <label for="telefono" class="form-label">Teléfono</label>
+                <input
+                  type="text"
+                  id="telefono"
+                  [(ngModel)]="nuevaReserva.telefono"
+                  name="telefono"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <div class="mb-1">
+                <label for="cantidadParticipantes" class="form-label"
+                  >Cantidad de Participantes</label
+                >
+                <input
+                  type="number"
+                  id="cantidadParticipantes"
+                  [(ngModel)]="nuevaReserva.cantidadParticipantes"
+                  name="cantidadParticipantes"
+                  class="form-control"
+                  min="1"
+                  required
+                />
+              </div>
+              <!-- Selector de Hora de Inicio -->
+              <div class="mb-3">
+                <label for="horaInicio" class="form-label"
+                  >Hora de Inicio</label
+                >
+                <select
+                  [(ngModel)]="nuevaReserva.horaInicio"
+                  name="nuevaReserva.horaInicio"
+                  id="horaInicio"
+                  class="form-select"
+                  required
+                >
+                  <option value="" disabled selected>
+                    Seleccione la hora de inicio
+                  </option>
+                  <option
+                    *ngFor="let franja of franjasPermitidas"
+                    [value]="franja.horaInicio"
+                  >
+                    {{ franja.horaInicio }}
+                  </option>
+                </select>
+              </div>
+              <!-- Selector de Hora de Fin -->
+              <div class="mb-3">
+                <label for="horaFin" class="form-label">Hora de Fin</label>
+                <select
+                  [(ngModel)]="nuevaReserva.horaFin"
+                  name="horaFin"
+                  id="horaFin"
+                  class="form-select"
+                  required
+                >
+                  <option value="" disabled selected>
+                    Seleccione la hora de fin
+                  </option>
+                  <option
+                    *ngFor="let franja of franjasPermitidas"
+                    [value]="franja.horaFin"
+                  >
+                    {{ franja.horaFin }}
+                  </option>
+                </select>
+              </div>
+
+              @if(!isEditing){
+
+              <div class="mb-1">
+                <label for="estado" class="form-label">Estado</label>
+                <select
+                  id="estado"
+                  [(ngModel)]="nuevaReserva.estado"
+                  name="estado"
+                  class="form-select"
+                  required
+                >
+                  <option value="PENDIENTE">Pendiente</option>
+                </select>
+              </div>
+              }
+              <div class="mb-1">
+                <label for="dia" class="form-label">Día</label>
+                <select
+                  [(ngModel)]="nuevaReserva.dia"
+                  name="horaFin"
+                  id="horaFin"
+                  class="form-select"
+                  required
+                >
+                  <option value="" disabled selected>
+                    Seleccione la hora de fin
+                  </option>
+                  <option *ngFor="let dia of dias" [ngValue]="dia">
+                    {{ dia }}
+                  </option>
+                </select>
+              </div>
+
+              <div class="col-span-2 mb-1">
+                <label for="motivoReserva" class="form-label">Motivo</label>
+                <textarea
+                  id="motivoReserva"
+                  [(ngModel)]="nuevaReserva.motivoReserva"
+                  name="motivoReserva"
+                  class="form-control"
+                  rows="3"
+                  required
+                ></textarea>
+              </div>
+              <div class="col-span-2 mb-1">
+                <label for="requerimientosTecnicos" class="form-label"
+                  >Requerimientos Técnicos</label
+                >
+                <textarea
+                  id="requerimientosTecnicos"
+                  [(ngModel)]="nuevaReserva.requerimientosTecnicos"
+                  name="requerimientosTecnicos"
+                  class="form-control"
+                  rows="2"
+                ></textarea>
+              </div>
+            </div>
+            <div class="text-end">
+              <button
+                type="submit"
+                class="btn btn-dark mr-2"
+                [disabled]="isSaving"
+              >
+                <span
+                  *ngIf="isSaving"
+                  class="spinner-border spinner-border-sm me-2"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                {{ isEditing ? "Guardar Cambios" : "Crear Reserva" }}
+              </button>
+              <button
+                type="button"
+                class="btn btn-warning"
+                (click)="cerrarModal()"
+                [disabled]="isSaving"
+              >
+                Cancelar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
 </div>

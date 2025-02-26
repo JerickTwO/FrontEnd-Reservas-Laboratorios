@@ -27,6 +27,12 @@ export class ReservaService {
     );
   }
 
+  obtenerReservasPeriodo(): Observable<Reserva[]> {
+    return this.http.get<Reserva[]>((`${this.baseUrl}/periodo-activo`), this.headers).pipe(
+      catchError(this.handleError)
+    );
+  }
+
   obtenerReservaPorId(idReserva: number): Observable<Reserva> {
     return this.http.get<Reserva>(`${this.baseUrl}/${idReserva}`, this.headers).pipe(
       catchError(this.handleError)

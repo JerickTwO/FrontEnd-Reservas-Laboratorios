@@ -31,6 +31,7 @@ export class ClaseComponent implements OnInit {
   isEditing: boolean = false;
   modalClase: Modal | null = null;
   isLoading: boolean = false;
+  clasesPeriodoActivo: Clase[] = [];
   franjasPermitidas = [
     { horaInicio: '07:00:00', horaFin: '08:00:00' },
     { horaInicio: '08:00:00', horaFin: '09:00:00' },
@@ -63,9 +64,6 @@ export class ClaseComponent implements OnInit {
         backdrop: true,
         keyboard: true
       });
-
-      // Cuando el modal se termine de cerrar (hidden.bs.modal),
-      // resetea la info.
       modalElement.addEventListener('hidden.bs.modal', () => {
         this.isEditing = false;
         this.newClase = this.resetNuevaClaseData();
@@ -75,11 +73,9 @@ export class ClaseComponent implements OnInit {
     this.cargarDatosIniciales();
   }
 
-
-
   cargarDatosIniciales(): void {
     this.isLoading = true;
-    this.cargarClases();
+    this.cargarClasesConPeriodoActivo();
     this.cargarMaterias();
     this.cargarDocentes();
     this.cargarLaboratorios();
@@ -94,15 +90,23 @@ export class ClaseComponent implements OnInit {
     });
   }
   cargarClases() {
-    this.isLoading = true;
     this.clasesService.getClases().subscribe(
       (data) => {
         this.clases = data;
-        this.isLoading = false;
       },
       (error) => {
         console.error('Error cargando clases', error);
-        this.isLoading = false;
+      }
+    );
+  }
+  cargarClasesConPeriodoActivo() {
+    this.isLoading = false;
+    this.clasesService.obtenerClasesPeriodo().subscribe(
+      (data) => {
+        this.clasesPeriodoActivo = data;
+      },
+      (error) => {
+        console.error('Error cargando clases', error);
       }
     );
   }
@@ -131,6 +135,10 @@ export class ClaseComponent implements OnInit {
   }
 
   guardarClase() {
+    if (this.isLoading) return;
+
+    this.isLoading = true;
+
     if (!this.newClase.periodo || !this.newClase.periodo.idPeriodo) {
       this.newClase.periodo = new Periodo();
     }
@@ -138,32 +146,49 @@ export class ClaseComponent implements OnInit {
     if (this.isEditing) {
       this.clasesService
         .editarClase(this.newClase.idClase, this.newClase)
-        .subscribe(
-          () => {
+        .subscribe({
+          next: () => {
             Swal.fire(
-              'Clase Creada',
+              'Clase Actualizada',
               'La clase se actualizó correctamente',
               'success'
-            )
+            );
             this.cargarClases();
             this.cerrarModal();
           },
-          (error) => console.error('Error editando clase', error)
-        );
+          error: (error) => {
+            console.error('Error editando clase', error);
+            Swal.fire('Error', 'No se pudo actualizar la clase.', 'error');
+            this.isLoading = false;
+          },
+          complete: () => {
+            this.isLoading = false;
+          }
+        });
     } else {
-      this.clasesService.agregarClase(this.newClase).subscribe(
-        () => {
+      this.clasesService.agregarClase(this.newClase).subscribe({
+        next: () => {
           Swal.fire(
             'Clase Creada',
             'La clase se creó correctamente',
             'success'
-          ); this.cargarClases();
-          this.cerrarModal()
+          );
+          this.cargarClases();
+          this.cerrarModal();
         },
-        (error) => console.error('Error agregando clase', error)
-      );
+        error: (error) => {
+          console.error('Error agregando clase', error);
+          Swal.fire('Error', 'No se pudo crear la clase.', 'error');
+          this.isLoading = false;
+
+        },
+        complete: () => {
+          this.isLoading = false;
+        }
+      });
     }
   }
+
 
 
   agregarClase(): void {

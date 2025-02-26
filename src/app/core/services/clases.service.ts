@@ -10,7 +10,7 @@ import { environment } from 'src/environments/environment';
 export class ClasesService {
   private apiUrl = `${environment.urlBase}/clases`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getClases(): Observable<Clase[]> {
     return this.http.get<Clase[]>(this.apiUrl);
@@ -19,6 +19,7 @@ export class ClasesService {
   obtenerClasesPeriodo(): Observable<Clase[]> {
     return this.http.get<Clase[]>(`${this.apiUrl}/periodo-activo`);
   }
+  
   agregarClase(clase: Clase): Observable<Clase> {
     const payload = {
       materia: { idMateria: Number(clase.materia.idMateria) },

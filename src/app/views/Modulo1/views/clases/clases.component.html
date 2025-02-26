@@ -7,18 +7,18 @@
       <i class="bi bi-plus-circle"></i> Nueva Clase
     </button>
     <p class="text-muted mb-0">
-      Total: {{ clases.length }} clases registradas.
+      Total: {{ clasesPeriodoActivo.length }} clases registradas.
     </p>
   </div>
 
   <div class="w-full overflow-hidden rounded-lg shadow-lg bg-white">
-    <div *ngIf="clases.length === 0 && !isLoading" class="text-center p-4">
+    <div *ngIf="clasesPeriodoActivo.length === 0 && !isLoading" class="text-center p-4">
       <p class="text-gray-500">No hay clases disponibles.</p>
     </div>
     <div *ngIf="isLoading" class="text-center p-4">
       <p class="text-gray-500">Cargando clases...</p>
     </div>
-    <div *ngIf="clases.length > 0">
+    <div *ngIf="clasesPeriodoActivo.length > 0">
       <div class="w-full overflow-x-auto">
         <table class="w-full text-sm text-gray-700">
           <thead class="bg-gray-800 text-white uppercase text-xs font-semibold">
@@ -33,7 +33,7 @@
           </thead>
           <tbody class="divide-y divide-gray-200">
             <tr
-              *ngFor="let clase of clases; trackBy: trackById"
+              *ngFor="let clase of clasesPeriodoActivo; trackBy: trackById"
               class="hover:bg-gray-100 transition"
             >
               <td class="px-6 py-4 font-medium">
@@ -229,11 +229,20 @@
                 type="submit"
                 class="btn btn-dark mr-2"
                 [disabled]="
-                  !newClase.materia.idMateria || !newClase.docente.idDocente
+                  isLoading ||
+                  !newClase.materia.idMateria ||
+                  !newClase.docente.idDocente
                 "
               >
+                <span
+                  *ngIf="isLoading"
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
                 {{ isEditing ? "Guardar Cambios" : "Crear Clase" }}
               </button>
+
               <button
                 type="button"
                 class="btn btn-warning"

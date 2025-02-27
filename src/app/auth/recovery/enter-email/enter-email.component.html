@@ -1,0 +1,12 @@
+<div class="container">
+    <h2>Recuperar Contraseña</h2>
+    <p>Ingrese su correo electrónico para enviar un código de recuperación.</p>
+    <input
+      type="correo"
+      placeholder="Correo Electrónico"
+      [(ngModel)]="correo"
+      required
+    />
+    <button (click)="enviarCorreo()">Enviar Código</button>
+  </div>
+  

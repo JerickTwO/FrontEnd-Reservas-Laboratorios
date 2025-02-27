@@ -20,14 +20,12 @@
           placeholder="Ingrese su correo electrónico"
         />
         <!-- Mostrar mensaje de error si el campo de correo electrónico es inválido -->
-        @if (usernameControl && usernameControl.errors &&
-        usernameControl.touched) {
-        <div class="">
-          @if (usernameControl.errors['required']) {
-          <div>Ingrese el correo usuario.</div>
-          }
+        <div *ngIf="usernameControl?.touched && usernameControl?.invalid">
+          <div *ngIf="usernameControl?.errors?.['required']">
+            Ingrese el correo usuario.
+          </div>
         </div>
-        }
+
         <!-- Campo de Contraseña -->
         <p>Contraseña</p>
         <div class="password-container">
@@ -35,7 +33,7 @@
             [type]="showPassword ? 'text' : 'password'"
             id="password_user"
             formControlName="password_user"
-            placeholder="Ingrese su contraseña "
+            placeholder="Ingrese su contraseña"
           />
           <span class="password-icon" (click)="showPassword = !showPassword"
             >👁</span
@@ -44,22 +42,29 @@
         <div class="error-container">
           <div
             class="error-message"
-            [hidden]="
-              !loginForm.get('password_user')?.touched ||
-              !loginForm.get('password_user')?.errors
+            *ngIf="
+              loginForm.get('password_user')?.touched &&
+              loginForm.get('password_user')?.invalid
             "
           >
-            <div
-              [hidden]="!loginForm.get('password_user')?.errors?.['required']"
-            >
+            <div *ngIf="loginForm.get('password_user')?.errors?.['required']">
               Ingrese su contraseña.
             </div>
           </div>
         </div>
+
+        <!-- Link de recuperación de contraseña -->
+        <div class="text-center mt-2">
+          <a class="forgot-password-link" (click)="goToRecovery()">
+            ¿Olvidaste tu contraseña?
+          </a>
+        </div>
+
         <!-- Mostrar mensaje de error -->
-        @if (errorMenssage) {
-        <div class="error-message">{{ errorMenssage }}</div>
-        }
+        <div *ngIf="errorMenssage" class="error-message">
+          {{ errorMenssage }}
+        </div>
+
         <!-- Botón de enviar -->
         <div class="btn_contenedor_login">
           <button class="button efects_button" (click)="login()">
@@ -70,4 +75,5 @@
     </div>
   </div>
 </section>
+
 }

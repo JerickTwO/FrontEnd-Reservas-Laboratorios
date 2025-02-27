@@ -8,7 +8,7 @@ import {
 
 import { Router } from '@angular/router';
 
-import { AlertService } from '../core/services/alerts.service';
+import { AlertService } from '../../core/services/alerts.service';
 import {
   AbstractControl,
   FormBuilder,
@@ -17,14 +17,15 @@ import {
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { UsuarioService } from '../core/services/usuario.service';
+import { UsuarioService } from '../../core/services/usuario.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-auth',
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.scss'],
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule],
+  imports: [FormsModule, CommonModule, ReactiveFormsModule],
 })
 export class AuthComponent implements OnInit {
   title: string = 'Iniciar Sesión';
@@ -76,5 +77,8 @@ export class AuthComponent implements OnInit {
         this.errorMenssage = 'Error en la autenticación.';
       }
     });
+  }
+  goToRecovery() {
+    this.router.navigate(['/recovery/email']);
   }
 }

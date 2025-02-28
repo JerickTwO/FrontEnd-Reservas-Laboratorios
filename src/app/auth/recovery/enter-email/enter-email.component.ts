@@ -24,6 +24,17 @@ export class EnterEmailComponent {
   ) { }
 
   enviarCorreo() {
+    if (this.isSaving) {
+      return;
+    }
+
+    if (!this.correo.trim()) {
+      Swal.fire('Error', 'El correo no puede estar vacío.', 'error');
+      return;
+    }
+
+    this.isSaving = true;
+
     this.recoveryService.enviarCorreoRecuperacion(this.correo).subscribe({
       next: (response) => {
         if (response.respuesta) {
@@ -33,13 +44,14 @@ export class EnterEmailComponent {
           });
         } else {
           Swal.fire('Error', response.mensaje || 'Correo no registrado.', 'error');
+          this.isSaving = false;
         }
       },
       error: (error) => {
+        this.isSaving = false;
         Swal.fire('Error', 'Error al enviar el correo. Inténtalo nuevamente.', 'error');
         console.error('Error al enviar correo:', error);
       }
     });
   }
-
 }

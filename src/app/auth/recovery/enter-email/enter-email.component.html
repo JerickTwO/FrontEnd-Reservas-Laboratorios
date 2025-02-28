@@ -7,17 +7,19 @@
           JEFATURA DE LABORATORIOS
           <span>DEPARTAMENTO DE CIENCIAS DE LA COMPUTACIÓN</span>
         </h2>
-        <p>
-          Ingrese su correo electrónico.
-        </p>
+        <p>Ingrese su correo electrónico.</p>
         <input
           type="email"
           placeholder="Correo Electrónico"
           [(ngModel)]="correo"
           required
         />
-        <button class="p-[4px]" (click)="enviarCorreo()" [disabled]="isSaving">
-          Enviar Código
+        <button
+          [disabled]="isSaving || !correo.trim()"
+          class="p-[4px]"
+          (click)="enviarCorreo()"
+        >
+          {{ isSaving ? "Cargando..." : "Enviar Código" }}
         </button>
       </div>
     </div>

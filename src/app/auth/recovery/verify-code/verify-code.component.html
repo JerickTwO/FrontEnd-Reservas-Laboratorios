@@ -9,9 +9,15 @@
           type="text"
           placeholder="Ingrese el código"
           [(ngModel)]="code"
+          maxlength="6"
           required
         />
-        <button (click)="verificarCodigo()">Verificar Código</button>
+        <button
+          [disabled]="isVerifying || !code.trim() || code.length !== 6"
+          (click)="verificarCodigo()"
+        >
+          {{ isVerifying ? "Verificando..." : "Verificar Código" }}
+        </button>
       </div>
     </div>
   </div>

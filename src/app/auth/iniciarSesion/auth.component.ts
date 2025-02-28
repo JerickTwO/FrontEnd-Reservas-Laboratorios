@@ -19,6 +19,7 @@ import {
 } from '@angular/forms';
 import { UsuarioService } from '../../core/services/usuario.service';
 import { CommonModule } from '@angular/common';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-auth',
@@ -68,11 +69,11 @@ export class AuthComponent implements OnInit {
 
     this.usuarioService.login({ username, password: password_user }).subscribe({
       next: (resp) => {
-        this.loading = false;
-
+        this.loading = true;
       },
       error: (err) => {
         this.loading = false;
+        Swal.fire('Error', "Contraseña Incorrecta", 'error')
         console.error('Error en login:', err);
         this.errorMenssage = 'Error en la autenticación.';
       }

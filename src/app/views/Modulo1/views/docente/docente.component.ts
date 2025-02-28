@@ -23,10 +23,12 @@ export class DocenteComponent {
   newDocente: Docente = new Docente();
   selectedDocente: Docente | null = null;
   isEditing: boolean = false;
+
   constructor(
     private docenteService: DocenteService,
     private departamentoService: DepartamentoService
   ) { }
+
   ngOnInit(): void {
     this.cargarDocentes();
     this.cargarDepartamentos();

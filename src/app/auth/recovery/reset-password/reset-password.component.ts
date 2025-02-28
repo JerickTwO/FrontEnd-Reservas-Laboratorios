@@ -11,12 +11,13 @@ import Swal from 'sweetalert2';
   standalone: true,
   imports: [CommonModule,
     FormsModule],
-  styleUrls: ['./reset-password.component.scss']
+  styleUrls: ['../../actualizarContrasena/actualizarContrasena.component.scss'],
 })
 export class ResetPasswordComponent implements OnInit {
   correo: string = '';
   code: string = '';
   newPassword: string = '';
+  mostrarPassword: boolean = false; // Estado para mostrar/ocultar contraseña
 
   constructor(
     private route: ActivatedRoute,
@@ -29,6 +30,10 @@ export class ResetPasswordComponent implements OnInit {
       this.correo = params['correo'];
       this.code = params['code'];
     });
+  }
+
+  togglePassword() {
+    this.mostrarPassword = !this.mostrarPassword;
   }
 
   resetPassword() {
@@ -57,6 +62,4 @@ export class ResetPasswordComponent implements OnInit {
       }
     });
   }
-
-
 }

@@ -11,11 +11,12 @@ import Swal from 'sweetalert2';
   imports: [CommonModule,
     FormsModule],
   templateUrl: './verify-code.component.html',
-  styleUrls: ['./verify-code.component.scss']
+  styleUrls: ['../../actualizarContrasena/actualizarContrasena.component.scss'],
 })
 export class VerifyCodeComponent implements OnInit {
   correo: string = '';
   code: string = '';
+  isVerifying: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -30,6 +31,22 @@ export class VerifyCodeComponent implements OnInit {
   }
 
   verificarCodigo() {
+    if (this.isVerifying) {
+      return;
+    }
+
+    if (!this.code.trim()) {
+      Swal.fire('Error', 'El código no puede estar vacío.', 'error');
+      return;
+    }
+
+    if (this.code.length !== 6) {
+      Swal.fire('Error', 'El código debe tener 6 dígitos.', 'error');
+      return;
+    }
+
+    this.isVerifying = true;
+
     this.recoveryService.verificarCodigo(this.correo, this.code).subscribe({
       next: (response) => {
         if (response.respuesta) {
@@ -40,12 +57,14 @@ export class VerifyCodeComponent implements OnInit {
         } else {
           Swal.fire('Error', response.mensaje || 'Código incorrecto o expirado.', 'error');
         }
+        this.isVerifying = false;
       },
       error: (error) => {
+        this.isVerifying = false;
         Swal.fire('Error', 'Error al verificar el código. Inténtalo nuevamente.', 'error');
         console.error('Error al verificar código:', error);
       }
     });
   }
-  
 }
+

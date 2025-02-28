@@ -108,7 +108,7 @@
                     *ngFor="let materia of materias"
                     [value]="materia.idMateria"
                   >
-                    {{ materia.nombreMateria }}
+                    {{ materia.nombreMateria }} - {{materia.nrc}}
                   </option>
                 </select>
                 <div *ngIf="!newClase.materia.idMateria" class="text-danger">

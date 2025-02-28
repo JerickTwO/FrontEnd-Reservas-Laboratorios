@@ -1,12 +1,18 @@
-<div class="container">
-    <h2>Verificar Código</h2>
-    <p>Se ha enviado un código de verificación a {{ correo }}.</p>
-    <input
-      type="text"
-      placeholder="Ingrese el código"
-      [(ngModel)]="code"
-      required
-    />
-    <button (click)="verificarCodigo()">Verificar Código</button>
+<section class="section">
+  <div class="left"></div>
+  <div class="right">
+    <div class="recuperar-container">
+      <div class="form">
+        <h2>Verificar Código</h2>
+        <p>Se ha enviado un código de verificación a {{ correo }}.</p>
+        <input
+          type="text"
+          placeholder="Ingrese el código"
+          [(ngModel)]="code"
+          required
+        />
+        <button (click)="verificarCodigo()">Verificar Código</button>
+      </div>
+    </div>
   </div>
-  
+</section>

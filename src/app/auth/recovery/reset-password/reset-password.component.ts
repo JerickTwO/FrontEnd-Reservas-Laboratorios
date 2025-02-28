@@ -32,16 +32,31 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   resetPassword() {
+    if (!this.newPassword.trim()) {
+      Swal.fire('Error', 'La nueva contraseña no puede estar vacía.', 'error');
+      return;
+    }
+    if (this.newPassword.length < 8) {
+      Swal.fire('Error', 'La contraseña debe tener al menos 8 caracteres.', 'error');
+      return;
+    }
+
     this.recoveryService.resetPassword(this.correo, this.code, this.newPassword).subscribe({
       next: (response) => {
-        console.log('Correo a enviar:', this.correo); // Verificar que no sea null
-        Swal.fire('Éxito', 'Contraseña actualizada.', 'success');
-        this.router.navigate(['/login'])
+        if (response.respuesta) {
+          Swal.fire('Éxito', 'Contraseña actualizada.', 'success');
+          this.router.navigate(['/login']);
+        } else {
+          Swal.fire('Error', response.mensaje || 'No se pudo actualizar la contraseña.', 'error');
+          console.error('Error en la respuesta del backend:', response);
+        }
       },
       error: (error) => {
-        Swal.fire('Error', 'No se pudo actualizar la contraseña.', 'error');
+        Swal.fire('Error', 'Error en el servidor. Inténtalo nuevamente.', 'error');
         console.error('Error al actualizar contraseña:', error);
       }
     });
   }
+
+
 }

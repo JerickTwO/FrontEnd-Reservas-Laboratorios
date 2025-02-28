@@ -1,12 +1,25 @@
-<div class="container">
-    <h2>Recuperar Contraseña</h2>
-    <p>Ingrese su correo electrónico para enviar un código de recuperación.</p>
-    <input
-      type="correo"
-      placeholder="Correo Electrónico"
-      [(ngModel)]="correo"
-      required
-    />
-    <button (click)="enviarCorreo()">Enviar Código</button>
+<section class="section">
+  <div class="left"></div>
+  <div class="right">
+    <div class="recuperar-container">
+      <div class="form">
+        <h2>
+          JEFATURA DE LABORATORIOS
+          <span>DEPARTAMENTO DE CIENCIAS DE LA COMPUTACIÓN</span>
+        </h2>
+        <p>
+          Ingrese su correo electrónico.
+        </p>
+        <input
+          type="email"
+          placeholder="Correo Electrónico"
+          [(ngModel)]="correo"
+          required
+        />
+        <button class="p-[4px]" (click)="enviarCorreo()" [disabled]="isSaving">
+          Enviar Código
+        </button>
+      </div>
+    </div>
   </div>
-  
+</section>

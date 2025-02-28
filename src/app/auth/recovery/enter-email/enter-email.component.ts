@@ -11,10 +11,12 @@ import Swal from 'sweetalert2';
   imports: [CommonModule,
     FormsModule],
   templateUrl: './enter-email.component.html',
-  styleUrls: ['./enter-email.component.scss']
+  styleUrls: ['../../actualizarContrasena/actualizarContrasena.component.scss'],
 })
 export class EnterEmailComponent {
   correo: string = '';
+  title: string = 'Recuperar Contraseña';
+  isSaving: boolean = false;
 
   constructor(
     private recoveryService: RecoveryService,
@@ -24,15 +26,20 @@ export class EnterEmailComponent {
   enviarCorreo() {
     this.recoveryService.enviarCorreoRecuperacion(this.correo).subscribe({
       next: (response) => {
-        Swal.fire('Éxito', 'Código de recuperación enviado.', 'success');
-        this.router.navigate(['/recovery/verify-code'], {
-          queryParams: { correo: this.correo }
-        });
+        if (response.respuesta) {
+          Swal.fire('Éxito', 'Código de recuperación enviado.', 'success');
+          this.router.navigate(['/recovery/verify-code'], {
+            queryParams: { correo: this.correo }
+          });
+        } else {
+          Swal.fire('Error', response.mensaje || 'Correo no registrado.', 'error');
+        }
       },
       error: (error) => {
-        Swal.fire('Error', 'Correo no registrado.', 'error');
+        Swal.fire('Error', 'Error al enviar el correo. Inténtalo nuevamente.', 'error');
         console.error('Error al enviar correo:', error);
       }
     });
   }
+
 }

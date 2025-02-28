@@ -42,21 +42,21 @@ export const routes: Routes = [
     path: recoveryEmail,
     component: EnterEmailComponent,
     data: {
-      title: capitalizeFirstLetter(recoveryEmail),
+      title: capitalizeFirstLetter("Verificación de Correo"),
     },
   },
   {
     path: verifyCode,
     component: VerifyCodeComponent,
     data: {
-      title: capitalizeFirstLetter(verifyCode),
+      title: capitalizeFirstLetter("Verificación de Código"),
     },
   },
   {
     path: resetPassword,
     component: ResetPasswordComponent,
     data: {
-      title: capitalizeFirstLetter(resetPassword),
+      title: capitalizeFirstLetter("Nueva Contraseña"),
     },
   },
   // {

@@ -32,15 +32,20 @@ export class VerifyCodeComponent implements OnInit {
   verificarCodigo() {
     this.recoveryService.verificarCodigo(this.correo, this.code).subscribe({
       next: (response) => {
-        Swal.fire('Éxito', 'Código verificado.', 'success');
-        this.router.navigate(['/recovery/reset-password'], {
-          queryParams: { correo: this.correo, code: this.code }
-        });
+        if (response.respuesta) {
+          Swal.fire('Éxito', 'Código verificado.', 'success');
+          this.router.navigate(['/recovery/reset-password'], {
+            queryParams: { correo: this.correo, code: this.code }
+          });
+        } else {
+          Swal.fire('Error', response.mensaje || 'Código incorrecto o expirado.', 'error');
+        }
       },
       error: (error) => {
-        Swal.fire('Error', 'Código incorrecto.', 'error');
+        Swal.fire('Error', 'Error al verificar el código. Inténtalo nuevamente.', 'error');
         console.error('Error al verificar código:', error);
       }
     });
   }
+  
 }

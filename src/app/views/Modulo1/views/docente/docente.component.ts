@@ -12,7 +12,7 @@ import { DepartamentoService } from 'src/app/core/services/departamento.service'
 @Component({
   selector: 'app-docente',
   standalone: true,
-  imports: [PaginationComponent, CommonModule, FormsModule, HttpClientModule],
+  imports: [CommonModule, FormsModule, HttpClientModule],
   templateUrl: './docente.component.html',
   styleUrl: './docente.component.scss'
 })
@@ -23,6 +23,7 @@ export class DocenteComponent {
   newDocente: Docente = new Docente();
   selectedDocente: Docente | null = null;
   isEditing: boolean = false;
+  idInstitucionalError: boolean = false;
 
   constructor(
     private docenteService: DocenteService,
@@ -65,7 +66,18 @@ export class DocenteComponent {
     this.showModal('previewDocenteModal');
   }
 
+  validarIdInstitucional(): void {
+    const pattern = /^L[0-9A-Za-z]{7}$/;
+    this.idInstitucionalError = !pattern.test(this.newDocente.idInstitucional);
+  }
+
   guardarDocente(): void {
+    this.validarIdInstitucional();
+    if (this.idInstitucionalError) {
+      alert("El ID Institucional es inválido. Debe comenzar con 'L' y tener exactamente 8 caracteres.");
+      return;
+    }
+
     if (this.isEditing) {
       this.editarDocente();
     } else {

@@ -39,11 +39,9 @@ export class ReservaService {
     );
   }
 
-  crearReserva(reserva: Reserva): Observable<Reserva> {
-    const { idReserva, ...reservaSinId } = reserva; // Eliminar el ID si existe
-    return this.http.post<Reserva>(this.baseUrl, reservaSinId, this.headers).pipe(
-      catchError(this.handleError)
-    );
+  crearReserva(reserva: Reserva): Observable<any> {
+    const { idReserva, ...reservaSinId } = reserva;
+    return this.http.post<Reserva>(this.baseUrl, reservaSinId, this.headers);
   }
 
   actualizarReserva(idReserva: number, data: Partial<Reserva>): Observable<Reserva> {

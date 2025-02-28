@@ -5,7 +5,7 @@ import { DiaEnum, Laboratorio } from 'src/app/models/laboratorio.model';
 import { LaboratorioService } from 'src/app/core/services/laboratorio.service';
 import { PaginationService } from 'src/app/core/services/pagination.service';
 import { PaginationComponent } from '../pagination/pagination.component';
-import { CommonModule } from '@angular/common';
+import { CommonModule, registerLocaleData } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { Modal } from 'bootstrap';
@@ -15,6 +15,9 @@ import Swal from 'sweetalert2';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { Periodo } from 'src/app/models/periodo.model';
+import localeEs from '@angular/common/locales/es';
+
+registerLocaleData(localeEs, 'es');
 
 @Component({
   selector: 'app-reserva',
@@ -45,6 +48,8 @@ export class ReservaComponent implements OnInit {
   userRole: string | undefined;
   franjasHorario: any;
   isLoading: boolean = false;
+  minDate: string;
+  maxDate: string;
 
   public franjasPermitidas: { horaInicio: string; horaFin: string }[] = [];
 
@@ -63,7 +68,13 @@ export class ReservaComponent implements OnInit {
     private laboratorioService: LaboratorioService,
     private paginationService: PaginationService,
     private usuarioService: UsuarioService
-  ) {}
+  ) {
+    const today = new Date();
+    this.minDate = today.toISOString().split('T')[0];
+    const maxDate = new Date();
+    maxDate.setMonth(maxDate.getMonth() + 3);
+    this.maxDate = maxDate.toISOString().split('T')[0];
+  }
 
   ngOnInit(): void {
     this.getLaboratorios();
@@ -80,7 +91,7 @@ export class ReservaComponent implements OnInit {
     this.usuarioService.usuario$.subscribe((usuario) => {
       if (usuario) {
         this.userRole = usuario.rol.nombre;
-        console.log('Rol del usuario:', this.userRole);
+        // console.log('Rol del usuario:', this.userRole);
       }
     });
 
@@ -118,7 +129,7 @@ export class ReservaComponent implements OnInit {
             reserva.fechaActualizacion = new Date(reserva.fechaActualizacion);
           }
         });
-        
+
         this.reservasPeriodoActivo = data;
         this.totalPages = Math.ceil(this.reservas.length / this.itemsPerPage);
         this.actualizarPaginacion();
@@ -150,77 +161,22 @@ export class ReservaComponent implements OnInit {
   }
 
   guardarReserva(): void {
-    // Si ya está cargando, no permitir múltiples clics
     if (this.isLoading) return;
-  
     this.isLoading = true;
-  
-    const selectedLab = this.laboratorios.find(
-      (lab) => lab.idLaboratorio == this.nuevaReserva.laboratorio.idLaboratorio
-    );
-  
-    if (selectedLab == null) {
-      Swal.fire('Error', 'Laboratorio no encontrado.', 'error');
-      this.isLoading = false;
-      return;
+
+    // Asegurarse de que la fecha se envíe en el formato correcto
+    if (this.nuevaReserva.fechaReserva) {
+      // Convertir la fecha a UTC
+      const fecha = new Date(this.nuevaReserva.fechaReserva);
+      fecha.setHours(0, 0, 0, 0);
+      this.nuevaReserva.fechaReserva = fecha;
     }
-  
-    if (this.nuevaReserva.cantidadParticipantes > selectedLab.capacidad) {
-      Swal.fire(
-        'Error',
-        'La cantidad de participantes excede la capacidad del laboratorio.',
-        'error'
-      );
-      this.isLoading = false;
-      return;
+
+    // Convertir el ID del laboratorio a número si es string
+    if (typeof this.nuevaReserva.laboratorio.idLaboratorio === 'string') {
+      this.nuevaReserva.laboratorio.idLaboratorio = parseInt(this.nuevaReserva.laboratorio.idLaboratorio, 10);
     }
-  
-    const [startHourStr, startMinStr] = this.nuevaReserva.horaInicio.split(':');
-    const [endHourStr, endMinStr] = this.nuevaReserva.horaFin.split(':');
-  
-    const startHour = parseInt(startHourStr, 10);
-    const startMin = parseInt(startMinStr || '0', 10);
-    const endHour = parseInt(endHourStr, 10);
-    const endMin = parseInt(endMinStr || '0', 10);
-  
-    const diffHours = endHour - startHour;
-    const diffMinutes = endMin - startMin;
-  
-    if (diffHours !== 1 || diffMinutes !== 0) {
-      Swal.fire(
-        'Error',
-        'La reserva debe tener exactamente 1 hora de diferencia (p.ej. 07:00-08:00).',
-        'error'
-      );
-      this.isLoading = false;
-      return;
-    }
-  
-    const existeReservaDuplicada = this.reservas.some(
-      (reserva) =>
-        reserva.laboratorio.idLaboratorio ===
-          this.nuevaReserva.laboratorio.idLaboratorio &&
-        reserva.dia === this.nuevaReserva.dia &&
-        reserva.horaInicio === this.nuevaReserva.horaInicio &&
-        reserva.horaFin === this.nuevaReserva.horaFin &&
-        (!this.isEditing || reserva.idReserva !== this.nuevaReserva.idReserva)
-    );
-  
-    if (existeReservaDuplicada) {
-      Swal.fire(
-        'Error',
-        'Ya existe una reserva para el laboratorio, día y horario seleccionado.',
-        'error'
-      );
-      this.isLoading = false;
-      return;
-    }
-  
-    this.nuevaReserva.horaInicio = this.formatTime(
-      this.nuevaReserva.horaInicio
-    );
-    this.nuevaReserva.horaFin = this.formatTime(this.nuevaReserva.horaFin);
-  
+
     if (this.isEditing) {
       if (!this.nuevaReserva.idReserva) {
         console.error('ID inválido para actualizar la reserva.');
@@ -230,7 +186,7 @@ export class ReservaComponent implements OnInit {
       this.reservaService
         .actualizarReserva(this.nuevaReserva.idReserva, this.nuevaReserva)
         .subscribe({
-          next: (reservaActualizada) => {
+          next: () => {
             Swal.fire(
               'Reserva Actualizada',
               'La reserva se actualizó correctamente.',
@@ -253,7 +209,7 @@ export class ReservaComponent implements OnInit {
         });
     } else {
       this.reservaService.crearReserva(this.nuevaReserva).subscribe({
-        next: (reservaCreada) => {
+        next: () => {
           Swal.fire(
             'Reserva Creada',
             'La reserva se creó correctamente.',
@@ -263,8 +219,14 @@ export class ReservaComponent implements OnInit {
           this.cerrarModal();
         },
         error: (err) => {
-          Swal.fire('Error', 'No se pudo crear la reserva.', 'error');
+          const errorMessage = err.error?.detalleError || 'No se pudo crear la reserva.';
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: errorMessage
+          });
           console.error('Error al crear la reserva:', err);
+          this.isLoading = false;
         },
         complete: () => {
           this.isLoading = false;
@@ -272,7 +234,7 @@ export class ReservaComponent implements OnInit {
       });
     }
   }
-  
+
 
   cambiarEstadoPendiente(reserva: Reserva): void {
     if (reserva.idReserva === undefined || reserva.idReserva === null) {
@@ -341,14 +303,22 @@ export class ReservaComponent implements OnInit {
 
   abrirModal(): void {
     this.isEditing = false;
-    this.nuevaReserva = this.resetNuevaReservaData();
+    const nuevaReserva = this.resetNuevaReservaData();
+    nuevaReserva.fechaReserva = new Date();
+    nuevaReserva.fechaReserva.setHours(0, 0, 0, 0);
+    this.nuevaReserva = nuevaReserva;
     this.getReservas();
     this.modalReserva.show();
   }
 
   abrirModalEditar(reserva: Reserva): void {
     this.isEditing = true;
-    this.nuevaReserva = { ...reserva };
+    const fechaReserva = reserva.fechaReserva ? new Date(reserva.fechaReserva) : new Date();
+    fechaReserva.setHours(0, 0, 0, 0);
+    this.nuevaReserva = {
+      ...reserva,
+      fechaReserva: fechaReserva
+    };
     this.nuevaReserva.horaInicio = reserva.horaInicio;
     this.nuevaReserva.horaFin = reserva.horaFin;
     this.modalReserva.show();
@@ -381,7 +351,7 @@ export class ReservaComponent implements OnInit {
       idReserva: 0,
       nombreCompleto: '',
       correo: '',
-      dia: DiaEnum.LUNES,
+      fechaReserva: new Date() || new Date('YYYY-MM-DD'),
       telefono: '',
       ocupacionLaboral: '',
       laboratorio: {
@@ -440,9 +410,8 @@ export class ReservaComponent implements OnInit {
     const datosExportacion = this.reservas.map((reserva) => [
       reserva.nombreCompleto,
       reserva.fechaActualizacion
-        ? `${reserva.fechaActualizacion.getDate()}/${
-            reserva.fechaActualizacion.getMonth() + 1
-          }/${reserva.fechaActualizacion.getFullYear()}`
+        ? `${reserva.fechaActualizacion.getDate()}/${reserva.fechaActualizacion.getMonth() + 1
+        }/${reserva.fechaActualizacion.getFullYear()}`
         : '',
       `${reserva.horaInicio}-${reserva.horaFin}`,
 

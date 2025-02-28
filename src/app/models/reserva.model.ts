@@ -8,7 +8,8 @@ export class Reserva {
   materia?: string;
   ocupacionLaboral: string;
   laboratorio: Laboratorio;
-  dia: DiaEnum;
+  dia?: string;
+  fechaReserva: Date;
   horaInicio: string;
   horaFin: string;
   periodo?: Periodo;
@@ -17,4 +18,5 @@ export class Reserva {
   requerimientosTecnicos?: string;
   estado: 'PENDIENTE' | 'APROBADA' | 'RECHAZADA';
   fechaActualizacion?: Date;
+
 }

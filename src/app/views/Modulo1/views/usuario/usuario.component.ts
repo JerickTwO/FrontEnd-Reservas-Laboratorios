@@ -56,6 +56,13 @@ export class UsuarioComponent {
     primerLogin: false,
     estado: true
   };
+  idInstitucionalError: boolean = false;
+
+  validarIdInstitucional(): void {
+    const pattern = /^L[0-9A-Za-z]{7}$/;
+    this.idInstitucionalError = !pattern.test(this.nuevoUsuario.idInstitucional);
+  }
+
   constructor(
     private docenteService: DocenteService,
     private departamentoService: DepartamentoService,
@@ -231,6 +238,11 @@ export class UsuarioComponent {
     const partes = this.nuevoUsuario.nombreCompleto.split(' ');
     const nombre = partes[0];
     const apellido = partes.slice(1).join(' ');
+
+    if (this.idInstitucionalError) {
+      Swal.fire('Error','El ID Institucional es inválido. Debe comenzar con L y tener exactamente 8 caracteres alfanuméricos.', 'error');
+      return;
+    }
 
     const payloadDocente: Docente = {
       idDocente: 0,

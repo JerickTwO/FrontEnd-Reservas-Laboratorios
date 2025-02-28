@@ -150,7 +150,6 @@ export class Horario5Component implements OnInit {
       idReserva: 0,
       nombreCompleto: '',
       correo: '',
-      dia: DiaEnum.LUNES,
       telefono: '',
       ocupacionLaboral: '',
       laboratorio: {
@@ -168,7 +167,9 @@ export class Horario5Component implements OnInit {
       cantidadParticipantes: 0,
       requerimientosTecnicos: '',
       estado: 'PENDIENTE',
+      fechaReserva: new Date(), // Add this line
     };
+
   }
 
   guardarReserva(): void {
@@ -269,8 +270,13 @@ export class Horario5Component implements OnInit {
           this.cerrarModal();
           this.isSaving = false;
         },
-        error: () => {
-          Swal.fire('Error', 'No se pudo crear la reserva.', 'error');
+        error: (err) => {
+          const errorMessage = err.error?.message || 'No se pudo crear la reserva.';
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: errorMessage
+          });
           this.isSaving = false;
         }
       });

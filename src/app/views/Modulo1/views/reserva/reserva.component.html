@@ -27,6 +27,8 @@
             <th class="px-6 py-3 text-left">Correo</th>
             <th class="px-6 py-3 text-left">Teléfono</th>
             <th class="px-6 py-3 text-left">Laboratorio</th>
+            <th class="px-6 py-3 text-left">Fecha Reserva</th>
+            <th class="px-6 py-3 text-left">Día</th>
             <th class="px-6 py-3 text-left">Hora Inicio</th>
             <th class="px-6 py-3 text-left">Hora Fin</th>
             <th class="px-6 py-3 text-left">Estado</th>
@@ -48,8 +50,16 @@
             <td class="px-2 py-4">
               {{ reserva.laboratorio.nombreLaboratorio }}
             </td>
+
+            <!-- NUEVAS COLUMNAS -->
+            <td class="px-2 py-4">
+              {{ reserva.fechaReserva | date : "dd/MM/yyyy" }}
+            </td>
+            <td class="px-2 py-4">{{ reserva.dia }}</td>
+
             <td class="px-2 py-4">{{ reserva.horaInicio }}</td>
             <td class="px-2 py-4">{{ reserva.horaFin }}</td>
+
             <td class="px-2 py-4">
               <span
                 class="px-3 py-1 text-xs font-semibold rounded-full"
@@ -222,21 +232,20 @@
               </div>
               }
               <div class="mb-1">
-                <label for="dia" class="form-label">Día</label>
-                <select
-                  [(ngModel)]="nuevaReserva.dia"
-                  name="horaFin"
-                  id="horaFin"
-                  class="form-select"
-                  required
+                <label for="fechaReserva" class="form-label"
+                  >Fecha de Reserva</label
                 >
-                  <option value="" disabled selected>
-                    Seleccione la hora de fin
-                  </option>
-                  <option *ngFor="let dia of dias" [ngValue]="dia">
-                    {{ dia }}
-                  </option>
-                </select>
+                <input
+                  type="date"
+                  [(ngModel)]="nuevaReserva.fechaReserva"
+                  name="fechaReserva"
+                  id="fechaReserva"
+                  class="form-control"
+                  required
+                  [min]="minDate"
+                  [max]="maxDate"
+                  (ngModelChange)="nuevaReserva.fechaReserva = $event"
+                />
               </div>
 
               <div class="col-span-2 mb-1">

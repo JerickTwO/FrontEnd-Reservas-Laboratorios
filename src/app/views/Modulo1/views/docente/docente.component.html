@@ -1,131 +1,237 @@
 <div class="">
-    <!-- Encabezado -->
-    <div class="d-flex justify-content-between align-items-center">
-        <button class="rounded-lg text-white text-sm py-2 px-3 bg-gray-800 hover:bg-gray-900 mb-3" (click)="openAddDocenteModal()">
-            Agregar Docente
-        </button>
-        <p class="text-muted mb-0">Total: {{ docentes.length }} docentes registrados.</p>
-    </div>
+  <!-- Encabezado -->
+  <div class="d-flex justify-content-between align-items-center">
+    <button
+      class="rounded-lg text-white text-sm py-2 px-3 bg-gray-800 hover:bg-gray-900 mb-3"
+      (click)="openAddDocenteModal()"
+    >
+      Agregar Docente
+    </button>
+    <p class="text-muted mb-0">
+      Total: {{ docentes.length }} docentes registrados.
+    </p>
+  </div>
 
-    <!-- Tabla de docentes -->
-    <div class="table-responsive">
-        <table class="table table-bordered table-striped align-middle">
-            <thead class="table-dark">
-                <tr>
-                    <th>Nombre Completo</th>
-                    <th>Correo</th>
-                    <th>Departamento</th>
-                    <th class="text-center">Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngIf="docentes.length === 0">
-                    <td colspan="4" class="text-center">No hay docentes disponibles.</td>
-                </tr>
-                <tr *ngFor="let docente of docentes">
-                    <td>{{ docente.nombreDocente }} {{ docente.apellidoDocente }}</td>
-                    <td>{{ docente.correoDocente }}</td>
-                    <td>{{ docente.departamento.nombreDepartamento || 'Sin departamento' }}</td>
-                    <td class="text-center">
-                        <button class="btn btn-warning btn-sm me-1" (click)="openEditDocenteModal(docente)">
-                            <i class='bx bxs-edit-alt' ></i> Editar
-                        </button>
-                        <button class="btn btn-info btn-sm me-1" (click)="openPreviewDocenteModal(docente)">
-                            <i class="bi bi-eye"></i> Vista Previa
-                        </button>
-                        <button class="btn btn-danger btn-sm" (click)="eliminarDocente(docente.idDocente!)">
-                            <i class="bx bxs-trash-alt"></i> Eliminar
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+  <!-- Tabla de docentes -->
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>Nombre Completo</th>
+          <th>Correo</th>
+          <th>Departamento</th>
+          <th class="text-center">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="docentes.length === 0">
+          <td colspan="4" class="text-center">No hay docentes disponibles.</td>
+        </tr>
+        <tr *ngFor="let docente of docentes">
+          <td>{{ docente.nombreDocente }} {{ docente.apellidoDocente }}</td>
+          <td>{{ docente.correoDocente }}</td>
+          <td>
+            {{ docente.departamento.nombreDepartamento || "Sin departamento" }}
+          </td>
+          <td class="text-center">
+            <button
+              class="btn btn-warning btn-sm me-1"
+              (click)="openEditDocenteModal(docente)"
+            >
+              <i class="bx bxs-edit-alt"></i> Editar
+            </button>
+            <button
+              class="btn btn-info btn-sm me-1"
+              (click)="openPreviewDocenteModal(docente)"
+            >
+              <i class="bi bi-eye"></i> Vista Previa
+            </button>
+            <button
+              class="btn btn-danger btn-sm"
+              (click)="eliminarDocente(docente.idDocente!)"
+            >
+              <i class="bx bxs-trash-alt"></i> Eliminar
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 
-    <!-- Modal para agregar/editar docente -->
-    <div class="modal fade" id="addDocenteModal" tabindex="-1" aria-labelledby="addDocenteModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="addDocenteModalLabel">Agregar/Editar Docente</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="mb-3">
-                            <label for="nombreDocente" class="form-label">Nombre</label>
-                            <input type="text" id="nombreDocente" [(ngModel)]="newDocente.nombreDocente"
-                                name="nombreDocente" class="form-control" placeholder="Ingrese el nombre del docente"
-                                required />
-                        </div>
-                        <div class="mb-3">
-                            <label for="apellidoDocente" class="form-label">Apellido</label>
-                            <input type="text" id="apellidoDocente" [(ngModel)]="newDocente.apellidoDocente"
-                                name="apellidoDocente" class="form-control"
-                                placeholder="Ingrese el apellido del docente" required />
-                        </div>
-                        <div class="mb-3">
-                            <label for="correoDocente" class="form-label">Correo</label>
-                            <input type="email" id="correoDocente" [(ngModel)]="newDocente.correoDocente"
-                                name="correoDocente" class="form-control" placeholder="Ingrese el correo del docente"
-                                required />
-                        </div>
-                        <div class="mb-3">
-                            <label for="idInstitucional" class="form-label">ID Institucional</label>
-                            <input type="text" id="idInstitucional" [(ngModel)]="newDocente.idInstitucional"
-                                name="idInstitucional" class="form-control" placeholder="Ingrese el ID institucional"
-                                required />
-                        </div>
-                        <div class="mb-3">
-                            <label for="departamentoId" class="form-label">Departamento</label>
-                            <select id="departamentoId" [(ngModel)]="newDocente.departamento.idDepartamento"
-                                name="departamentoId" class="form-select" required>
-                                <option [value]="null" disabled>Selecciona un departamento</option>
-                                <option *ngFor="let departamento of departamentos"
-                                    [value]="departamento.idDepartamento">
-                                    {{ departamento.nombreDepartamento }}
-                                </option>
-                            </select>
-                        </div>
-                        <div class="text-end">
-                            <button type="button" class="btn btn-primary" (click)="guardarDocente()">
-                                <i class="bi bi-save"></i> Guardar
-                            </button>
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                <i class="bi bi-x-circle"></i> Cancelar
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+  <!-- Modal para agregar/editar docente -->
+  <div
+    class="modal fade"
+    id="addDocenteModal"
+    tabindex="-1"
+    aria-labelledby="addDocenteModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title" id="addDocenteModalLabel">
+            Agregar/Editar Docente
+          </h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
         </div>
-    </div>
-
-    <!-- Modal para vista previa del docente -->
-    <div class="modal fade" id="previewDocenteModal" tabindex="-1" aria-labelledby="previewDocenteModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header bg-info text-white">
-                    <h5 class="modal-title" id="previewDocenteModalLabel">Vista Previa del Docente</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <p><strong>Nombre Completo:</strong> {{ selectedDocente?.nombreDocente }} {{
-                        selectedDocente?.apellidoDocente }}</p>
-                    <p><strong>Correo:</strong> {{ selectedDocente?.correoDocente }}</p>
-                    <p><strong>ID Institucional:</strong> {{ selectedDocente?.idInstitucional }}</p>
-                    <p>
-                        <strong>Departamento:</strong> {{ selectedDocente?.departamento?.nombreDepartamento || 'Sin departamento' }}
-                    </p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        <i class="bi bi-x-circle"></i> Cerrar
-                    </button>
-                </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label for="nombreDocente" class="form-label">Nombre</label>
+              <input
+                type="text"
+                id="nombreDocente"
+                [(ngModel)]="newDocente.nombreDocente"
+                name="nombreDocente"
+                class="form-control"
+                placeholder="Ingrese el nombre del docente"
+                required
+              />
             </div>
+            <div class="mb-3">
+              <label for="apellidoDocente" class="form-label">Apellido</label>
+              <input
+                type="text"
+                id="apellidoDocente"
+                [(ngModel)]="newDocente.apellidoDocente"
+                name="apellidoDocente"
+                class="form-control"
+                placeholder="Ingrese el apellido del docente"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="correoDocente" class="form-label">Correo</label>
+              <input
+                type="email"
+                id="correoDocente"
+                [(ngModel)]="newDocente.correoDocente"
+                name="correoDocente"
+                class="form-control"
+                placeholder="Ingrese el correo del docente"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="idInstitucional" class="form-label"
+                >ID Institucional</label
+              >
+              <input
+                type="text"
+                id="idInstitucional"
+                [(ngModel)]="newDocente.idInstitucional"
+                name="idInstitucional"
+                class="form-control"
+                placeholder="Ingrese el ID institucional"
+                required
+                minlength="8"
+                maxlength="8"
+                (input)="validarIdInstitucional()"
+              />
+              <div *ngIf="idInstitucionalError" class="text-danger mt-1">
+                El ID debe comenzar con 'L' y tener exactamente 8 caracteres.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="departamentoId" class="form-label"
+                >Departamento</label
+              >
+              <select
+                id="departamentoId"
+                [(ngModel)]="newDocente.departamento.idDepartamento"
+                name="departamentoId"
+                class="form-select"
+                required
+              >
+                <option [value]="null" disabled>
+                  Selecciona un departamento
+                </option>
+                <option
+                  *ngFor="let departamento of departamentos"
+                  [value]="departamento.idDepartamento"
+                >
+                  {{ departamento.nombreDepartamento }}
+                </option>
+              </select>
+            </div>
+            <div class="text-end">
+              <button
+                type="button"
+                class="btn btn-primary"
+                (click)="guardarDocente()"
+              >
+                <i class="bi bi-save"></i> Guardar
+              </button>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                <i class="bi bi-x-circle"></i> Cancelar
+              </button>
+            </div>
+          </form>
         </div>
+      </div>
     </div>
+  </div>
+
+  <!-- Modal para vista previa del docente -->
+  <div
+    class="modal fade"
+    id="previewDocenteModal"
+    tabindex="-1"
+    aria-labelledby="previewDocenteModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header bg-info text-white">
+          <h5 class="modal-title" id="previewDocenteModalLabel">
+            Vista Previa del Docente
+          </h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <p>
+            <strong>Nombre Completo:</strong>
+            {{ selectedDocente?.nombreDocente }}
+            {{ selectedDocente?.apellidoDocente }}
+          </p>
+          <p><strong>Correo:</strong> {{ selectedDocente?.correoDocente }}</p>
+          <p>
+            <strong>ID Institucional:</strong>
+            {{ selectedDocente?.idInstitucional }}
+          </p>
+          <p>
+            <strong>Departamento:</strong>
+            {{
+              selectedDocente?.departamento?.nombreDepartamento ||
+                "Sin departamento"
+            }}
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            <i class="bi bi-x-circle"></i> Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

@@ -168,6 +168,7 @@ export class Horario6Component implements OnInit {
       cantidadParticipantes: 0,
       requerimientosTecnicos: '',
       estado: 'PENDIENTE',
+      fechaReserva: new Date(),
     };
   }
 
@@ -269,8 +270,13 @@ export class Horario6Component implements OnInit {
           this.cerrarModal();
           this.isSaving = false;
         },
-        error: () => {
-          Swal.fire('Error', 'No se pudo crear la reserva.', 'error');
+        error: (err) => {
+          const errorMessage = err.error?.message || 'No se pudo crear la reserva.';
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: errorMessage
+          });
           this.isSaving = false;
         }
       });

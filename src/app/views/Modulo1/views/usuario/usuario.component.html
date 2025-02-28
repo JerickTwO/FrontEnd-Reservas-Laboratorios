@@ -134,8 +134,8 @@
                 />
               </div>
 
-              <div class="mb-1">
-                <label class="form-label" for="idInstitucional"
+              <div class="mb-3">
+                <label for="idInstitucional" class="form-label"
                   >ID Institucional</label
                 >
                 <input
@@ -144,10 +144,18 @@
                   [(ngModel)]="nuevoUsuario.idInstitucional"
                   name="idInstitucional"
                   class="form-control"
+                  placeholder="Ingrese el ID institucional"
+                  required
+                  minlength="8"
+                  maxlength="8"
+                  (input)="validarIdInstitucional()"
                 />
+                <div *ngIf="idInstitucionalError" class="text-danger mt-1">
+                  El ID debe comenzar con 'L' y tener exactamente 8 caracteres.
+                </div>
               </div>
               <div class="mb-1" *ngIf="nuevoUsuario.tipoUsuario === 'DOCENTE'">
-                <label class="form-label" for="departamentoId" 
+                <label class="form-label" for="departamentoId"
                   >Departamento</label
                 >
                 <select
@@ -182,14 +190,14 @@
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-dark mr-2" (click)="guardarNuevo()">
-            Guardar
-          </button>
           <button
             type="button"
-            class="btn btn-warning"
-            data-bs-dismiss="modal"
+            class="btn btn-dark mr-2"
+            (click)="guardarNuevo()"
           >
+            Guardar
+          </button>
+          <button type="button" class="btn btn-warning" data-bs-dismiss="modal">
             Cancelar
           </button>
         </div>
@@ -217,7 +225,7 @@
         <div class="modal-body" *ngIf="usuarioAEditar">
           <form>
             <div class="mb-1">
-              <label class="form-label" for="nombreCompletoEdit" 
+              <label class="form-label" for="nombreCompletoEdit"
                 >Nombre Completo</label
               >
               <input
@@ -230,9 +238,7 @@
             </div>
 
             <div class="mb-1">
-              <label class="form-label" for="correoEdit"
-                >Correo</label
-              >
+              <label class="form-label" for="correoEdit">Correo</label>
               <input
                 type="email"
                 id="correoEdit"

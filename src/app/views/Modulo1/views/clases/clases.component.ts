@@ -32,16 +32,8 @@ export class ClaseComponent implements OnInit {
   modalClase: Modal | null = null;
   isLoading: boolean = false;
   clasesPeriodoActivo: Clase[] = [];
-  franjasPermitidas = [
-    { horaInicio: '07:00:00', horaFin: '08:00:00' },
-    { horaInicio: '08:00:00', horaFin: '09:00:00' },
-    { horaInicio: '09:00:00', horaFin: '10:00:00' },
-    { horaInicio: '10:00:00', horaFin: '11:00:00' },
-    { horaInicio: '11:00:00', horaFin: '12:00:00' },
-    { horaInicio: '12:00:00', horaFin: '13:00:00' },
-    { horaInicio: '13:00:00', horaFin: '14:00:00' },
-    { horaInicio: '14:00:00', horaFin: '15:00:00' },
-  ];
+  public franjasPermitidas: { horaInicio: string; horaFin: string }[] = [];
+
   dias: DiaEnum[] = [
     DiaEnum.LUNES,
     DiaEnum.MARTES,
@@ -55,14 +47,14 @@ export class ClaseComponent implements OnInit {
     private materiaService: MateriaService,
     private docenteService: DocenteService,
     private laboratorioService: LaboratorioService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     const modalElement = document.getElementById('claseModal');
     if (modalElement) {
       this.modalClase = new Modal(modalElement, {
         backdrop: true,
-        keyboard: true
+        keyboard: true,
       });
       modalElement.addEventListener('hidden.bs.modal', () => {
         this.isEditing = false;
@@ -89,24 +81,28 @@ export class ClaseComponent implements OnInit {
       error: (err) => console.error('Error al cargar laboratorios:', err),
     });
   }
+  
   cargarClases() {
     this.clasesService.getClases().subscribe(
       (data) => {
         this.clases = data;
+        this.cargarClasesConPeriodoActivo();
       },
       (error) => {
         console.error('Error cargando clases', error);
       }
     );
   }
+  
   cargarClasesConPeriodoActivo() {
-    this.isLoading = false;
     this.clasesService.obtenerClasesPeriodo().subscribe(
       (data) => {
         this.clasesPeriodoActivo = data;
+        this.isLoading = false;
       },
       (error) => {
         console.error('Error cargando clases', error);
+        this.isLoading = false;
       }
     );
   }
@@ -126,12 +122,13 @@ export class ClaseComponent implements OnInit {
   }
 
   openAddClaseModal() {
-    this.modalClase?.show()
+    this.modalClase?.show();
   }
 
   openEditClaseModal(clase: Clase) {
     this.isEditing = true;
     this.newClase = { ...clase }; // Hacemos una copia del objeto para editarlo
+    this.modalClase?.show();
   }
 
   guardarClase() {
@@ -163,7 +160,7 @@ export class ClaseComponent implements OnInit {
           },
           complete: () => {
             this.isLoading = false;
-          }
+          },
         });
     } else {
       this.clasesService.agregarClase(this.newClase).subscribe({
@@ -180,52 +177,52 @@ export class ClaseComponent implements OnInit {
           console.error('Error agregando clase', error);
           Swal.fire('Error', 'No se pudo crear la clase.', 'error');
           this.isLoading = false;
-
         },
         complete: () => {
           this.isLoading = false;
-        }
+        },
       });
     }
   }
 
-
-
-  agregarClase(): void {
-    this.clasesService.agregarClase(this.newClase).subscribe({
-      next: () => {
-        this.cerrarModal();
-        this.recargarPagina();
-      },
-      error: (err) => console.error('Error al agregar clase:', err),
-    });
-  }
-
-  editarClase(): void {
-    this.clasesService
-      .editarClase(this.newClase.idClase, this.newClase)
-      .subscribe({
-        next: () => {
-          this.cerrarModal();
-          this.recargarPagina(); // <-- Recarga la página después de editar
-        },
-        error: (err) => console.error('Error al editar clase:', err),
-      });
-  }
-
   eliminarClase(id: number) {
-    this.clasesService.eliminarClase(id).subscribe(
-      () => {
-        this.cargarClases(); // Recargamos las clases
-      },
-      (error) => {
-        console.error('Error eliminando clase', error);
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: "No podrás revertir esta acción",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.clasesService.eliminarClase(id).subscribe(
+          () => {
+            Swal.fire(
+              'Eliminada',
+              'La clase ha sido eliminada.',
+              'success'
+            );
+            this.cargarClases();
+          },
+          (error) => {
+            console.error('Error eliminando clase', error);
+            Swal.fire(
+              'Error',
+              'No se pudo eliminar la clase.',
+              'error'
+            );
+          }
+        );
       }
-    );
+    });
   }
 
   cerrarModal(): void {
     this.modalClase?.hide();
+    this.newClase = this.resetNuevaClaseData();
+    this.isEditing = false;
   }
 
   trackById(index: number, item: Clase): number {
@@ -237,22 +234,43 @@ export class ClaseComponent implements OnInit {
       idClase: 0,
       materia: new Materia(),
       docente: new Docente(),
-      laboratorio: new Laboratorio(), // Inicializa laboratorio aquí
+      laboratorio: new Laboratorio(),
       periodo: new Periodo(),
       horaInicio: '',
       horaFin: '',
-      dia: DiaEnum.LUNES, // o cualquier valor por defecto
+      dia: DiaEnum.LUNES,
       fechaCreacion: new Date(),
       fechaActualizacion: new Date(),
     };
   }
 
-
   private validarClase(clase: Clase): boolean {
     return clase.materia.idMateria > 0 && clase.docente.idDocente > 0;
   }
 
-  private recargarPagina(): void {
-    window.location.reload();
+  onLaboratorioChange(): void {
+    const labId = Number(this.newClase.laboratorio.idLaboratorio);
+    console.log('ID del laboratorio seleccionado:', labId);
+
+    const selectedLab = this.laboratorios.find(
+      (lab) => lab.idLaboratorio === labId
+    );
+    console.log('Laboratorio encontrado:', selectedLab);
+
+    if (selectedLab && selectedLab.franjasHorario) {
+      this.franjasPermitidas = selectedLab.franjasHorario.map((franja) => {
+        const [horaInicio, horaFin] = franja.split('-');
+        console.info('Franja horaria:', horaInicio, horaFin);
+        return { horaInicio, horaFin };
+      });
+    } else {
+      console.error(
+        'No se encontró el laboratorio o no tiene franjas horarias'
+      );
+      this.franjasPermitidas = [];
+    }
+
+    this.newClase.horaInicio = '';
+    this.newClase.horaFin = '';
   }
 }

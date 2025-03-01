@@ -21,7 +21,7 @@ import { UsuarioService } from 'src/app/core/services/usuario.service';
   styleUrl: './horarios.component.scss',
 })
 export class Horario1Component implements OnInit {
-  laboratorios: Laboratorio[];
+  laboratorio: Laboratorio = new Laboratorio();
   horas: string[] = [];
   dias: DiaEnum[] = [];
   periodoActivo: Periodo | null = null;
@@ -42,15 +42,18 @@ export class Horario1Component implements OnInit {
     private reservaService: ReservaService,
     private laboratorioService: LaboratorioService,
     private usuarioService: UsuarioService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.cargarReservasHorario();
     this.obtenerPeriodoActivo();
     this.getLaboratorios();
-    this.modalReserva = new Modal(document.getElementById(`modalReserva${this.numeroLaboratorio}`)!, {
-      backdrop: 'static',
-    });
+    this.modalReserva = new Modal(
+      document.getElementById(`modalReserva${this.numeroLaboratorio}`)!,
+      {
+        backdrop: 'static',
+      }
+    );
 
     document
       .getElementById(`modalReserva${this.numeroLaboratorio}`)
@@ -65,26 +68,28 @@ export class Horario1Component implements OnInit {
   }
 
   getLaboratorios(): void {
-    this.laboratorioService.getLaboratorios().subscribe({
-      next: (data) => {
-        this.laboratorios = data;
+    this.laboratorioService
+      .getLaboratorioById(this.numeroLaboratorio)
+      .subscribe({
+        next: (data) => {
+          this.laboratorio = data;
 
-        if (this.laboratorios.length > 0) {
-          this.franjasPermitidas = this.laboratorios[0].franjasHorario.map(
-            (franja: string) => {
-              const [horaInicio, horaFin] = franja.split('-');
-              return { horaInicio, horaFin };
-            }
-          );
+          if (this.laboratorio) {
+            this.franjasPermitidas = this.laboratorio.franjasHorario.map(
+              (franja: string) => {
+                const [horaInicio, horaFin] = franja.split('-');
+                return { horaInicio, horaFin };
+              }
+            );
 
-          this.horas = this.laboratorios[0].franjasHorario;
-          this.dias = Object.keys(DiaEnum)
-            .filter((key) => isNaN(Number(key)))
-            .map((key) => DiaEnum[key as keyof typeof DiaEnum]);
-        }
-      },
-      error: (err) => console.error('Error al cargar los laboratorios:', err),
-    });
+            this.horas = this.laboratorio.franjasHorario;
+            this.dias = Object.keys(DiaEnum)
+              .filter((key) => isNaN(Number(key)))
+              .map((key) => DiaEnum[key as keyof typeof DiaEnum]);
+          }
+        },
+        error: (err) => console.error('Error al cargar el laboratorio:', err),
+      });
   }
   obtenerPeriodoActivo(): void {
     this.periodoService.getPeriodoActivo().subscribe(
@@ -99,7 +104,10 @@ export class Horario1Component implements OnInit {
   cargarReservasHorario(): void {
     this.horarioService.obtenerClasesReservas().subscribe(
       (data) => {
-        this.horariosReservas = data.filter((reserva: HorarioReservas) => reserva.laboratorio.idLaboratorio === this.numeroLaboratorio);
+        this.horariosReservas = data.filter(
+          (reserva: HorarioReservas) =>
+            reserva.laboratorio.idLaboratorio === this.numeroLaboratorio
+        );
       },
       (error) => {
         console.error('Error al cargar los horarios con reservas:', error);
@@ -176,12 +184,14 @@ export class Horario1Component implements OnInit {
 
     this.nuevaReserva.laboratorio.idLaboratorio = this.numeroLaboratorio;
 
-    const selectedLab = this.laboratorios.find(
-      (lab) => lab.idLaboratorio === this.numeroLaboratorio
-    );
+    const selectedLab = this.laboratorio;
     if (!selectedLab) {
-      Swal.fire('Error', `Laboratorio ${this.numeroLaboratorio} no encontrado.`, 'error');
-      this.isSaving = false
+      Swal.fire(
+        'Error',
+        `Laboratorio ${this.numeroLaboratorio} no encontrado.`,
+        'error'
+      );
+      this.isSaving = false;
       return;
     }
 
@@ -191,7 +201,7 @@ export class Horario1Component implements OnInit {
         'La cantidad de participantes excede la capacidad del laboratorio.',
         'error'
       );
-      this.isSaving = false
+      this.isSaving = false;
       return;
     }
 
@@ -234,7 +244,9 @@ export class Horario1Component implements OnInit {
       return;
     }
 
-    this.nuevaReserva.horaInicio = this.formatTime(this.nuevaReserva.horaInicio);
+    this.nuevaReserva.horaInicio = this.formatTime(
+      this.nuevaReserva.horaInicio
+    );
     this.nuevaReserva.horaFin = this.formatTime(this.nuevaReserva.horaFin);
 
     if (this.isEditing) {
@@ -259,25 +271,32 @@ export class Horario1Component implements OnInit {
           error: () => {
             Swal.fire('Error', 'No se pudo actualizar la reserva.', 'error');
             this.isSaving = false;
-          }
+          },
         });
     } else {
       this.reservaService.crearReserva(this.nuevaReserva).subscribe({
         next: () => {
-          Swal.fire('Reserva Creada', 'La reserva se creó correctamente.', 'success');
+          Swal.fire(
+            'Reserva Creada',
+            'La reserva se creó correctamente.',
+            'success'
+          );
           this.cargarReservasHorario();
           this.cerrarModal();
           this.isSaving = false;
         },
         error: (err) => {
-          const errorMessage = err.error?.message || err.error?.error || 'No se pudo crear la reserva.';
+          const errorMessage =
+            err.error?.message ||
+            err.error?.error ||
+            'No se pudo crear la reserva.';
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: errorMessage
+            text: errorMessage,
           });
           this.isSaving = false;
-        }
+        },
       });
     }
   }

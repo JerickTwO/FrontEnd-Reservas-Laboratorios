@@ -42,15 +42,18 @@ export class Horario6Component implements OnInit {
     private reservaService: ReservaService,
     private laboratorioService: LaboratorioService,
     private usuarioService: UsuarioService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.cargarReservasHorario();
     this.obtenerPeriodoActivo();
     this.getLaboratorios();
-    this.modalReserva = new Modal(document.getElementById(`modalReserva${this.numeroLaboratorio}`)!, {
-      backdrop: 'static',
-    });
+    this.modalReserva = new Modal(
+      document.getElementById(`modalReserva${this.numeroLaboratorio}`)!,
+      {
+        backdrop: 'static',
+      }
+    );
 
     document
       .getElementById(`modalReserva${this.numeroLaboratorio}`)
@@ -99,7 +102,10 @@ export class Horario6Component implements OnInit {
   cargarReservasHorario(): void {
     this.horarioService.obtenerClasesReservas().subscribe(
       (data) => {
-        this.horariosReservas = data.filter((reserva: HorarioReservas) => reserva.laboratorio.idLaboratorio === this.numeroLaboratorio);
+        this.horariosReservas = data.filter(
+          (reserva: HorarioReservas) =>
+            reserva.laboratorio.idLaboratorio === this.numeroLaboratorio
+        );
       },
       (error) => {
         console.error('Error al cargar los horarios con reservas:', error);
@@ -181,8 +187,12 @@ export class Horario6Component implements OnInit {
       (lab) => lab.idLaboratorio === this.numeroLaboratorio
     );
     if (!selectedLab) {
-      Swal.fire('Error', `Laboratorio ${this.numeroLaboratorio} no encontrado.`, 'error');
-      this.isSaving = false
+      Swal.fire(
+        'Error',
+        `Laboratorio ${this.numeroLaboratorio} no encontrado.`,
+        'error'
+      );
+      this.isSaving = false;
       return;
     }
 
@@ -192,7 +202,7 @@ export class Horario6Component implements OnInit {
         'La cantidad de participantes excede la capacidad del laboratorio.',
         'error'
       );
-      this.isSaving = false
+      this.isSaving = false;
       return;
     }
 
@@ -235,7 +245,9 @@ export class Horario6Component implements OnInit {
       return;
     }
 
-    this.nuevaReserva.horaInicio = this.formatTime(this.nuevaReserva.horaInicio);
+    this.nuevaReserva.horaInicio = this.formatTime(
+      this.nuevaReserva.horaInicio
+    );
     this.nuevaReserva.horaFin = this.formatTime(this.nuevaReserva.horaFin);
 
     if (this.isEditing) {
@@ -260,25 +272,30 @@ export class Horario6Component implements OnInit {
           error: () => {
             Swal.fire('Error', 'No se pudo actualizar la reserva.', 'error');
             this.isSaving = false;
-          }
+          },
         });
     } else {
       this.reservaService.crearReserva(this.nuevaReserva).subscribe({
         next: () => {
-          Swal.fire('Reserva Creada', 'La reserva se creó correctamente.', 'success');
+          Swal.fire(
+            'Reserva Creada',
+            'La reserva se creó correctamente.',
+            'success'
+          );
           this.cargarReservasHorario();
           this.cerrarModal();
           this.isSaving = false;
         },
         error: (err) => {
-          const errorMessage = err.error?.message || 'No se pudo crear la reserva.';
+          const errorMessage =
+            err.error?.message || 'No se pudo crear la reserva.';
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: errorMessage
+            text: errorMessage,
           });
           this.isSaving = false;
-        }
+        },
       });
     }
   }

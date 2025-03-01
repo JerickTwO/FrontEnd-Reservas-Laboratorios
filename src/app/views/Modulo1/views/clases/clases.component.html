@@ -161,13 +161,14 @@
                   name="laboratorio"
                   class="form-select"
                   required
+                  (change)="onLaboratorioChange()"
                 >
-                  <option [value]="null" disabled>
+                  <option [ngValue]="null" disabled>
                     Selecciona un laboratorio
                   </option>
                   <option
                     *ngFor="let laboratorio of laboratorios"
-                    [value]="laboratorio.idLaboratorio"
+                    [ngValue]="laboratorio.idLaboratorio"
                   >
                     {{ laboratorio.nombreLaboratorio }}
                   </option>

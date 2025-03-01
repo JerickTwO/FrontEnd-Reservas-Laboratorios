@@ -91,7 +91,6 @@ export class ReservaComponent implements OnInit {
     this.usuarioService.usuario$.subscribe((usuario) => {
       if (usuario) {
         this.userRole = usuario.rol.nombre;
-        // console.log('Rol del usuario:', this.userRole);
       }
     });
 
@@ -174,7 +173,10 @@ export class ReservaComponent implements OnInit {
 
     // Convertir el ID del laboratorio a número si es string
     if (typeof this.nuevaReserva.laboratorio.idLaboratorio === 'string') {
-      this.nuevaReserva.laboratorio.idLaboratorio = parseInt(this.nuevaReserva.laboratorio.idLaboratorio, 10);
+      this.nuevaReserva.laboratorio.idLaboratorio = parseInt(
+        this.nuevaReserva.laboratorio.idLaboratorio,
+        10
+      );
     }
 
     if (this.isEditing) {
@@ -196,16 +198,12 @@ export class ReservaComponent implements OnInit {
             this.cerrarModal();
           },
           error: (err) => {
-            Swal.fire(
-              'Error',
-              'No se pudo actualizar la reserva.',
-              'error'
-            );
+            Swal.fire('Error', 'No se pudo actualizar la reserva.', 'error');
             console.error('Error al actualizar la reserva:', err);
           },
           complete: () => {
             this.isLoading = false;
-          }
+          },
         });
     } else {
       this.reservaService.crearReserva(this.nuevaReserva).subscribe({
@@ -219,22 +217,22 @@ export class ReservaComponent implements OnInit {
           this.cerrarModal();
         },
         error: (err) => {
-          const errorMessage = err.error?.detalleError || 'No se pudo crear la reserva.';
+          const errorMessage =
+            err.error?.detalleError || 'No se pudo crear la reserva.';
           Swal.fire({
             icon: 'error',
             title: 'Error',
-            text: errorMessage
+            text: errorMessage,
           });
           console.error('Error al crear la reserva:', err);
           this.isLoading = false;
         },
         complete: () => {
           this.isLoading = false;
-        }
+        },
       });
     }
   }
-
 
   cambiarEstadoPendiente(reserva: Reserva): void {
     if (reserva.idReserva === undefined || reserva.idReserva === null) {
@@ -313,11 +311,13 @@ export class ReservaComponent implements OnInit {
 
   abrirModalEditar(reserva: Reserva): void {
     this.isEditing = true;
-    const fechaReserva = reserva.fechaReserva ? new Date(reserva.fechaReserva) : new Date();
+    const fechaReserva = reserva.fechaReserva
+      ? new Date(reserva.fechaReserva)
+      : new Date();
     fechaReserva.setHours(0, 0, 0, 0);
     this.nuevaReserva = {
       ...reserva,
-      fechaReserva: fechaReserva
+      fechaReserva: fechaReserva,
     };
     this.nuevaReserva.horaInicio = reserva.horaInicio;
     this.nuevaReserva.horaFin = reserva.horaFin;
@@ -395,23 +395,21 @@ export class ReservaComponent implements OnInit {
   exportarPDF(): void {
     const doc = new jsPDF();
 
-    // Agregar logos
     const itinLogo = 'assets/img/logos/itin.png';
     const espeLogo = 'assets/img/logos/espe.png';
 
     doc.addImage(espeLogo, 'PNG', 15, 1, 70, 30);
     doc.addImage(itinLogo, 'PNG', 130, 8, 55, 20);
 
-    // Título
     doc.setFontSize(14);
     doc.text('REPORTE DE RESERVA DE LABORATORIOS', 50, 40);
 
-    // Preparar datos de la tabla
     const datosExportacion = this.reservas.map((reserva) => [
       reserva.nombreCompleto,
-      reserva.fechaActualizacion
-        ? `${reserva.fechaActualizacion.getDate()}/${reserva.fechaActualizacion.getMonth() + 1
-        }/${reserva.fechaActualizacion.getFullYear()}`
+      reserva.fechaReserva
+        ? `${reserva.fechaReserva.getDate()}/${
+            reserva.fechaReserva.getMonth() + 1
+          }/${reserva.fechaReserva.getFullYear()}`
         : '',
       `${reserva.horaInicio}-${reserva.horaFin}`,
 
@@ -429,7 +427,6 @@ export class ReservaComponent implements OnInit {
       },
     });
 
-    // Descargar PDF
     doc.save('Reservas.pdf');
   }
 }

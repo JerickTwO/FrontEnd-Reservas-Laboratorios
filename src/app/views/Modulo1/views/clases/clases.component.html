@@ -12,7 +12,10 @@
   </div>
 
   <div class="w-full overflow-hidden rounded-lg shadow-lg bg-white">
-    <div *ngIf="clasesPeriodoActivo.length === 0 && !isLoading" class="text-center p-4">
+    <div
+      *ngIf="clasesPeriodoActivo.length === 0 && !isLoading"
+      class="text-center p-4"
+    >
       <p class="text-gray-500">No hay clases disponibles.</p>
     </div>
     <div *ngIf="isLoading" class="text-center p-4">
@@ -108,7 +111,7 @@
                     *ngFor="let materia of materias"
                     [value]="materia.idMateria"
                   >
-                    {{ materia.nombreMateria }} - {{materia.nrc}}
+                    {{ materia.nombreMateria }} - {{ materia.nrc }}
                   </option>
                 </select>
                 <div *ngIf="!newClase.materia.idMateria" class="text-danger">

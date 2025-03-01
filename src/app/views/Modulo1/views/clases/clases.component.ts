@@ -13,6 +13,7 @@ import { PeriodoService } from 'src/app/core/services/periodo.service';
 import { DiaEnum, Laboratorio } from 'src/app/models/laboratorio.model';
 import { LaboratorioService } from 'src/app/core/services/laboratorio.service';
 import Swal from 'sweetalert2';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-materia',
@@ -81,7 +82,7 @@ export class ClaseComponent implements OnInit {
       error: (err) => console.error('Error al cargar laboratorios:', err),
     });
   }
-  
+
   cargarClases() {
     this.clasesService.getClases().subscribe(
       (data) => {
@@ -93,18 +94,33 @@ export class ClaseComponent implements OnInit {
       }
     );
   }
-  
+
   cargarClasesConPeriodoActivo() {
-    this.clasesService.obtenerClasesPeriodo().subscribe(
-      (data) => {
-        this.clasesPeriodoActivo = data;
+    this.clasesService.obtenerClasesPeriodo().subscribe({
+      next: (data) => {
+        console.log('Clases actualizadas recibidas:', data);
+
+        // Traducción de días si vienen en inglés desde el backend
+        const traduccionDias: { [key: string]: DiaEnum } = {
+          MONDAY: DiaEnum.LUNES,
+          TUESDAY: DiaEnum.MARTES,
+          WEDNESDAY: DiaEnum.MIERCOLES,
+          THURSDAY: DiaEnum.JUEVES,
+          FRIDAY: DiaEnum.VIERNES,
+        };
+
+        this.clasesPeriodoActivo = data.map((clase) => ({
+          ...clase,
+          dia: traduccionDias[clase.dia] || clase.dia, // Traducción o valor por defecto
+        }));
+
         this.isLoading = false;
       },
-      (error) => {
+      error: (error) => {
         console.error('Error cargando clases', error);
         this.isLoading = false;
-      }
-    );
+      },
+    });
   }
 
   cargarMaterias(): void {
@@ -127,7 +143,36 @@ export class ClaseComponent implements OnInit {
 
   openEditClaseModal(clase: Clase) {
     this.isEditing = true;
-    this.newClase = { ...clase }; // Hacemos una copia del objeto para editarlo
+    console.log('Clase original a editar:', clase);
+
+    // Cargar las franjas horarias del laboratorio seleccionado
+    const selectedLab = this.laboratorios.find(
+      (lab) => lab.idLaboratorio === clase.laboratorio.idLaboratorio
+    );
+    console.log('Laboratorio seleccionado:', selectedLab);
+
+    if (selectedLab && selectedLab.franjasHorario) {
+      this.franjasPermitidas = selectedLab.franjasHorario.map((franja) => {
+        const [horaInicio, horaFin] = franja.split('-');
+        return { horaInicio, horaFin };
+      });
+    }
+
+    // Formatear las horas para que coincidan con el formato de las franjas (HH:mm)
+    const formatearHora = (hora: string) => {
+      if (!hora) return '';
+      // Si la hora tiene formato HH:mm:ss, convertir a HH:mm
+      return hora.substring(0, 5);
+    };
+
+    // Hacemos una copia del objeto para editarlo
+    this.newClase = {
+      ...clase,
+      horaInicio: formatearHora(clase.horaInicio),
+      horaFin: formatearHora(clase.horaFin),
+    };
+
+    console.log('Clase preparada para editar:', this.newClase);
     this.modalClase?.show();
   }
 
@@ -140,18 +185,42 @@ export class ClaseComponent implements OnInit {
       this.newClase.periodo = new Periodo();
     }
 
+    // Formatear las horas al formato que espera el backend (HH:mm:ss)
+    const claseToSave = {
+      ...this.newClase,
+      horaInicio: this.newClase.horaInicio.includes(':')
+        ? this.newClase.horaInicio.length === 5
+          ? this.newClase.horaInicio + ':00'
+          : this.newClase.horaInicio
+        : this.newClase.horaInicio + ':00:00',
+      horaFin: this.newClase.horaFin.includes(':')
+        ? this.newClase.horaFin.length === 5
+          ? this.newClase.horaFin + ':00'
+          : this.newClase.horaFin
+        : this.newClase.horaFin + ':00:00',
+    };
+
+    console.log('Guardando clase con valores:', claseToSave);
+
     if (this.isEditing) {
       this.clasesService
-        .editarClase(this.newClase.idClase, this.newClase)
+        .editarClase(claseToSave.idClase, claseToSave)
         .subscribe({
-          next: () => {
-            Swal.fire(
-              'Clase Actualizada',
-              'La clase se actualizó correctamente',
-              'success'
-            );
-            this.cargarClases();
+          next: (claseActualizada) => {
+            // Primero cerramos el modal
             this.cerrarModal();
+
+            // Luego recargamos los datos
+            this.cargarClasesConPeriodoActivo();
+
+            // Finalmente mostramos el mensaje de éxito
+            setTimeout(() => {
+              Swal.fire(
+                'Clase Actualizada',
+                'La clase se actualizó correctamente',
+                'success'
+              );
+            }, 100);
           },
           error: (error) => {
             console.error('Error editando clase', error);
@@ -163,15 +232,17 @@ export class ClaseComponent implements OnInit {
           },
         });
     } else {
-      this.clasesService.agregarClase(this.newClase).subscribe({
-        next: () => {
-          Swal.fire(
-            'Clase Creada',
-            'La clase se creó correctamente',
-            'success'
-          );
-          this.cargarClases();
+      this.clasesService.agregarClase(claseToSave).subscribe({
+        next: (nuevaClase) => {
           this.cerrarModal();
+          this.cargarClasesConPeriodoActivo();
+          setTimeout(() => {
+            Swal.fire(
+              'Clase Creada',
+              'La clase se creó correctamente',
+              'success'
+            );
+          }, 100);
         },
         error: (error) => {
           console.error('Error agregando clase', error);
@@ -188,31 +259,25 @@ export class ClaseComponent implements OnInit {
   eliminarClase(id: number) {
     Swal.fire({
       title: '¿Estás seguro?',
-      text: "No podrás revertir esta acción",
+      text: 'No podrás revertir esta acción',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Sí, eliminar',
-      cancelButtonText: 'Cancelar'
+      cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
         this.clasesService.eliminarClase(id).subscribe(
           () => {
-            Swal.fire(
-              'Eliminada',
-              'La clase ha sido eliminada.',
-              'success'
+            this.clasesPeriodoActivo = this.clasesPeriodoActivo.filter(
+              (c) => c.idClase !== id
             );
-            this.cargarClases();
+            Swal.fire('Eliminada', 'La clase ha sido eliminada.', 'success');
           },
           (error) => {
             console.error('Error eliminando clase', error);
-            Swal.fire(
-              'Error',
-              'No se pudo eliminar la clase.',
-              'error'
-            );
+            Swal.fire('Error', 'No se pudo eliminar la clase.', 'error');
           }
         );
       }

@@ -140,12 +140,6 @@ export class ReservaComponent implements OnInit {
     this.laboratorioService.getLaboratorios().subscribe({
       next: (data) => {
         this.laboratorios = data;
-        console.log(
-          'Franjas Laboratorio:',
-          this.laboratorios[0].franjasHorario
-        );
-
-        // Conviertes cada string en un objeto con horaInicio/horaFin
         if (this.laboratorios.length > 0) {
           this.franjasPermitidas = this.laboratorios[0].franjasHorario.map(
             (franja: string) => {
@@ -162,16 +156,11 @@ export class ReservaComponent implements OnInit {
   guardarReserva(): void {
     if (this.isLoading) return;
     this.isLoading = true;
-
-    // Asegurarse de que la fecha se envíe en el formato correcto
     if (this.nuevaReserva.fechaReserva) {
-      // Convertir la fecha a UTC
       const fecha = new Date(this.nuevaReserva.fechaReserva);
       fecha.setHours(0, 0, 0, 0);
       this.nuevaReserva.fechaReserva = fecha;
     }
-
-    // Convertir el ID del laboratorio a número si es string
     if (typeof this.nuevaReserva.laboratorio.idLaboratorio === 'string') {
       this.nuevaReserva.laboratorio.idLaboratorio = parseInt(
         this.nuevaReserva.laboratorio.idLaboratorio,

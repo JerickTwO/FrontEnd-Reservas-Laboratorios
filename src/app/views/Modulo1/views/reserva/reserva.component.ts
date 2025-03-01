@@ -156,11 +156,41 @@ export class ReservaComponent implements OnInit {
   guardarReserva(): void {
     if (this.isLoading) return;
     this.isLoading = true;
+
+    console.log('Fecha antes de procesar:', this.nuevaReserva.fechaReserva);
+
+    // Asegurarnos de que la fecha es un objeto Date
+    if (
+      this.nuevaReserva.fechaReserva &&
+      !(this.nuevaReserva.fechaReserva instanceof Date)
+    ) {
+      this.nuevaReserva.fechaReserva = new Date(this.nuevaReserva.fechaReserva);
+    }
+
     if (this.nuevaReserva.fechaReserva) {
       const fecha = new Date(this.nuevaReserva.fechaReserva);
       fecha.setHours(0, 0, 0, 0);
       this.nuevaReserva.fechaReserva = fecha;
+      console.log('Fecha después de procesar:', this.nuevaReserva.fechaReserva);
     }
+
+    // Formatear las horas al formato que espera el backend (HH:mm:ss)
+    const reservaToSave = {
+      ...this.nuevaReserva,
+      horaInicio: this.nuevaReserva.horaInicio.includes(':')
+        ? this.nuevaReserva.horaInicio.length === 5
+          ? this.nuevaReserva.horaInicio + ':00'
+          : this.nuevaReserva.horaInicio
+        : this.nuevaReserva.horaInicio + ':00:00',
+      horaFin: this.nuevaReserva.horaFin.includes(':')
+        ? this.nuevaReserva.horaFin.length === 5
+          ? this.nuevaReserva.horaFin + ':00'
+          : this.nuevaReserva.horaFin
+        : this.nuevaReserva.horaFin + ':00:00',
+    };
+
+    console.log('Reserva a guardar:', reservaToSave);
+
     if (typeof this.nuevaReserva.laboratorio.idLaboratorio === 'string') {
       this.nuevaReserva.laboratorio.idLaboratorio = parseInt(
         this.nuevaReserva.laboratorio.idLaboratorio,
@@ -175,7 +205,7 @@ export class ReservaComponent implements OnInit {
         return;
       }
       this.reservaService
-        .actualizarReserva(this.nuevaReserva.idReserva, this.nuevaReserva)
+        .actualizarReserva(this.nuevaReserva.idReserva, reservaToSave)
         .subscribe({
           next: () => {
             Swal.fire(
@@ -195,7 +225,7 @@ export class ReservaComponent implements OnInit {
           },
         });
     } else {
-      this.reservaService.crearReserva(this.nuevaReserva).subscribe({
+      this.reservaService.crearReserva(reservaToSave).subscribe({
         next: () => {
           Swal.fire(
             'Reserva Creada',
@@ -300,16 +330,49 @@ export class ReservaComponent implements OnInit {
 
   abrirModalEditar(reserva: Reserva): void {
     this.isEditing = true;
-    const fechaReserva = reserva.fechaReserva
-      ? new Date(reserva.fechaReserva)
-      : new Date();
-    fechaReserva.setHours(0, 0, 0, 0);
+    console.log('Reserva original a editar:', reserva);
+
+    let fechaReserva: Date;
+
+    if (reserva.fechaReserva) {
+      fechaReserva =
+        reserva.fechaReserva instanceof Date
+          ? new Date(reserva.fechaReserva)
+          : new Date(reserva.fechaReserva);
+    } else {
+      fechaReserva = new Date();
+    }
+
+    // Format hours
+    const formatearHora = (hora: string) => {
+      if (!hora) return '';
+      return hora.substring(0, 5);
+    };
+
+    // Load time slots for the selected lab
+    if (reserva.laboratorio && reserva.laboratorio.idLaboratorio) {
+      const selectedLab = this.laboratorios.find(
+        (lab) => lab.idLaboratorio === reserva.laboratorio.idLaboratorio
+      );
+
+      if (selectedLab && selectedLab.franjasHorario) {
+        this.franjasPermitidas = selectedLab.franjasHorario.map(
+          (franja: string) => {
+            const [horaInicio, horaFin] = franja.split('-');
+            return { horaInicio, horaFin };
+          }
+        );
+      }
+    }
+
     this.nuevaReserva = {
       ...reserva,
       fechaReserva: fechaReserva,
+      horaInicio: formatearHora(reserva.horaInicio),
+      horaFin: formatearHora(reserva.horaFin),
     };
-    this.nuevaReserva.horaInicio = reserva.horaInicio;
-    this.nuevaReserva.horaFin = reserva.horaFin;
+
+    console.log('Reserva preparada para editar:', this.nuevaReserva);
     this.modalReserva.show();
   }
 

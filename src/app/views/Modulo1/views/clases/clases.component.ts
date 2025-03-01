@@ -184,8 +184,6 @@ export class ClaseComponent implements OnInit {
     if (!this.newClase.periodo || !this.newClase.periodo.idPeriodo) {
       this.newClase.periodo = new Periodo();
     }
-
-    // Formatear las horas al formato que espera el backend (HH:mm:ss)
     const claseToSave = {
       ...this.newClase,
       horaInicio: this.newClase.horaInicio.includes(':')
@@ -207,13 +205,8 @@ export class ClaseComponent implements OnInit {
         .editarClase(claseToSave.idClase, claseToSave)
         .subscribe({
           next: (claseActualizada) => {
-            // Primero cerramos el modal
             this.cerrarModal();
-
-            // Luego recargamos los datos
             this.cargarClasesConPeriodoActivo();
-
-            // Finalmente mostramos el mensaje de éxito
             setTimeout(() => {
               Swal.fire(
                 'Clase Actualizada',

@@ -232,9 +232,7 @@
               </div>
               }
               <div class="mb-1">
-                <label for="fechaReserva" class="form-label"
-                  >Fecha de Reserva</label
-                >
+                <label for="fechaReserva" class="form-label">Fecha de Reserva</label>
                 <input
                   type="date"
                   [(ngModel)]="nuevaReserva.fechaReserva"
@@ -244,7 +242,6 @@
                   required
                   [min]="minDate"
                   [max]="maxDate"
-                  (ngModelChange)="nuevaReserva.fechaReserva = $event"
                 />
               </div>
 

@@ -263,14 +263,25 @@
     </div>
   </div>
   <div class="text-center mt-4 mb-2">
-    <label for="hora-inicio" class="me-2">Hora de inicio: </label>
-    <select id="hora-inicio" class="form-select form-select-sm d-inline-block w-auto" style="max-width: 200px;" (change)="actualizarHorario($event)">
-      <option value="07:00">07:00</option>
+    <label for="horaInicio">Hora de Inicio</label>
+    <select
+      id="hora-inicio"
+      class="form-select form-select-sm d-inline-block w-auto"
+      style="max-width: 200px"
+      [(ngModel)]="nuevaReserva.horaInicio"
+      name="horaInicio"
+      required
+    >
+      <option value="" disabled selected>Seleccione la hora de inicio</option>
+      <option value="07:00" selected>07:00</option>
       <option value="08:00">08:00</option>
-      <option value="09:00" selected>09:00</option>
+      <option value="09:00">09:00</option>
       <option value="10:00">10:00</option>
       <option value="11:00">11:00</option>
       <option value="12:00">12:00</option>
     </select>
+    <button class="btn btn-primary ml-2" (click)="actualizarHorario()">
+      Guardar Horario
+    </button>
   </div>
 </div>

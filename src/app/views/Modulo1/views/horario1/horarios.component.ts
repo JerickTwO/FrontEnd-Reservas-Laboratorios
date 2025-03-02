@@ -73,7 +73,6 @@ export class Horario1Component implements OnInit {
     this.horarioService.obtenerHorarios().subscribe({
       next: (data) => {
         this.horario = data.resultado;
-        console.log('Horario:', this.horario[0]);
         if (this.horario.length > 0) {
           const firstHorario = this.horario[0];
           this.franjasPermitidas =
@@ -83,9 +82,10 @@ export class Horario1Component implements OnInit {
             }) || [];
 
           this.horas = firstHorario.franjasHorario || [];
-          this.dias = firstHorario.diasHorario?.map((dia: string) =>
-            DiaEnum[dia as keyof typeof DiaEnum]
-          ) || [];
+          this.dias =
+            firstHorario.diasHorario?.map(
+              (dia: string) => DiaEnum[dia as keyof typeof DiaEnum]
+            ) || [];
         }
       },
       error: (err) => console.error('Error al cargar el horario:', err),
@@ -103,23 +103,62 @@ export class Horario1Component implements OnInit {
       });
   }
 
-  actualizarHorario(event: Event): void {
-    const select = event.target as HTMLSelectElement;
-    const horaInicio = select.value;
-    this.horas = this.generarHoras(horaInicio);
-    this.franjasPermitidas = this.horas.map((franja) => {
-      const [horaInicio, horaFin] = franja.split('-');
-      return { horaInicio, horaFin };
+  actualizarHorario(): void {
+    if (!this.nuevaReserva.horaInicio) {
+      Swal.fire(
+        'Error',
+        'Seleccione una hora de inicio para actualizar el horario.',
+        'error'
+      );
+      return;
+    }
+
+    // Generar nuevas franjas basadas en la nueva hora de inicio
+    const nuevasFranjas = this.generarHoras(this.nuevaReserva.horaInicio);
+
+    const horarioActualizado: Horario = {
+      idHorario: this.horario[0]?.idHorario, // Obtener el ID del horario existente
+      franjasHorario: nuevasFranjas, // Actualizar las franjas generadas dinámicamente
+      diasHorario: this.dias, // Mantener los mismos días
+    };
+
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'El horario se actualizará con los nuevos valores.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, actualizar',
+      cancelButtonText: 'Cancelar',
+      timer: 5000, // 5 segundos
+      timerProgressBar: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.horarioService.actualizarHorario(horarioActualizado).subscribe({
+          next: (response) => {
+            this.getHorario();
+            this.horario = [response]; // Actualizar la lista de horarios en el frontend
+            Swal.fire(
+              'Horario Actualizado',
+              'El horario se ha actualizado correctamente en el servidor.',
+              'success'
+            );
+          },
+          error: (err) => {
+            console.error('Error al actualizar el horario:', err);
+            Swal.fire('Error', 'No se pudo actualizar el horario.', 'error');
+          },
+        });
+      } else if (result.dismiss === Swal.DismissReason.timer) {
+        Swal.fire('Tiempo agotado', 'No se realizó ningún cambio.', 'info');
+      }
     });
-
-    this.cargarReservasHorario();
   }
-
   generarHoras(inicio: string): string[] {
     const horas: string[] = [];
     let [hora, minuto] = inicio.split(':').map(Number);
 
     for (let i = 0; i < 8; i++) {
+      // Mantener 8 franjas
       const inicioHora = `${hora.toString().padStart(2, '0')}:${minuto
         .toString()
         .padStart(2, '0')}`;
@@ -132,6 +171,7 @@ export class Horario1Component implements OnInit {
 
     return horas;
   }
+
   obtenerPeriodoActivo(): void {
     this.periodoService.getPeriodoActivo().subscribe(
       (data) => {
@@ -149,12 +189,6 @@ export class Horario1Component implements OnInit {
           (reserva: HorarioReservas) =>
             reserva.laboratorio.idLaboratorio === this.numeroLaboratorio
         );
-        console.log('Horarios reservas:', data);
-        console.log('Horarios reservas:', this.horariosReservas);
-        console.log('Numero laboratorio:', this.numeroLaboratorio);
-        data.forEach((reserva) => {
-          console.log('Numero laboratorio:', reserva.laboratorio.idLaboratorio);
-        });
       },
       (error) => {
         console.error('Error al cargar los horarios con reservas:', error);

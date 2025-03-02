@@ -16,6 +16,8 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { Periodo } from 'src/app/models/periodo.model';
 import localeEs from '@angular/common/locales/es';
+import { HorarioService } from 'src/app/core/services/horario.service';
+import { Horario } from 'src/app/models/horario.model';
 
 registerLocaleData(localeEs, 'es');
 
@@ -35,6 +37,7 @@ registerLocaleData(localeEs, 'es');
 export class ReservaComponent implements OnInit {
   reservas: Reserva[] = [];
   laboratorios: Laboratorio[] = [];
+  horario: Horario[] = [];
   nuevaReserva: Reserva = this.resetNuevaReservaData();
   modalVisible: boolean = false;
   isEditing: boolean = false;
@@ -67,7 +70,8 @@ export class ReservaComponent implements OnInit {
     private reservaService: ReservaService,
     private laboratorioService: LaboratorioService,
     private paginationService: PaginationService,
-    private usuarioService: UsuarioService
+    private usuarioService: UsuarioService,
+    private horarioService: HorarioService
   ) {
     const today = new Date();
     this.minDate = today.toISOString().split('T')[0];
@@ -78,6 +82,7 @@ export class ReservaComponent implements OnInit {
 
   ngOnInit(): void {
     this.getLaboratorios();
+    this.getHorarios();
     this.getReservasConPeriodoActivo();
     this.modalReserva = new Modal(document.getElementById('modalReserva')!, {
       backdrop: 'static',
@@ -140,16 +145,26 @@ export class ReservaComponent implements OnInit {
     this.laboratorioService.getLaboratorios().subscribe({
       next: (data) => {
         this.laboratorios = data;
-        if (this.laboratorios.length > 0) {
-          this.franjasPermitidas = this.laboratorios[0].franjasHorario.map(
-            (franja: string) => {
-              const [horaInicio, horaFin] = franja.split('-');
-              return { horaInicio, horaFin };
-            }
-          );
-        }
       },
       error: (err) => console.error('Error al cargar los laboratorios:', err),
+    });
+  }
+  getHorarios(): void {
+    this.horarioService.obtenerHorarios().subscribe({
+      next: (data) => {
+        this.horario = data.resultado;
+        console.log('Horario:', this.horario);
+        if (this.horario.length > 0) {
+          const firstHorario = this.horario[0];
+          console.log('Horario:', firstHorario);
+          this.franjasPermitidas =
+            firstHorario.franjasHorario?.map((franja: string) => {
+              const [horaInicio, horaFin] = franja.split('-');
+              return { horaInicio, horaFin };
+            }) || [];
+        }
+      },
+      error: (err) => console.error('Error al cargar los horarios:', err),
     });
   }
 
@@ -351,12 +366,13 @@ export class ReservaComponent implements OnInit {
 
     // Load time slots for the selected lab
     if (reserva.laboratorio && reserva.laboratorio.idLaboratorio) {
-      const selectedLab = this.laboratorios.find(
-        (lab) => lab.idLaboratorio === reserva.laboratorio.idLaboratorio
-      );
-
-      if (selectedLab && selectedLab.franjasHorario) {
-        this.franjasPermitidas = selectedLab.franjasHorario.map(
+      if (
+        this.horario &&
+        Array.isArray(this.horario) &&
+        this.horario.length > 0 &&
+        this.horario[0].franjasHorario
+      ) {
+        this.franjasPermitidas = this.horario[0].franjasHorario.map(
           (franja: string) => {
             const [horaInicio, horaFin] = franja.split('-');
             return { horaInicio, horaFin };
@@ -411,8 +427,6 @@ export class ReservaComponent implements OnInit {
         nombreLaboratorio: '',
         ubicacion: '',
         capacidad: 0,
-        franjasHorario: [],
-        diasHorario: [],
       },
       periodo: new Periodo(),
       horaInicio: '',

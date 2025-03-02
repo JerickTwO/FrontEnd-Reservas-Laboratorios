@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, throwError } from 'rxjs';
 import { Horario } from 'src/app/models/horario.model';
-import { Laboratorio } from 'src/app/models/laboratorio.model'; // Importar el modelo de laboratorio
+import { Laboratorio } from 'src/app/models/laboratorio.model';
 import { environment } from 'src/environments/environment.development';
 import { HorarioReservas } from 'src/app/models/horarioReservas.model';
 
@@ -10,60 +10,57 @@ import { HorarioReservas } from 'src/app/models/horarioReservas.model';
   providedIn: 'root',
 })
 export class HorarioService {
-  private apiUrl = `${environment.urlBase}/horarios`;
-  private laboratorioApiUrl = `${environment.urlBase}/laboratorios`;
+  private readonly HorarioApiUrl = `${environment.urlBase}/horarios`;
+  private readonly laboratorioApiUrl = `${environment.urlBase}/laboratorios`;
 
+  constructor(private http: HttpClient) {}
 
-  constructor(private http: HttpClient) { }
-
-
-  // Obtener todas las reservas de clases
   obtenerClasesReservas(): Observable<HorarioReservas[]> {
-    return this.http.get<HorarioReservas[]>(`${this.apiUrl}/clases-reservas`).pipe(
-      catchError(this.handleError)
-    );
-  }
-     
-  // Obtener todos los horarios
-  obtenerHorarios(): Observable<Horario[]> {
-    return this.http.get<Horario[]>(this.apiUrl);
+    return this.http
+      .get<HorarioReservas[]>(`${this.HorarioApiUrl}/clases-reservas`)
+      .pipe(catchError(this.handleError));
   }
 
-  // Crear un nuevo horario
+  obtenerHorarios(): Observable<{ respuesta: boolean; codigoHttp: number; mensaje: string; resultado: Horario[]; detalleError: any }> {
+    return this.http.get<{ respuesta: boolean; codigoHttp: number; mensaje: string; resultado: Horario[]; detalleError: any }>(this.HorarioApiUrl).pipe(catchError(this.handleError));
+  }
+
   crearHorario(horario: Horario): Observable<Horario> {
-    return this.http.post<Horario>(this.apiUrl, horario);
+    return this.http.post<Horario>(this.HorarioApiUrl, horario).pipe(catchError(this.handleError));
   }
 
-  // Actualizar un horario existente
   actualizarHorario(horario: Horario): Observable<Horario> {
-    return this.http.put<Horario>(`${this.apiUrl}/${horario.idHorario}`, horario);
+    return this.http.put<Horario>(
+      `${this.HorarioApiUrl}/${horario.idHorario}`,
+      horario
+    ).pipe(catchError(this.handleError));
   }
 
-  // Obtener todos los laboratorios
   getLaboratorios(): Observable<Laboratorio[]> {
-    return this.http.get<Laboratorio[]>(this.laboratorioApiUrl);
+    return this.http.get<Laboratorio[]>(this.laboratorioApiUrl).pipe(catchError(this.handleError));
   }
 
-  // Obtener un laboratorio por ID
   getLaboratorioById(id: number): Observable<Laboratorio> {
-    return this.http.get<Laboratorio>(`${this.laboratorioApiUrl}/${id}`);
+    return this.http.get<Laboratorio>(`${this.laboratorioApiUrl}/${id}`).pipe(catchError(this.handleError));
   }
 
-  // Crear un nuevo laboratorio (si es necesario)
   crearLaboratorio(laboratorio: Laboratorio): Observable<Laboratorio> {
-    return this.http.post<Laboratorio>(this.laboratorioApiUrl, laboratorio);
+    return this.http.post<Laboratorio>(this.laboratorioApiUrl, laboratorio).pipe(catchError(this.handleError));
   }
 
-  // Actualizar un laboratorio existente (si es necesario)
   actualizarLaboratorio(laboratorio: Laboratorio): Observable<Laboratorio> {
-    return this.http.put<Laboratorio>(`${this.laboratorioApiUrl}/${laboratorio.idLaboratorio}`, laboratorio);
+    return this.http.put<Laboratorio>(
+      `${this.laboratorioApiUrl}/${laboratorio.idLaboratorio}`,
+      laboratorio
+    ).pipe(catchError(this.handleError));
   }
+
   obtenerHorariosConReservaAprobada(): Observable<Horario[]> {
-    return this.http.get<Horario[]>(`${this.apiUrl}/aprobadas`).pipe(
-      catchError(this.handleError)
-    );
+    return this.http
+      .get<Horario[]>(`${this.HorarioApiUrl}/aprobadas`)
+      .pipe(catchError(this.handleError));
   }
-  // Manejo de errores
+
   private handleError(error: any): Observable<never> {
     console.error('Ocurrió un error:', error);
     return throwError(() => new Error('Error al comunicarse con el servidor.'));

@@ -25,8 +25,6 @@ export class LaboratorioComponent implements OnInit {
     nombreLaboratorio: '',
     capacidad: 0,
     ubicacion: '',
-    franjasHorario: [],
-    diasHorario: [] as DiaEnum[],
   };
   error: string | null = null;
   currentPage = 1;
@@ -59,27 +57,14 @@ export class LaboratorioComponent implements OnInit {
       },
     });
   }
-  // cargarLaboratorio(id: string): void {
-  //   this.laboratorioService.getLaboratorioById(id).subscribe(
-  //     (data: Laboratorio) => {
-  //     this.laboratorio = data;
-  //     console.log('Laboratorio cargado:', this.laboratorio);
-  //     },
-  //     (error: any) => {
-  //     console.error('Error al cargar el laboratorio:', error);
-  //     }
-  //   );
-  // }
-  // Abrir el modal para agregar un nuevo laboratorio
+
   openAddLaboratorioModal(): void {
     this.newLaboratorio = {
       idLaboratorio: 0,
       nombreLaboratorio: '',
       capacidad: 0,
       ubicacion: '',
-      franjasHorario: [],
-      diasHorario: [],
-    }; // Limpiar el formulario
+    };
     this.openModal('addLaboratorioModal');
   }
 

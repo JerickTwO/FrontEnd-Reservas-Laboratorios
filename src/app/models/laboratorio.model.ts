@@ -10,16 +10,12 @@ export class Laboratorio {
     nombreLaboratorio: string;
     capacidad: number;
     ubicacion: string;
-    franjasHorario: string[];
-    diasHorario: DiaEnum[];
 
     constructor() {
         this.idLaboratorio = 0;
         this.nombreLaboratorio = '';
         this.capacidad = 0;
         this.ubicacion = '';
-        this.franjasHorario = [];
-        this.diasHorario = [];
     }
 }
 

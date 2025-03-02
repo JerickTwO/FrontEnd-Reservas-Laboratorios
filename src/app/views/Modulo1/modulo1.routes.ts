@@ -14,15 +14,11 @@ import { CarrerasComponent } from './views/carreras/carreras.component';
 import { ClaseComponent } from './views/clases/clases.component';
 import { PeriodoComponent } from './views/periodo/periodo.component';
 import { Horario1Component } from './views/horario1/horarios.component';
-import { Horario2Component } from './views/horario2/horarios.component';
-import { Horario3Component } from './views/horario3/horarios.component';
-import { Horario4Component } from './views/horario4/horarios.component';
-import { Horario5Component } from './views/horario5/horarios.component';
-import { Horario6Component } from './views/horario6/horarios.component';
-import { ActualizarContrasenaComponent } from '../../auth/actualizarContrasena/actualizarContrasena.component';
-import { EnterEmailComponent } from 'src/app/auth/recovery/enter-email/enter-email.component';
-import { ResetPasswordComponent } from 'src/app/auth/recovery/reset-password/reset-password.component';
-import { VerifyCodeComponent } from 'src/app/auth/recovery/verify-code/verify-code.component';
+// import { Horario2Component } from './views/horario2/horarios.component';
+// import { Horario3Component } from './views/horario3/horarios.component';
+// import { Horario4Component } from './views/horario4/horarios.component';
+// import { Horario5Component } from './views/horario5/horarios.component';
+// import { Horario6Component } from './views/horario6/horarios.component';
 
 
 const home: string = 'dashboard';
@@ -198,42 +194,43 @@ export const routesModulo1: Routes = [
         data: {
           title: capitalizeFirstLetter(`Horario ${horario1}`),
         },
-      }, {
-        path: horario2,
-        canActivate: [isAuthenticatedGuard],
-        component: Horario2Component,
-        data: {
-          title: capitalizeFirstLetter(`Horario ${horario2}`),
-        },
-      }, {
-        path: horario3,
-        canActivate: [isAuthenticatedGuard],
-        component: Horario3Component,
-        data: {
-          title: capitalizeFirstLetter(`Horario ${horario3}`),
-        },
-      }, {
-        path: horario4,
-        canActivate: [isAuthenticatedGuard],
-        component: Horario4Component,
-        data: {
-          title: capitalizeFirstLetter(`Horario ${horario4}`),
-        },
-      }, {
-        path: horario5,
-        canActivate: [isAuthenticatedGuard],
-        component: Horario5Component,
-        data: {
-          title: capitalizeFirstLetter(`Horario ${horario5}`),
-        },
-      }, {
-        path: horario6,
-        canActivate: [isAuthenticatedGuard],
-        component: Horario6Component,
-        data: {
-          title: capitalizeFirstLetter(`Horario ${horario6}`),
-        },
       },
+      // {
+      //   path: horario2,
+      //   canActivate: [isAuthenticatedGuard],
+      //   component: Horario2Component,
+      //   data: {
+      //     title: capitalizeFirstLetter(`Horario ${horario2}`),
+      //   },
+      // }, {
+      //   path: horario3,
+      //   canActivate: [isAuthenticatedGuard],
+      //   component: Horario3Component,
+      //   data: {
+      //     title: capitalizeFirstLetter(`Horario ${horario3}`),
+      //   },
+      // }, {
+      //   path: horario4,
+      //   canActivate: [isAuthenticatedGuard],
+      //   component: Horario4Component,
+      //   data: {
+      //     title: capitalizeFirstLetter(`Horario ${horario4}`),
+      //   },
+      // }, {
+      //   path: horario5,
+      //   canActivate: [isAuthenticatedGuard],
+      //   component: Horario5Component,
+      //   data: {
+      //     title: capitalizeFirstLetter(`Horario ${horario5}`),
+      //   },
+      // }, {
+      //   path: horario6,
+      //   canActivate: [isAuthenticatedGuard],
+      //   component: Horario6Component,
+      //   data: {
+      //     title: capitalizeFirstLetter(`Horario ${horario6}`),
+      //   },
+      // },
 
 
       // {

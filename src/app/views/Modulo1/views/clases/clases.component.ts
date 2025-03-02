@@ -9,11 +9,11 @@ import { Modal } from 'bootstrap';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ClasesService } from 'src/app/core/services/clases.service';
-import { PeriodoService } from 'src/app/core/services/periodo.service';
 import { DiaEnum, Laboratorio } from 'src/app/models/laboratorio.model';
 import { LaboratorioService } from 'src/app/core/services/laboratorio.service';
 import Swal from 'sweetalert2';
-import { Observable } from 'rxjs';
+import { HorarioService } from 'src/app/core/services/horario.service';
+import { Horario } from 'src/app/models/horario.model';
 
 @Component({
   selector: 'app-materia',
@@ -34,6 +34,8 @@ export class ClaseComponent implements OnInit {
   isLoading: boolean = false;
   clasesPeriodoActivo: Clase[] = [];
   public franjasPermitidas: { horaInicio: string; horaFin: string }[] = [];
+  public horas: string[] = [];
+  public horario: Horario[] = [];
 
   dias: DiaEnum[] = [
     DiaEnum.LUNES,
@@ -47,7 +49,8 @@ export class ClaseComponent implements OnInit {
     private clasesService: ClasesService,
     private materiaService: MateriaService,
     private docenteService: DocenteService,
-    private laboratorioService: LaboratorioService
+    private laboratorioService: LaboratorioService,
+    private horarioService: HorarioService
   ) {}
 
   ngOnInit(): void {
@@ -71,6 +74,7 @@ export class ClaseComponent implements OnInit {
     this.cargarClasesConPeriodoActivo();
     this.cargarMaterias();
     this.cargarDocentes();
+    this.getHorario();
     this.cargarLaboratorios();
   }
 
@@ -140,32 +144,50 @@ export class ClaseComponent implements OnInit {
   openAddClaseModal() {
     this.modalClase?.show();
   }
+  getHorario(): void {
+    this.horarioService.obtenerHorarios().subscribe({
+      next: (data) => {
+        this.horario = data.resultado;
+        if (this.horario.length > 0) {
+          const firstHorario = this.horario[0];
+          this.franjasPermitidas =
+            firstHorario.franjasHorario?.map((franja: string) => {
+              const [horaInicio, horaFin] = franja.split('-');
+              return { horaInicio, horaFin };
+            }) || [];
 
+          this.horas = firstHorario.franjasHorario || [];
+          this.dias = Object.keys(DiaEnum)
+            .filter((key) => isNaN(Number(key)))
+            .map((key) => DiaEnum[key as keyof typeof DiaEnum]);
+        }
+      },
+      error: (err) => console.error('Error al cargar el horario:', err),
+    });
+  }
   openEditClaseModal(clase: Clase) {
     this.isEditing = true;
     console.log('Clase original a editar:', clase);
 
-    // Cargar las franjas horarias del laboratorio seleccionado
-    const selectedLab = this.laboratorios.find(
-      (lab) => lab.idLaboratorio === clase.laboratorio.idLaboratorio
-    );
-    console.log('Laboratorio seleccionado:', selectedLab);
+    if (this.horario.length > 0) {
+      const firstHorario = this.horario[0];
+      this.franjasPermitidas =
+        firstHorario.franjasHorario?.map((franja: string) => {
+          const [horaInicio, horaFin] = franja.split('-');
+          return { horaInicio, horaFin };
+        }) || [];
 
-    if (selectedLab && selectedLab.franjasHorario) {
-      this.franjasPermitidas = selectedLab.franjasHorario.map((franja) => {
-        const [horaInicio, horaFin] = franja.split('-');
-        return { horaInicio, horaFin };
-      });
+      this.horas = firstHorario.franjasHorario || [];
+      this.dias = Object.keys(DiaEnum)
+        .filter((key) => isNaN(Number(key)))
+        .map((key) => DiaEnum[key as keyof typeof DiaEnum]);
     }
 
-    // Formatear las horas para que coincidan con el formato de las franjas (HH:mm)
     const formatearHora = (hora: string) => {
       if (!hora) return '';
-      // Si la hora tiene formato HH:mm:ss, convertir a HH:mm
       return hora.substring(0, 5);
     };
 
-    // Hacemos una copia del objeto para editarlo
     this.newClase = {
       ...clase,
       horaInicio: formatearHora(clase.horaInicio),
@@ -308,19 +330,16 @@ export class ClaseComponent implements OnInit {
 
   onLaboratorioChange(): void {
     const labId = Number(this.newClase.laboratorio.idLaboratorio);
-    console.log('ID del laboratorio seleccionado:', labId);
-
     const selectedLab = this.laboratorios.find(
       (lab) => lab.idLaboratorio === labId
     );
-    console.log('Laboratorio encontrado:', selectedLab);
-
-    if (selectedLab && selectedLab.franjasHorario) {
-      this.franjasPermitidas = selectedLab.franjasHorario.map((franja) => {
-        const [horaInicio, horaFin] = franja.split('-');
-        console.info('Franja horaria:', horaInicio, horaFin);
-        return { horaInicio, horaFin };
-      });
+    if (this.horario.length > 0) {
+      const firstHorario = this.horario[0];
+      this.franjasPermitidas =
+        firstHorario.franjasHorario?.map((franja: string) => {
+          const [horaInicio, horaFin] = franja.split('-');
+          return { horaInicio, horaFin };
+        }) || [];
     } else {
       console.error(
         'No se encontró el laboratorio o no tiene franjas horarias'

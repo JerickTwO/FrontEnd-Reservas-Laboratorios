@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HorarioService } from 'src/app/core/services/horario.service';
 import { LaboratorioService } from 'src/app/core/services/laboratorio.service';
@@ -13,6 +13,7 @@ import Swal from 'sweetalert2';
 import { Reserva } from 'src/app/models/reserva.model';
 import { UsuarioService } from 'src/app/core/services/usuario.service';
 import { Horario } from 'src/app/models/horario.model';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-horarios',
@@ -32,42 +33,53 @@ export class Horario1Component implements OnInit {
   isEditing: boolean = false;
   franjasHorario: any;
   modalReserva: any;
-  numeroLaboratorio: number = 1;
   horariosReservas: HorarioReservas[] = [];
   userRole: string | undefined;
   public isSaving: boolean = false;
-
+  numeroLaboratorio: number;
+  minDate: string;
+  maxDate: string;
   public franjasPermitidas: { horaInicio: string; horaFin: string }[] = [];
   constructor(
     private horarioService: HorarioService,
     private periodoService: PeriodoService,
     private reservaService: ReservaService,
     private laboratorioService: LaboratorioService,
-    private usuarioService: UsuarioService
-  ) {}
+    private usuarioService: UsuarioService,
+    private route: ActivatedRoute
+  ) {
+    const today = new Date();
+    this.minDate = today.toISOString().split('T')[0];
+    const maxDate = new Date();
+    maxDate.setMonth(maxDate.getMonth() + 3);
+    this.maxDate = maxDate.toISOString().split('T')[0];
+  }
 
   ngOnInit(): void {
-    this.cargarReservasHorario();
-    this.obtenerPeriodoActivo();
-    this.getHorario();
-    this.horas = this.generarHoras('09:00');
-    this.modalReserva = new Modal(
-      document.getElementById(`modalReserva${this.numeroLaboratorio}`)!,
-      {
-        backdrop: 'static',
-      }
-    );
-
-    document
-      .getElementById(`modalReserva${this.numeroLaboratorio}`)
-      ?.addEventListener('hidden.bs.modal', () => {
-        this.cerrarModal();
-      });
-    this.usuarioService.usuario$.subscribe((usuario) => {
-      if (usuario) {
-        this.userRole = usuario.rol.nombre;
+    this.route.paramMap.subscribe((params) => {
+      const id = params.get('id');
+      if (id) {
+        this.numeroLaboratorio = +id;
+        this.getLaboratorios();
+        this.cargarReservasHorario();
+        this.obtenerPeriodoActivo();
+        this.getHorario();
       }
     });
+    this.horas = this.generarHoras('09:00');
+  }
+
+  ngAfterViewInit(): void {
+    const idModal = 'modalReserva' + this.numeroLaboratorio;
+    // Si por ej. numeroLaboratorio = 3 --> "modalReserva3"
+
+    const modalElement = document.getElementById(idModal);
+    if (modalElement) {
+      this.modalReserva = new Modal(modalElement, { backdrop: 'static' });
+      modalElement.addEventListener('hidden.bs.modal', () => {
+        this.cerrarModal();
+      });
+    }
   }
   getHorario(): void {
     this.horarioService.obtenerHorarios().subscribe({

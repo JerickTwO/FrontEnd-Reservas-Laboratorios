@@ -130,103 +130,26 @@
             </a>
             <li class="dividers">Horarios</li>
 
-            <a
-              [routerLink]="routes[13]"
-              routerLinkActive="active-section"
-              [class.active-section]="activeLink.includes(routes[13])"
-            >
-              <div class="icon-sidebar-item">
-                <i class="bx bxs-time"></i>
-              </div>
-              <div class="name-sidebar-item">
-                <li>Laboratorio 1</li>
-              </div>
-            </a>
-            <!-- <a
-              [routerLink]="routes[14]"
-              routerLinkActive="active-section"
-              [class.active-section]="activeLink.includes(routes[14])"
-            >
-              <div class="icon-sidebar-item">
-                <i class="bx bxs-time"></i>
-              </div>
-              <div class="name-sidebar-item">
-                <li>Laboratorio 2</li>
-              </div>
-            </a>
-            <a
-              [routerLink]="routes[15]"
-              routerLinkActive="active-section"
-              [class.active-section]="activeLink.includes(routes[15])"
-            >
-              <div class="icon-sidebar-item">
-                <i class="bx bxs-time"></i>
-              </div>
-              <div class="name-sidebar-item">
-                <li>Laboratorio 3</li>
-              </div>
-            </a>
-            <a
-              [routerLink]="routes[16]"
-              routerLinkActive="active-section"
-              [class.active-section]="activeLink.includes(routes[16])"
-            >
-              <div class="icon-sidebar-item">
-                <i class="bx bxs-time"></i>
-              </div>
-              <div class="name-sidebar-item">
-                <li>Laboratorio 4</li>
-              </div>
-            </a>
-            <a
-              [routerLink]="routes[17]"
-              routerLinkActive="active-section"
-              [class.active-section]="activeLink.includes(routes[17])"
-            >
-              <div class="icon-sidebar-item">
-                <i class="bx bxs-time"></i>
-              </div>
-              <div class="name-sidebar-item">
-                <li>Laboratorio 5</li>
-              </div>
-            </a>
-            <a
-              [routerLink]="routes[18]"
-              routerLinkActive="active-section"
-              [class.active-section]="activeLink.includes(routes[18])"
-            >
-              <div class="icon-sidebar-item">
-                <i class="bx bxs-time"></i>
-              </div>
-              <div class="name-sidebar-item">
-                <li>Laboratorio 6</li>
-              </div>
-            </a> -->
-
-            <!-- @if (laboratorios.length > 0) {
+            @if (laboratorios && laboratorios.length > 0) {
             <ul class="nav-list">
-              @for (laboratorio of laboratorios; track $index) {
-              <li>
+              <li *ngFor="let lab of laboratorios; let i = index">
                 <a
-                  [routerLink]="'/horario/' + laboratorio.idLaboratorio"
+                  [routerLink]="'/horario/' + lab.idLaboratorio"
                   routerLinkActive="active-section"
                   [class.active-section]="
-                    activeLink.includes('/horario/' + laboratorio.idLaboratorio)
+                    activeLink.includes('/horario/' + lab.idLaboratorio)
                   "
                 >
-                  @if($index !== 0){
                   <div class="icon-sidebar-item">
                     <i class="bx bxs-time"></i>
                   </div>
                   <div class="name-sidebar-item">
-                    <li>{{ "Horario " + ($index + 1) }}</li>
+                    <li>{{ "Laboratorio " + lab.idLaboratorio }}</li>
                   </div>
-                  }
                 </a>
               </li>
-              }
             </ul>
-            } -->
+            }
           </ul>
           } @if (userRole === "docente") {
           <ul class="nav-list">

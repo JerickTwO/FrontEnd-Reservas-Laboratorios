@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { TooltipModule } from 'primeng/tooltip';
 import { CommonModule } from '@angular/common';
@@ -18,22 +18,36 @@ export class SidebarComponent implements OnInit {
   @Input() title!: string;
   @Input() sidebarHidden!: boolean;
   @Input() routes!: string[];
+  laboratorios: Laboratorio[];
+  @Input() reservas: any[] = [];
+
+  @Output() labSeleccionado = new EventEmitter<string>();
+  @Output() opcionSeleccionada = new EventEmitter<string>();
+
+  laboratorioSeleccionado: any | null = null;
+  opcionActiva: string = '';
   activeLink: string = '';
   usuario!: Usuario; // Define el tipo correcto para el usuario
   userRole: string | undefined;
   submenuOpen = false;
-  laboratorios: Laboratorio[];
-  
-  constructor(private usuarioService: UsuarioService, private laboratorioService: LaboratorioService) {}
+
+  constructor(
+    private usuarioService: UsuarioService,
+    private laboratorioService: LaboratorioService
+  ) {}
 
   ngOnInit(): void {
     this.obtenerLaboratorios();
     this.usuarioService.usuario$.subscribe((usuario) => {
       if (usuario) {
-        this.userRole = usuario.rol.nombre; 
+        this.userRole = usuario.rol.nombre;
         console.log('Rol del usuario:', this.userRole);
       }
     });
+    if (this.laboratorios.length > 0) {
+      this.laboratorioSeleccionado = this.laboratorios[0];
+      this.labSeleccionado.emit(this.laboratorioSeleccionado.id);
+    }
   }
 
   toggleSubmenu() {
@@ -49,5 +63,14 @@ export class SidebarComponent implements OnInit {
         console.error('Error al obtener laboratorios:', error);
       }
     );
+  }
+  seleccionarLaboratorio(lab: any) {
+    this.laboratorioSeleccionado = lab;
+    this.labSeleccionado.emit(lab.id);
+  }
+
+  seleccionarOpcion(opcionId: string) {
+    this.opcionActiva = opcionId;
+    this.opcionSeleccionada.emit(opcionId);
   }
 }

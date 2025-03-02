@@ -82,15 +82,15 @@
   <!-- Modal para crear o editar reserva -->
   <div
     class="modal fade"
-    id="modalReserva1"
+    [id]="'modalReserva' + numeroLaboratorio"
     tabindex="-1"
-    aria-labelledby="modalReservaLabel"
+    [attr.aria-labelledby]="'modalReservaLabel' + numeroLaboratorio"
     aria-hidden="true"
   >
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header bg-gray-800 text-white">
-          <h5 class="modal-title" id="modalReservaLabel1">
+          <h5 class="modal-title">
             {{
               isEditing
                 ? "Editar Reserva"
@@ -209,7 +209,21 @@
                   </option>
                 </select>
               </div>
-
+              <div class="mb-1">
+                <label for="fechaReserva" class="form-label"
+                  >Fecha de Reserva</label
+                >
+                <input
+                  type="date"
+                  [(ngModel)]="nuevaReserva.fechaReserva"
+                  name="fechaReserva"
+                  id="fechaReserva"
+                  class="form-control"
+                  required
+                  [min]="minDate"
+                  [max]="maxDate"
+                />
+              </div>
               <div class="col-span-2 mb-1">
                 <label for="motivoReserva" class="form-label">Motivo</label>
                 <textarea

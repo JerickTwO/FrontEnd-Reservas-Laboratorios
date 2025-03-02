@@ -233,14 +233,14 @@ export const routesModulo1: Routes = [
       // },
 
 
-      // {
-      //   path: 'horario/:id',
-      //   canActivate: [isAuthenticatedGuard],
-      //   component: HorariosComponent,
-      //   data: {
-      //     title: capitalizeFirstLetter(horarios),
-      //   }
-      // },
+      {
+        path: 'horario/:id',
+        canActivate: [isAuthenticatedGuard],
+        component: Horario1Component,
+        data: {
+          title: capitalizeFirstLetter('Horario'),
+        }
+      },
     ],
   },
 ]

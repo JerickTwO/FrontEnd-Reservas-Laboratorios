@@ -53,7 +53,7 @@ export class ReservaComponent implements OnInit {
   isLoading: boolean = false;
   minDate: string;
   maxDate: string;
-
+  selectedLabForPDF: number | null = null;
   public franjasPermitidas: { horaInicio: string; horaFin: string }[] = [];
 
   dias: DiaEnum[] = [
@@ -395,19 +395,39 @@ export class ReservaComponent implements OnInit {
     this.isEditing = false;
     this.nuevaReserva = this.resetNuevaReservaData();
   }
-
   eliminarReserva(id: number | undefined): void {
     if (!id) {
       console.error('ID inválido para eliminar reserva.');
       return;
     }
 
-    this.reservaService.eliminarReserva(id).subscribe({
-      next: () => {
-        console.log(`Reserva con ID ${id} eliminada correctamente.`);
-        this.getReservas();
-      },
-      error: (err) => console.error('Error al eliminar la reserva:', err),
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: 'No podrás revertir esta acción',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.reservaService.eliminarReserva(id).subscribe({
+          next: () => {
+            Swal.fire(
+              '¡Eliminado!',
+              'La reserva ha sido eliminada.',
+              'success'
+            ).then(() => {
+              this.getReservasConPeriodoActivo();
+            });
+          },
+          error: (err) => {
+            Swal.fire('Error', 'Hubo un error al eliminar la reserva', 'error');
+            console.error('Error al eliminar la reserva:', err);
+          },
+        });
+      }
     });
   }
 
@@ -454,28 +474,66 @@ export class ReservaComponent implements OnInit {
     this.currentPage = page;
     this.actualizarPaginacion();
   }
-
   exportarPDF(): void {
     const doc = new jsPDF();
 
     const itinLogo = 'assets/img/logos/itin.png';
     const espeLogo = 'assets/img/logos/espe.png';
 
+    // Agregamos los logos
     doc.addImage(espeLogo, 'PNG', 15, 1, 70, 30);
     doc.addImage(itinLogo, 'PNG', 130, 8, 55, 20);
 
-    doc.setFontSize(14);
-    doc.text('REPORTE DE RESERVA DE LABORATORIOS', 50, 40);
+    // 1) Determinar el título según el laboratorio seleccionado
+    let tituloPDF = 'REPORTE DE RESERVA DE LABORATORIOS - GENERAL';
+    if (this.selectedLabForPDF) {
+      // Busca el laboratorio por id
+      const labSeleccionado = this.laboratorios.find(
+        (lab) => lab.idLaboratorio === Number(this.selectedLabForPDF)
+      );
+      if (labSeleccionado) {
+        tituloPDF = `REPORTE DE RESERVAS POR ${labSeleccionado.nombreLaboratorio}`;
+      }
+    }
 
-    const datosExportacion = this.reservas.map((reserva) => [
+    // Ajustar la fuente y escribir el título
+    doc.setFontSize(14);
+    doc.text(tituloPDF, 50, 40);
+
+    // 2) Filtrar las reservas (si corresponde)
+    let reservasFiltradas = this.reservas;
+    if (this.selectedLabForPDF) {
+      reservasFiltradas = this.reservas.filter((reserva) => {
+        return (
+          reserva.laboratorio.idLaboratorio === Number(this.selectedLabForPDF)
+        );
+      });
+    }
+
+    // 3) Preparar datos para autoTable
+    const datosExportacion = reservasFiltradas.map((reserva) => [
+      reserva.laboratorio.nombreLaboratorio,
       reserva.nombreCompleto,
-      reserva.fechaReserva instanceof Date ? reserva.fechaReserva.toLocaleDateString() : reserva.fechaReserva,
-      `${reserva.horaInicio}-${reserva.horaFin}`,
+      reserva.fechaReserva instanceof Date
+        ? reserva.fechaReserva.toLocaleDateString()
+        : reserva.fechaReserva,
+      `${reserva.horaInicio} - ${reserva.horaFin}`,
+      reserva.cantidadParticipantes,
       reserva.motivoReserva,
     ]);
 
+    // 4) Generar la tabla
     autoTable(doc, {
-      head: [['NOMBRE', 'FECHA', 'HORA', 'MOTIVO']],
+      head: [
+        [
+          'LABORATORIO',
+          'NOMBRE DEL SOLICITANTE',
+          'FECHA',
+          'HORA',
+          'PARTICIPANTES',
+          'MOTIVO',
+        ],
+      ],
       body: datosExportacion,
       startY: 45,
       theme: 'grid',
@@ -485,6 +543,7 @@ export class ReservaComponent implements OnInit {
       },
     });
 
+    // 5) Descargar el PDF
     doc.save('Reservas.pdf');
   }
 }

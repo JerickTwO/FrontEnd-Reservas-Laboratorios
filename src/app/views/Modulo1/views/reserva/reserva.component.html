@@ -7,11 +7,21 @@
       >
         <i class="bi bi-plus-circle"></i> Nueva Reserva
       </button>
-      @if (userRole === "admin" && reservasPeriodoActivo.length > 0) {
+
+      <select
+        class="form-select d-inline-block w-auto"
+        [(ngModel)]="selectedLabForPDF"
+        name="selectedLabForPDF"
+      >
+        <option [value]="null">Todos los Laboratorios</option>
+        <option *ngFor="let lab of laboratorios" [value]="lab.idLaboratorio">
+          {{ lab.nombreLaboratorio }}
+        </option>
+      </select>
+
       <button class="btn btn-outline-secondary btn-sm" (click)="exportarPDF()">
         <i class="bi bi-file-earmark-pdf"></i> Exportar a PDF
       </button>
-      }
     </div>
 
     <p class="text-muted mb-0">
@@ -232,7 +242,9 @@
               </div>
               }
               <div class="mb-1">
-                <label for="fechaReserva" class="form-label">Fecha de Reserva</label>
+                <label for="fechaReserva" class="form-label"
+                  >Fecha de Reserva</label
+                >
                 <input
                   type="date"
                   [(ngModel)]="nuevaReserva.fechaReserva"

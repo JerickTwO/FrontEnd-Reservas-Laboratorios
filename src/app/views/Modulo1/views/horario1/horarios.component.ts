@@ -404,6 +404,31 @@ export class Horario1Component implements OnInit {
     this.nuevaReserva = this.resetNuevaReservaData();
     this.modalReserva.show();
   }
+  abrirModalConHorario(dia: string, hora: string): void {
+    this.isEditing = false;
+    this.nuevaReserva = this.resetNuevaReservaData();
+    this.nuevaReserva.dia = dia;
+    if (hora.includes('-')) {
+      const [horaInicio, horaFin] = hora.split('-');
+      this.nuevaReserva.horaInicio = this.formatTime(horaInicio);
+      this.nuevaReserva.horaFin = this.formatTime(horaFin);
+    } else {
+      this.nuevaReserva.horaInicio = this.formatTime(hora);
+      const horaInicioNum = parseInt(hora.split(':')[0]);
+      const minutos = hora.split(':')[1] || '00';
+      const horaFinNum = (horaInicioNum + 1) % 24;
+      this.nuevaReserva.horaFin = this.formatTime(`${horaFinNum}:${minutos}`);
+    }
+    
+    this.modalReserva.show();
+    
+    setTimeout(() => {
+      const horaFinInput = document.getElementById('horaFin') as HTMLInputElement;
+      if (horaFinInput) {
+        horaFinInput.value = this.nuevaReserva.horaFin;
+      }
+    }, 100);
+  }
 
   cerrarModal(): void {
     this.modalReserva.hide();

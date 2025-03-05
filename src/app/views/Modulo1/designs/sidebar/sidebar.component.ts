@@ -5,7 +5,7 @@ import { CommonModule } from '@angular/common';
 import { UsuarioService } from 'src/app/core/services/usuario.service';
 import { Usuario } from 'src/app/models/usuario.model';
 import { LaboratorioService } from 'src/app/core/services/laboratorio.service';
-import { DiaEnum, Laboratorio } from 'src/app/models/laboratorio.model';
+import { Laboratorio } from 'src/app/models/laboratorio.model';
 
 @Component({
   selector: 'app-sidebar',

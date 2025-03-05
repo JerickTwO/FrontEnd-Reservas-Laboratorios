@@ -21,12 +21,17 @@ $base-angular-primary: mat.define-palette(mat.$indigo-palette);
 $base-angular-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
 $base-angular-warn: mat.define-palette(mat.$red-palette);
 
-$base-angular-theme: mat.define-light-theme((color: (primary: $base-angular-primary,
-        accent: $base-angular-accent,
-        warn: $base-angular-warn )));
+$base-angular-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $base-angular-primary,
+      accent: $base-angular-accent,
+      warn: $base-angular-warn,
+    ),
+  )
+);
 
 @include mat.all-component-themes($base-angular-theme);
-
 
 // ===============================================
 // Esilos de PrumeNG
@@ -35,14 +40,13 @@ $base-angular-theme: mat.define-light-theme((color: (primary: $base-angular-prim
 @import "primeng/resources/primeng.css";
 @import "primeicons/primeicons.css";
 
-
 .p-toast {
   top: 80px !important;
   right: 15px !important;
   z-index: 99 !important;
 
   .p-toast-message.p-toast-message-info {
-    box-shadow: 1px 1px 3px rgba(colors.$black, .5);
+    box-shadow: 1px 1px 3px rgba(colors.$black, 0.5);
   }
 }
 
@@ -50,7 +54,6 @@ $base-angular-theme: mat.define-light-theme((color: (primary: $base-angular-prim
 // Estilos para fontawesome
 // ===============================================
 @import url("https://pro.fontawesome.com/releases/v6.0.0-beta1/css/all.css");
-
 
 // ===============================================
 // Estilos para sweedAlert2
@@ -106,4 +109,81 @@ body {
 .divisor {
   display: grid;
   color: colors.$black !important;
+}
+/* Modal */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: #fff;
+  border-radius: 8px;
+  max-width: 800px;
+  width: 100%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal-content h3 {
+  margin-top: 0;
+  color: #333;
+  text-align: center;
+}
+
+/* Botón cerrar */
+.close {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 24px;
+  cursor: pointer;
+  color: #333;
+}
+
+.close:hover {
+  color: #999;
+}
+
+/* Formulario */
+form div {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="datetime-local"],
+textarea,
+select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="datetime-local"]:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+}
+
+.error {
+  color: red;
+  font-size: 14px;
+  margin-top: 5px;
 }

@@ -1,7 +1,6 @@
 <section class="content-sidebar">
   <div class="content scroll-small">
     <div class="sidebar">
-      <!-- Identidad del sitio -->
       <a [routerLink]="routes[0]" class="logo_site">
         <div class="img_logo">
           <img src="assets/img/logos/Icon_profile.png" alt="logo" />
@@ -11,12 +10,10 @@
           <p>{{ title }}</p>
         </div>
       </a>
-      <!-- Items -->
       <div class="links_site">
         <nav class="nav">
           @if (userRole === "admin") {
           <ul class="nav-list">
-            <!-- <div *ngIf="usuario.role !== 'Customer'"> -->
             <a
               [routerLink]="routes[0]"
               routerLinkActive="active-section"
@@ -151,82 +148,27 @@
             </ul>
             }
           </ul>
-          } @if (userRole === "docente") {
+          } @if (userRole === "docente") { @if (laboratorios &&
+          laboratorios.length > 0) {
           <ul class="nav-list">
-            <a
-              [routerLink]="routes[13]"
-              routerLinkActive="active-section"
-              [class.active-section]="activeLink.includes(routes[13])"
-            >
-              <div class="icon-sidebar-item">
-                <i class="bx bxs-time"></i>
-              </div>
-              <div class="name-sidebar-item">
-                <li>Laboratorio 1</li>
-              </div>
-            </a>
-            <a
-              [routerLink]="routes[14]"
-              routerLinkActive="active-section"
-              [class.active-section]="activeLink.includes(routes[14])"
-            >
-              <div class="icon-sidebar-item">
-                <i class="bx bxs-time"></i>
-              </div>
-              <div class="name-sidebar-item">
-                <li>Laboratorio 2</li>
-              </div>
-            </a>
-            <a
-              [routerLink]="routes[15]"
-              routerLinkActive="active-section"
-              [class.active-section]="activeLink.includes(routes[15])"
-            >
-              <div class="icon-sidebar-item">
-                <i class="bx bxs-time"></i>
-              </div>
-              <div class="name-sidebar-item">
-                <li>Laboratorio 3</li>
-              </div>
-            </a>
-            <a
-              [routerLink]="routes[16]"
-              routerLinkActive="active-section"
-              [class.active-section]="activeLink.includes(routes[16])"
-            >
-              <div class="icon-sidebar-item">
-                <i class="bx bxs-time"></i>
-              </div>
-              <div class="name-sidebar-item">
-                <li>Laboratorio 4</li>
-              </div>
-            </a>
-            <a
-              [routerLink]="routes[17]"
-              routerLinkActive="active-section"
-              [class.active-section]="activeLink.includes(routes[17])"
-            >
-              <div class="icon-sidebar-item">
-                <i class="bx bxs-time"></i>
-              </div>
-              <div class="name-sidebar-item">
-                <li>Laboratorio 5</li>
-              </div>
-            </a>
-            <a
-              [routerLink]="routes[18]"
-              routerLinkActive="active-section"
-              [class.active-section]="activeLink.includes(routes[18])"
-            >
-              <div class="icon-sidebar-item">
-                <i class="bx bxs-time"></i>
-              </div>
-              <div class="name-sidebar-item">
-                <li>Laboratorio 6</li>
-              </div>
-            </a>
+            <li *ngFor="let lab of laboratorios; let i = index">
+              <a
+                [routerLink]="'/horario/' + lab.idLaboratorio"
+                routerLinkActive="active-section"
+                [class.active-section]="
+                  activeLink.includes('/horario/' + lab.idLaboratorio)
+                "
+              >
+                <div class="icon-sidebar-item">
+                  <i class="bx bxs-time"></i>
+                </div>
+                <div class="name-sidebar-item">
+                  <li>{{ "Laboratorio " + lab.idLaboratorio }}</li>
+                </div>
+              </a>
+            </li>
           </ul>
-          }
+          } }
         </nav>
       </div>
     </div>

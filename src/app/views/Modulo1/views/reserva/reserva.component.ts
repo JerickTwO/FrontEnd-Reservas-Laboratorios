@@ -357,14 +357,11 @@ export class ReservaComponent implements OnInit {
     } else {
       fechaReserva = new Date();
     }
-
-    // Format hours
     const formatearHora = (hora: string) => {
       if (!hora) return '';
       return hora.substring(0, 5);
     };
 
-    // Load time slots for the selected lab
     if (reserva.laboratorio && reserva.laboratorio.idLaboratorio) {
       if (
         this.horario &&
@@ -472,13 +469,8 @@ export class ReservaComponent implements OnInit {
 
     const datosExportacion = this.reservas.map((reserva) => [
       reserva.nombreCompleto,
-      reserva.fechaReserva
-        ? `${reserva.fechaReserva.getDate()}/${
-            reserva.fechaReserva.getMonth() + 1
-          }/${reserva.fechaReserva.getFullYear()}`
-        : '',
+      reserva.fechaReserva instanceof Date ? reserva.fechaReserva.toLocaleDateString() : reserva.fechaReserva,
       `${reserva.horaInicio}-${reserva.horaFin}`,
-
       reserva.motivoReserva,
     ]);
 

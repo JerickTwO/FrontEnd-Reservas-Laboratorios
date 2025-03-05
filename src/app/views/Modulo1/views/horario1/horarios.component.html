@@ -37,8 +37,7 @@
             <ng-container *ngIf="obtenerReservaInicio(dia, hora) as reserva">
               <td
                 [attr.rowspan]="getReservaRowspan(reserva)"
-                onclick="console.log(saludo)"
-                class="px-6 py-4 text-center align-middle border border-gray-200 hover:bg-blue-50"
+                class="px-6 py-4 text-center align-middle border border-gray-200 hover:bg-blue-50 cursor-pointer"
               >
                 <ng-container *ngIf="reserva.tipo === 'CLASE'; else otroTipo">
                   <strong class="block text-blue-900 mb-1">{{
@@ -70,7 +69,10 @@
                 !isReservaContinuacion(dia, hora)
               "
             >
-              <td class="px-6 py-4 text-center border border-gray-200">
+              <td
+                class="px-6 py-4 text-center border border-gray-200 hover:bg-blue-50 cursor-pointer"
+                (click)="abrirModalConHorario(dia, hora)"
+              >
                 Disponible
               </td>
             </ng-container>

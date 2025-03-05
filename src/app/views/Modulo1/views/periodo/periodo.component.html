@@ -1,10 +1,10 @@
-<div class="container mx-auto px-4 py-8">
+<div class="mx-auto px-4 py-6">
   <h2 class="text-2xl font-semibold mb-6">Gestionar Períodos</h2>
   <form
     (ngSubmit)="guardar()"
     class="space-y-4 bg-white p-6 rounded-lg shadow-md"
   >
-    <div>
+    <div class="">
       <label for="nombrePeriodo" class="block text-sm font-medium text-gray-700"
         >Nombre del Período:</label
       >
@@ -17,7 +17,7 @@
         class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
       />
     </div>
-    <div>
+    <div class="">
       <label for="fechaInicio" class="block text-sm font-medium text-gray-700"
         >Fecha de Inicio:</label
       >
@@ -27,10 +27,10 @@
         [(ngModel)]="periodo.fechaInicio"
         name="fechaInicio"
         required
-        class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+        class="mt-1 block px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 w-full lg:max-w-[1100px]"
       />
     </div>
-    <div>
+    <div class="">
       <label for="fechaFin" class="block text-sm font-medium text-gray-700"
         >Fecha de Fin:</label
       >
@@ -40,10 +40,10 @@
         [(ngModel)]="periodo.fechaFin"
         name="fechaFin"
         required
-        class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+        class="mt-1 block px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 w-full md-w-[ lg:max-w-[1100px]"
       />
     </div>
-    <div>
+    <div class="">
       <label for="descripcion" class="block text-sm font-medium text-gray-700"
         >Descripción:</label
       >
@@ -76,51 +76,51 @@
     <table class="min-w-full bg-white shadow-md rounded-md overflow-hidden">
       <thead class="bg-gray-100">
         <tr>
-          <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">
-            Nombre del Período
+          <th class="px-2 py-2 text-left text-sm font-medium text-gray-700">
+            Nombre
           </th>
-          <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">
+          <th class="px-2 py-2 text-left text-sm font-medium text-gray-700">
             Fecha de Inicio
           </th>
-          <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">
+          <th class="px-2 py-2 text-left text-sm font-medium text-gray-700">
             Fecha de Fin
           </th>
-          <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">
+          <th class="px-2 py-2 text-left text-sm font-medium text-gray-700">
             Descripción
           </th>
-          <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">
+          <th class="px-2 py-2 text-left text-sm font-medium text-gray-700">
             Estado
           </th>
-          <th class="px-4 py-2 text-left text-sm font-medium text-gray-700">
+          <th class="px-2 py-2 text-left text-sm font-medium text-gray-700">
             Acciones
           </th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let p of periodos" class="border-b border-gray-200">
-          <td class="px-4 py-2 text-sm text-gray-700">{{ p.nombrePeriodo }}</td>
-          <td class="px-4 py-2 text-sm text-gray-700">{{ p.fechaInicio }}</td>
-          <td class="px-4 py-2 text-sm text-gray-700">{{ p.fechaFin }}</td>
-          <td class="px-4 py-2 text-sm text-gray-700">{{ p.descripcion }}</td>
-          <td class="px-4 py-2 text-sm text-gray-700">
+          <td class="px-2 py-2 text-sm text-gray-700">{{ p.nombrePeriodo }}</td>
+          <td class="px-2 py-2 text-sm text-gray-700">{{ p.fechaInicio }}</td>
+          <td class="px-2 py-2 text-sm text-gray-700">{{ p.fechaFin }}</td>
+          <td class="px-2 py-2 text-sm text-gray-700">{{ p.descripcion }}</td>
+          <td class="px-2 py-2 text-sm text-gray-700">
             {{ p.estado ? "Activo" : "Inactivo" }}
           </td>
-          <td class="px-4 py-2 text-sm">
+          <td class="flex gap-2 px-2 py-2">
             <button
               (click)="editar(p.idPeriodo!)"
-              class="bg-yellow-500 text-white py-1 px-3 rounded-md hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-500"
+              class="btn btn-sm btn-outline-dark"
             >
               Editar
             </button>
             <button
               (click)="eliminar(p.idPeriodo!)"
-              class="bg-red-500 text-white py-1 px-3 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 ml-2"
+              class="btn btn-sm btn-outline-danger"
             >
               Eliminar
             </button>
             <button
               (click)="cambiarEstado(p.idPeriodo!, !p.estado)"
-              class="bg-green-500 text-white py-1 px-3 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 ml-2"
+              class="btn btn-sm btn-outline-success"
             >
               {{ p.estado ? "Desactivar" : "Activar" }}
             </button>

@@ -39,7 +39,16 @@ $base-angular-theme: mat.define-light-theme(
 @import "primeng/resources/themes/lara-light-blue/theme.css";
 @import "primeng/resources/primeng.css";
 @import "primeicons/primeicons.css";
+[type="date"] {
+  appearance: none; /* Quita la apariencia nativa */
+  -webkit-appearance: none; /* Para Safari/Chrome */
+  background-position: 95% center; /* Opcional: reubica un icono custom si lo agregas */
+  background-repeat: no-repeat;
+}
 
+::-webkit-calendar-picker-indicator {
+  opacity: 0; /* Oculta el icono nativo */
+}
 .p-toast {
   top: 80px !important;
   right: 15px !important;

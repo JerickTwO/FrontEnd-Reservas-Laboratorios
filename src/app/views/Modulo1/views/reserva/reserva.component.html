@@ -8,6 +8,10 @@
         <i class="bi bi-plus-circle"></i> Nueva Reserva
       </button>
 
+      <button class="btn btn-outline-secondary btn-sm" (click)="exportarPDF()">
+        <i class="bi bi-file-earmark-pdf"></i> Exportar a PDF
+      </button>
+
       <select
         class="form-select d-inline-block w-auto"
         [(ngModel)]="selectedLabForPDF"
@@ -18,10 +22,6 @@
           {{ lab.nombreLaboratorio }}
         </option>
       </select>
-
-      <button class="btn btn-outline-secondary btn-sm" (click)="exportarPDF()">
-        <i class="bi bi-file-earmark-pdf"></i> Exportar a PDF
-      </button>
     </div>
 
     <p class="text-muted mb-0">

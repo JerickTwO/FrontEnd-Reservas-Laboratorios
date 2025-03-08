@@ -18,7 +18,7 @@ import Swal from 'sweetalert2';
   standalone: true,
   imports: [CommonModule, FormsModule, HttpClientModule],
   templateUrl: './usuario.component.html',
-  styleUrl: './usuario.component.scss'
+  styleUrl: './usuario.component.scss',
 })
 export class UsuarioComponent {
   usuarioAEditar: Usuario | null = null;
@@ -54,21 +54,23 @@ export class UsuarioComponent {
     contrasena: '',
     rol: 'DOCENTE' as unknown as Roles,
     primerLogin: false,
-    estado: true
+    estado: true,
   };
   idInstitucionalError: boolean = false;
 
   validarIdInstitucional(): void {
-    const pattern = /^L[0-9A-Za-z]{7}$/;
-    this.idInstitucionalError = !pattern.test(this.nuevoUsuario.idInstitucional);
+    const pattern = /^L[0-9A-Za-z]{8}$/;
+    this.idInstitucionalError = !pattern.test(
+      this.nuevoUsuario.idInstitucional
+    );
   }
 
   constructor(
     private docenteService: DocenteService,
     private departamentoService: DepartamentoService,
     private administradorService: AdministradorService,
-    private usuarioService: UsuarioService,
-  ) { }
+    private usuarioService: UsuarioService
+  ) {}
   ngOnInit(): void {
     this.cargarListaUnificada();
     this.cargarDepartamentos();
@@ -76,9 +78,8 @@ export class UsuarioComponent {
   cargarDepartamentos(): void {
     this.departamentoService.getDepartamentos().subscribe(
       (data) => {
-        this.departamentos = data
+        this.departamentos = data;
         console.log('Departamentos cargados:', data);
-
       },
       (error) => console.error('Error al cargar departamentos:', error)
     );
@@ -98,26 +99,31 @@ export class UsuarioComponent {
       contrasena: '',
       rol: 'DOCENTE' as unknown as Roles,
       primerLogin: false,
-      estado: true
+      estado: true,
     };
 
     this.abrirModalCreacion();
   }
   filtrarUsuarios(): void {
-    this.usuariosFiltrados = this.usuariosUnificados.filter(usuario => {
-      return (this.mostrarAdministradores && usuario.tipoUsuario === 'ADMINISTRADOR') ||
-        (this.mostrarDocentes && usuario.tipoUsuario === 'DOCENTE');
+    this.usuariosFiltrados = this.usuariosUnificados.filter((usuario) => {
+      return (
+        (this.mostrarAdministradores &&
+          usuario.tipoUsuario === 'ADMINISTRADOR') ||
+        (this.mostrarDocentes && usuario.tipoUsuario === 'DOCENTE')
+      );
     });
   }
   cargarListaUnificada(): void {
     this.usuarioService.getUsuariosUnificados().subscribe({
       next: (usuarios) => {
         this.usuariosUnificados = usuarios;
-        this.docentes = usuarios.filter(u => u.tipoUsuario === 'DOCENTE');
-        this.administradores = usuarios.filter(u => u.tipoUsuario === 'ADMINISTRADOR');
+        this.docentes = usuarios.filter((u) => u.tipoUsuario === 'DOCENTE');
+        this.administradores = usuarios.filter(
+          (u) => u.tipoUsuario === 'ADMINISTRADOR'
+        );
         this.filtrarUsuarios();
       },
-      error: (err) => console.error('Error cargando usuarios', err)
+      error: (err) => console.error('Error cargando usuarios', err),
     });
   }
   openEditUsuarioModal(usuario: Usuario): void {
@@ -138,31 +144,33 @@ export class UsuarioComponent {
       confirmButtonColor: '#d33',
       cancelButtonColor: '#3085d6',
       confirmButtonText: 'Sí, eliminar',
-      cancelButtonText: 'Cancelar'
+      cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
         // Si el usuario confirma:
         if (usuario.tipoUsuario === 'ADMINISTRADOR') {
-          this.administradorService.eliminarAdministrador(usuario.id).subscribe({
-            next: () => {
-              // Al eliminar correctamente, puedes mostrar otro SweetAlert
-              Swal.fire(
-                'Eliminado',
-                'Administrador eliminado correctamente',
-                'success'
-              );
-              this.cargarListaUnificada();
-            },
-            error: (error: any) => {
-              console.error('Error eliminando administrador:', error);
-              // Opcionalmente, muestra alerta de error
-              Swal.fire(
-                'Error',
-                'No se pudo eliminar el administrador',
-                'error'
-              );
-            }
-          });
+          this.administradorService
+            .eliminarAdministrador(usuario.id)
+            .subscribe({
+              next: () => {
+                // Al eliminar correctamente, puedes mostrar otro SweetAlert
+                Swal.fire(
+                  'Eliminado',
+                  'Administrador eliminado correctamente',
+                  'success'
+                );
+                this.cargarListaUnificada();
+              },
+              error: (error: any) => {
+                console.error('Error eliminando administrador:', error);
+                // Opcionalmente, muestra alerta de error
+                Swal.fire(
+                  'Error',
+                  'No se pudo eliminar el administrador',
+                  'error'
+                );
+              },
+            });
         } else if (usuario.tipoUsuario === 'DOCENTE') {
           this.docenteService.eliminarDocente(usuario.id).subscribe({
             next: () => {
@@ -175,12 +183,8 @@ export class UsuarioComponent {
             },
             error: (error: any) => {
               console.error('Error eliminando docente:', error);
-              Swal.fire(
-                'Error',
-                'No se pudo eliminar el docente',
-                'error'
-              );
-            }
+              Swal.fire('Error', 'No se pudo eliminar el docente', 'error');
+            },
           });
         }
       }
@@ -194,7 +198,7 @@ export class UsuarioComponent {
       showCancelButton: true,
       confirmButtonText: 'Sí, crear',
       cancelButtonText: 'Cancelar',
-      allowOutsideClick: false
+      allowOutsideClick: false,
     }).then((result) => {
       if (result.isConfirmed) {
         if (this.nuevoUsuario.tipoUsuario === 'ADMINISTRADOR') {
@@ -216,7 +220,7 @@ export class UsuarioComponent {
       nombreAdministrador: nombre,
       apellidoAdministrador: apellido,
       correoAdministrador: this.nuevoUsuario.correo,
-      idInstitucional: this.nuevoUsuario.idInstitucional
+      idInstitucional: this.nuevoUsuario.idInstitucional,
     };
 
     this.administradorService.agregarAdministrador(payloadAdmin).subscribe({
@@ -224,15 +228,14 @@ export class UsuarioComponent {
         console.log('Administrador creado', res);
         this.actualizarListaLocal();
       },
-      error: (err) => console.error('Error creando admin', err)
+      error: (err) => console.error('Error creando admin', err),
     });
   }
   getDepartmentName(id: number | undefined): string {
     if (!id) return '---';
-    const dpto = this.departamentos.find(dep => dep.idDepartamento === id);
+    const dpto = this.departamentos.find((dep) => dep.idDepartamento === id);
     return dpto ? dpto.nombreDepartamento : '---';
   }
-
 
   crearDocente(): void {
     const partes = this.nuevoUsuario.nombreCompleto.split(' ');
@@ -240,7 +243,11 @@ export class UsuarioComponent {
     const apellido = partes.slice(1).join(' ');
 
     if (this.idInstitucionalError) {
-      Swal.fire('Error','El ID Institucional es inválido. Debe comenzar con L y tener exactamente 8 caracteres alfanuméricos.', 'error');
+      Swal.fire(
+        'Error',
+        'El ID Institucional es inválido. Debe comenzar con L y tener exactamente 8 caracteres alfanuméricos.',
+        'error'
+      );
       return;
     }
 
@@ -253,8 +260,8 @@ export class UsuarioComponent {
       departamento: {
         idDepartamento: this.nuevoUsuario.departamentoId ?? 0,
         nombreDepartamento: '',
-        descripcion: ''
-      }
+        descripcion: '',
+      },
     };
 
     this.docenteService.agregarDocente(payloadDocente).subscribe({
@@ -262,7 +269,7 @@ export class UsuarioComponent {
         console.log('Docente creado', res);
         this.actualizarListaLocal();
       },
-      error: (err) => console.error('Error creando docente', err)
+      error: (err) => console.error('Error creando docente', err),
     });
   }
 
@@ -276,7 +283,7 @@ export class UsuarioComponent {
       showCancelButton: true,
       confirmButtonText: 'Sí, actualizar',
       cancelButtonText: 'Cancelar',
-      allowOutsideClick: false
+      allowOutsideClick: false,
     }).then((result) => {
       if (result.isConfirmed) {
         if (this.usuarioAEditar?.tipoUsuario === 'DOCENTE') {
@@ -293,20 +300,24 @@ export class UsuarioComponent {
             departamento: {
               idDepartamento: this.usuarioAEditar.departamentoId ?? 0,
               nombreDepartamento: '',
-              descripcion: ''
-            }
+              descripcion: '',
+            },
           };
 
           this.docenteService.editarDocente(payloadDocente).subscribe({
             next: () => {
-              Swal.fire('Actualizado', 'Docente actualizado correctamente', 'success');
+              Swal.fire(
+                'Actualizado',
+                'Docente actualizado correctamente',
+                'success'
+              );
               this.cerrarModalEdicion();
               this.cargarListaUnificada();
             },
             error: (error: any) => {
               console.error('Error actualizando docente:', error);
               Swal.fire('Error', 'No se pudo actualizar el docente', 'error');
-            }
+            },
           });
         } else if (this.usuarioAEditar?.tipoUsuario === 'ADMINISTRADOR') {
           const partes = this.usuarioAEditar.nombreCompleto.split(' ');
@@ -318,29 +329,36 @@ export class UsuarioComponent {
             nombreAdministrador: nombre,
             apellidoAdministrador: apellido,
             correoAdministrador: this.usuarioAEditar.correo,
-            idInstitucional: this.usuarioAEditar.idInstitucional
+            idInstitucional: this.usuarioAEditar.idInstitucional,
           };
 
-          this.administradorService.editarAdministrador(payloadAdmin).subscribe({
-            next: () => {
-              Swal.fire('Actualizado', 'Administrador actualizado correctamente', 'success');
-              this.cerrarModalEdicion();
-              this.cargarListaUnificada();
-            },
-            error: (error: any) => {
-              console.error('Error actualizando administrador:', error);
-              Swal.fire('Error', 'No se pudo actualizar el administrador', 'error');
-            }
-          });
+          this.administradorService
+            .editarAdministrador(payloadAdmin)
+            .subscribe({
+              next: () => {
+                Swal.fire(
+                  'Actualizado',
+                  'Administrador actualizado correctamente',
+                  'success'
+                );
+                this.cerrarModalEdicion();
+                this.cargarListaUnificada();
+              },
+              error: (error: any) => {
+                console.error('Error actualizando administrador:', error);
+                Swal.fire(
+                  'Error',
+                  'No se pudo actualizar el administrador',
+                  'error'
+                );
+              },
+            });
         }
       }
     });
   }
 
-
-
   abrirModalEdicion(): void {
-
     const modalEl = document.getElementById('editUsuarioModal');
     if (modalEl) {
       const modalBootstrap = new bootstrap.Modal(modalEl);
@@ -369,7 +387,6 @@ export class UsuarioComponent {
       modalBootstrap?.hide();
     }
   }
-
 
   actualizarListaLocal(): void {
     // 1. Cerrar el modal

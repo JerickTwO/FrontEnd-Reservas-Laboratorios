@@ -67,7 +67,7 @@ export class DocenteComponent {
   }
 
   validarIdInstitucional(): void {
-    const pattern = /^L[0-9A-Za-z]{7}$/;
+    const pattern = /^L[0-9A-Za-z]{8}$/;
     this.idInstitucionalError = !pattern.test(this.newDocente.idInstitucional);
   }
 

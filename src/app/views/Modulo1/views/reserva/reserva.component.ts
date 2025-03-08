@@ -480,27 +480,25 @@ export class ReservaComponent implements OnInit {
     const itinLogo = 'assets/img/logos/itin.png';
     const espeLogo = 'assets/img/logos/espe.png';
 
-    // Agregamos los logos
     doc.addImage(espeLogo, 'PNG', 15, 1, 70, 30);
     doc.addImage(itinLogo, 'PNG', 130, 8, 55, 20);
 
-    // 1) Determinar el título según el laboratorio seleccionado
     let tituloPDF = 'REPORTE DE RESERVA DE LABORATORIOS - GENERAL';
+    let nombreLaboratorio = 'GENERAL';
+
     if (this.selectedLabForPDF) {
-      // Busca el laboratorio por id
       const labSeleccionado = this.laboratorios.find(
         (lab) => lab.idLaboratorio === Number(this.selectedLabForPDF)
       );
       if (labSeleccionado) {
-        tituloPDF = `REPORTE DE RESERVAS POR ${labSeleccionado.nombreLaboratorio}`;
+        nombreLaboratorio = labSeleccionado.nombreLaboratorio;
+        tituloPDF = `REPORTE DE RESERVA DE LABORATORIOS - ${nombreLaboratorio}`;
       }
     }
 
-    // Ajustar la fuente y escribir el título
     doc.setFontSize(14);
     doc.text(tituloPDF, 50, 40);
 
-    // 2) Filtrar las reservas (si corresponde)
     let reservasFiltradas = this.reservas;
     if (this.selectedLabForPDF) {
       reservasFiltradas = this.reservas.filter((reserva) => {
@@ -510,7 +508,6 @@ export class ReservaComponent implements OnInit {
       });
     }
 
-    // 3) Preparar datos para autoTable
     const datosExportacion = reservasFiltradas.map((reserva) => [
       reserva.laboratorio.nombreLaboratorio,
       reserva.nombreCompleto,
@@ -522,7 +519,13 @@ export class ReservaComponent implements OnInit {
       reserva.motivoReserva,
     ]);
 
-    // 4) Generar la tabla
+    doc.setFontSize(12);
+    doc.text(
+      `Total de reservas (${nombreLaboratorio}): ${reservasFiltradas.length}`,
+      14,
+      50
+    );
+
     autoTable(doc, {
       head: [
         [
@@ -535,7 +538,7 @@ export class ReservaComponent implements OnInit {
         ],
       ],
       body: datosExportacion,
-      startY: 45,
+      startY: 55,
       theme: 'grid',
       headStyles: {
         fillColor: [0, 0, 0],
@@ -543,7 +546,6 @@ export class ReservaComponent implements OnInit {
       },
     });
 
-    // 5) Descargar el PDF
     doc.save('Reservas.pdf');
   }
 }
